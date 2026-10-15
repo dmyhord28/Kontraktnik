@@ -150,10 +150,9 @@
             background: #0f172a; border: 1px solid rgba(56, 189, 248, 0.25); border-radius: 8px; 
             box-shadow: 0 10px 25px rgba(0,0,0,0.5); opacity: 0; visibility: hidden; pointer-events: none; 
             transform: translateY(-10px); transition: all 0.2s ease; z-index: 99;
-            max-height: 180px; overflow-y: auto; /* Встановлено фіксовану висоту з ползунком */
+            max-height: 180px; overflow-y: auto; 
         }
         
-        /* Скролбар для випадаючого списку */
         .custom-options::-webkit-scrollbar { width: 6px; }
         .custom-options::-webkit-scrollbar-track { background: rgba(10, 15, 26, 0.5); border-radius: 4px; }
         .custom-options::-webkit-scrollbar-thumb { background: var(--accent); border-radius: 4px; }
@@ -432,6 +431,55 @@
         </div>
     </footer>
 
+    <!-- DODANE PRZYCISKI MINI-GRY I TABELI REKORDÓW NA SAMYM DOLE -->
+    <div style="background: var(--bg-deep); padding: 2rem; border-top: 1px solid var(--accent-border); text-align: center; display: flex; justify-content: center; gap: 1.5rem; flex-wrap: wrap;">
+        <button class="btn-main-trigger" style="margin-bottom: 0; padding: 0.8rem 1.8rem; font-size: 0.95rem;" onclick="openGameModal()">🎮 Mini-Gra: Target Strike</button>
+        <button class="btn-main-trigger" style="margin-bottom: 0; padding: 0.8rem 1.8rem; font-size: 0.95rem; border-color: rgba(34, 197, 94, 0.4); color: var(--status-online);" onclick="openLeaderboardModal()">🏆 Tabela Rekordów</button>
+    </div>
+
+    <!-- Modal Mini-Gry -->
+    <div class="modal-overlay" id="gameModal">
+        <div class="modal-window" style="max-width: 500px; text-align: center;">
+            <button class="close-modal" onclick="closeGameModal()">×</button>
+            <h2 style="color: #f1f5f9; margin-bottom: 0.5rem;">🎯 Tactical Target Strike</h2>
+            <p style="color: var(--text-muted); font-size: 0.85rem; margin-bottom: 1rem;">Klikaj w cele przed upływem czasu!</p>
+
+            <div style="display: flex; justify-content: space-around; font-weight: bold; margin-bottom: 1rem; background: rgba(0,0,0,0.3); padding: 0.6rem; border-radius: 8px;">
+                <div>Wynik: <span id="gameScore" style="color: var(--accent);">0</span></div>
+                <div>Czas: <span id="gameTimer" style="color: var(--status-alert);">15</span>s</div>
+            </div>
+
+            <div id="gameArea" style="width: 100%; height: 260px; background: #070b14; border: 1px solid var(--accent-border); border-radius: 10px; position: relative; overflow: hidden; cursor: crosshair;">
+                <div id="gameTarget" onclick="hitTarget()" style="width: 45px; height: 45px; background: radial-gradient(circle, #ef4444 30%, #38bdf8 70%); border-radius: 50%; position: absolute; display: none; box-shadow: 0 0 12px var(--accent); transform: translate(-50%, -50%);"></div>
+            </div>
+
+            <button id="btnStartGame" class="btn-submit" style="margin-top: 1rem;" onclick="startGame()">Start Gry</button>
+        </div>
+    </div>
+
+    <!-- Modal Tabeli Rekordów -->
+    <div class="modal-overlay" id="leaderboardModal">
+        <div class="modal-window" style="max-width: 500px;">
+            <button class="close-modal" onclick="closeLeaderboardModal()">×</button>
+            <h2 style="color: #f1f5f9; margin-bottom: 1rem; text-align: center;">🏆 Tabela Rekordów</h2>
+            
+            <div style="max-height: 320px; overflow-y: auto; background: var(--bg-dark); border-radius: 8px; border: 1px solid rgba(255,255,255,0.05); padding: 0.8rem;">
+                <table style="width: 100%; color: var(--text-main); border-collapse: collapse; text-align: left;">
+                    <thead>
+                        <tr style="border-bottom: 1px solid var(--accent-border); color: var(--accent); font-size: 0.85rem;">
+                            <th style="padding: 6px;">#</th>
+                            <th style="padding: 6px;">Gracz</th>
+                            <th style="padding: 6px; text-align: right;">Wynik</th>
+                        </tr>
+                    </thead>
+                    <tbody id="leaderboardBody">
+                        <tr><td colspan="3" style="text-align:center; padding: 1rem; color: var(--text-subtle);">Ładowanie rekordów...</td></tr>
+                    </tbody>
+                </table>
+            </div>
+        </div>
+    </div>
+
     <!-- Modal overlay & window -->
     <div class="modal-overlay" id="modalOverlay">
         <div class="modal-window">
@@ -552,11 +600,18 @@
         firebase.initializeApp(firebaseConfig);
         const database = firebase.database();
         const candidatesRef = database.ref('candidates');
+        const scoresRef = database.ref('leaderboard');
         
         let currentRoomId = null;
         let isRecruiter = false;
         let globalSenderName = "Гість";
         let isCheckingCrypto = false;
+
+        // Zmienne do mini-gry
+        let score = 0;
+        let timeLeft = 15;
+        let gameInterval = null;
+        let isPlaying = false;
 
         const playBeep = (freq = 600, duration = 0.05) => {
             try {
@@ -635,7 +690,6 @@
             }
         }
 
-        // Універсальний toggle для декількох випадаючих списків
         function toggleCustomSelect(wrapperId) {
             playBeep(700);
             const wrapper = document.getElementById(wrapperId);
@@ -952,6 +1006,130 @@
                     isCheckingCrypto = false;
                 }, 2500); 
             }, 1000); 
+        }
+
+        // --- OBSŁUGA MINI-GRY I TABELI REKORDÓW ---
+        function openGameModal() {
+            playBeep(800);
+            document.getElementById('gameModal').classList.add('active');
+            document.body.classList.add('modal-open');
+        }
+
+        function closeGameModal() {
+            playBeep(400);
+            document.getElementById('gameModal').classList.remove('active');
+            document.body.classList.remove('modal-open');
+            resetGame();
+        }
+
+        function openLeaderboardModal() {
+            playBeep(800);
+            document.getElementById('leaderboardModal').classList.add('active');
+            document.body.classList.add('modal-open');
+            loadLeaderboard();
+        }
+
+        function closeLeaderboardModal() {
+            playBeep(400);
+            document.getElementById('leaderboardModal').classList.remove('active');
+            document.body.classList.remove('modal-open');
+        }
+
+        function startGame() {
+            score = 0;
+            timeLeft = 15;
+            isPlaying = true;
+            document.getElementById('gameScore').innerText = score;
+            document.getElementById('gameTimer').innerText = timeLeft;
+            document.getElementById('btnStartGame').style.display = 'none';
+            
+            moveTarget();
+            document.getElementById('gameTarget').style.display = 'block';
+
+            gameInterval = setInterval(() => {
+                timeLeft--;
+                document.getElementById('gameTimer').innerText = timeLeft;
+                if (timeLeft <= 0) {
+                    endGame();
+                }
+            }, 1000);
+        }
+
+        function moveTarget() {
+            const area = document.getElementById('gameArea');
+            const target = document.getElementById('gameTarget');
+            const maxX = area.clientWidth - 50;
+            const maxY = area.clientHeight - 50;
+
+            const randomX = Math.floor(Math.random() * maxX) + 25;
+            const randomY = Math.floor(Math.random() * maxY) + 25;
+
+            target.style.left = randomX + 'px';
+            target.style.top = randomY + 'px';
+        }
+
+        function hitTarget() {
+            if (!isPlaying) return;
+            playBeep(1200, 0.02);
+            score += 10;
+            document.getElementById('gameScore').innerText = score;
+            moveTarget();
+        }
+
+        function endGame() {
+            isPlaying = false;
+            clearInterval(gameInterval);
+            document.getElementById('gameTarget').style.display = 'none';
+            document.getElementById('btnStartGame').style.display = 'block';
+            document.getElementById('btnStartGame').innerText = 'Graj ponownie';
+            playBeep(300, 0.2);
+
+            let playerName = prompt(`Koniec gry! Twój wynik: ${score} pkt.\nWpisz swój nick, aby zapisać rekord:`, globalSenderName || "Gracz");
+            if (playerName && playerName.trim() !== '') {
+                scoresRef.push({
+                    name: playerName.trim(),
+                    score: score,
+                    timestamp: Date.now()
+                });
+                openLeaderboardModal();
+            }
+        }
+
+        function resetGame() {
+            isPlaying = false;
+            clearInterval(gameInterval);
+            document.getElementById('gameTarget').style.display = 'none';
+            document.getElementById('btnStartGame').style.display = 'block';
+        }
+
+        function loadLeaderboard() {
+            scoresRef.orderByChild('score').limitToLast(10).on('value', (snapshot) => {
+                const tbody = document.getElementById('leaderboardBody');
+                tbody.innerHTML = '';
+                
+                if (!snapshot.exists()) {
+                    tbody.innerHTML = '<tr><td colspan="3" style="text-align:center; padding: 1rem; color: var(--text-subtle);">Brak zapisanych rekordów. Bądź pierwszy!</td></tr>';
+                    return;
+                }
+
+                let list = [];
+                snapshot.forEach((child) => {
+                    list.push(child.val());
+                });
+
+                list.sort((a, b) => b.score - a.score);
+
+                list.forEach((item, index) => {
+                    const tr = document.createElement('tr');
+                    tr.style.borderBottom = '1px solid rgba(255,255,255,0.03)';
+                    tr.innerHTML = `
+                        <td style="padding: 8px; font-weight: bold; color: ${index < 3 ? 'var(--accent)' : 'inherit'};">${index + 1}</td>
+                        <td style="padding: 8px;">${escapeHtml(item.name)}</td>
+                        <td style="padding: 8px; text-align: right; font-weight: bold; color: var(--status-online);">${item.score}</td>
+                    `;
+                    tbody.appendChild(tr);
+                });
+            });
         }
     </script>
 </body>
