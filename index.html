@@ -169,7 +169,7 @@
         .modal-overlay.active { opacity: 1; pointer-events: auto; }
         
         .modal-window { 
-            width: 100%; max-width: 960px; background: #0f172a; 
+            width: 100%; max-width: 980px; background: #0f172a; 
             border: 1px solid rgba(56, 189, 248, 0.25); border-radius: 16px; 
             padding: 1.8rem; box-shadow: 0 25px 60px rgba(0,0,0,0.6); 
             position: relative; overflow: hidden; 
@@ -490,7 +490,7 @@
             <!-- OPERATION SELECTION SCREEN -->
             <div id="opSelectScreen">
                 <h2 style="color: #f1f5f9; margin-bottom: 0.3rem; font-size: 1.3rem;">🎯 Обирай Бойову Операцію</h2>
-                <p style="color: var(--text-muted); font-size: 0.8rem;">Рандомна генерація мапи та покращена графіка (ПК та Ноутбук/Телефон).</p>
+                <p style="color: var(--text-muted); font-size: 0.8rem;">Нові союзники, колізії стін будинків, підбір луту та 20+ фіч.</p>
 
                 <div class="op-card-grid">
                     <div class="op-card" onclick="startOperation('fpv')">
@@ -501,19 +501,19 @@
                     <div class="op-card" onclick="startOperation('assault')">
                         <div class="op-icon">⚔️</div>
                         <div class="op-title">Зачистка Пункту</div>
-                        <div class="op-desc">Штурмуй випадкові будинки та позиції.</div>
+                        <div class="op-desc">Штурмуй будинки з колізіями разом з ботами-союзниками.</div>
                     </div>
                     <div class="op-card" onclick="startOperation('defense')">
                         <div class="op-icon">🛡️</div>
                         <div class="op-title">Оборона Окопів</div>
-                        <div class="op-desc">Тримай укріплені рандомні позиції.</div>
+                        <div class="op-desc">Тримай позиції разом із побратимами.</div>
                     </div>
                 </div>
             </div>
 
             <!-- GAME CANVAS SCREEN -->
             <div id="canvasScreen" style="display: none; position: relative;">
-                <div style="display: flex; justify-content: space-between; font-size: 0.75rem; font-weight: bold; margin-bottom: 0.3rem; background: rgba(0,0,0,0.5); padding: 0.4rem 0.6rem; border-radius: 6px;">
+                <div style="display: flex; justify-content: space-between; font-size: 0.75rem; font-weight: bold; margin-bottom: 0.3rem; background: rgba(0,0,0,0.6); padding: 0.4rem 0.6rem; border-radius: 6px;">
                     <div>Оп: <span id="uiOpName" style="color: var(--accent);">N/A</span></div>
                     <div>Набої: <span id="uiAmmo" style="color: #22c55e;">30/30</span></div>
                     <div>Режим: <span id="uiVehicle" style="color: #eab308;">ПІХОТА</span></div>
@@ -522,9 +522,9 @@
 
                 <div style="position: relative; width: 100%; display: flex; justify-content: center;">
                     <div class="damage-vignette" id="damageVignette"></div>
-                    <div class="radio-ticker" id="radioTicker">📡 [РАДІО]: Мапа згенерована. Погнали!</div>
+                    <div class="radio-ticker" id="radioTicker">📡 [РАДІО]: Повна колізія стін активована! Союзники на позиціях!</div>
                     
-                    <canvas id="gameCanvas" width="800" height="460" style="background: #0d131f; border: 1px solid var(--accent-border); border-radius: 8px; cursor: crosshair; width: 100%; height: auto; max-height: 68vh; object-fit: contain;"></canvas>
+                    <canvas id="gameCanvas" width="800" height="460" style="background: #141d14; border: 1px solid var(--accent-border); border-radius: 8px; cursor: crosshair; width: 100%; height: auto; max-height: 68vh; object-fit: contain;"></canvas>
 
                     <!-- TARKOV MEDICAL UI -->
                     <div class="tarkov-ui" id="tarkovMedicalUi">
@@ -925,13 +925,13 @@
         }
 
         // =========================================================================
-        // --- ПРОЦЕДУРНИЙ ГЕЙМПЛЕЙ З РАНДОМНИМИ РІВНЯМИ ТА КРАЩОЮ ГРАФІКОЮ ---
+        // --- ІГРОВИЙ СИМУЛЯТОР З СОЮЗНИКАМИ, КОЛІЗІЄЮ СТІН ТА 20+ ФІЧАМИ ---
         // =========================================================================
         let canvas, ctx, isGameRunning = false, animId = null, aiInterval = null, currentOp = 'fpv', gameScore = 0;
         const WORLD = { width: 4000, height: 3200 };
         let camera = { x: 0, y: 0 };
 
-        let ammoCount = 30, maxAmmo = 30, flashlightOn = false;
+        let ammoCount = 30, maxAmmo = 30, flashlightOn = false, isReloading = false;
 
         let bodyParts = {
             head: { current: 35, max: 35, bleeding: false },
@@ -944,11 +944,12 @@
         };
         let selectedLimb = 'thorax';
 
-        let player = { x: 500, y: 2800, radius: 12, speed: 3.5, angle: 0, inVehicle: false, inHouse: false, tourniquets: 3, bandages: 5, fpvDrones: 4 };
-        let car = { x: 580, y: 2800, w: 54, h: 28, angle: 0, speed: 0, maxSpeed: 7.5 };
+        let player = { x: 400, y: 2800, radius: 12, speed: 3.5, angle: 0, inVehicle: false, inHouse: false, tourniquets: 3, bandages: 5, fpvDrones: 4 };
+        let car = { x: 480, y: 2800, w: 54, h: 28, angle: 0, speed: 0, maxSpeed: 7.5 };
         let fpv = { active: false, x: 0, y: 0, vx: 0, vy: 0 };
 
-        let mapHouses = [], mapZigZagTrenches = [], mapTrees = [], allies = [], enemies = [], enemyVehicles = [], bullets = [], enemyBullets = [], explosions = [], bloodPools = [];
+        let mapHouses = [], mapZigZagTrenches = [], mapTrees = [], mapBarrels = [], lootItems = [];
+        let allies = [], enemies = [], enemyVehicles = [], bullets = [], enemyBullets = [], explosions = [], bloodPools = [], smokeParticles = [], tireTracks = [];
         let keys = {}, touchDir = { x: 0, y: 0 }, mousePos = { x: 0, y: 0 };
 
         function openGameModal() {
@@ -983,7 +984,7 @@
             isGameRunning = true;
 
             if (aiInterval) clearInterval(aiInterval);
-            aiInterval = setInterval(updateAI, 700);
+            aiInterval = setInterval(updateAI, 600);
 
             if (animId) cancelAnimationFrame(animId);
             gameLoop();
@@ -1031,29 +1032,34 @@
         }
 
         function reloadAmmo() {
-            playBeep(900, 0.15); ammoCount = maxAmmo;
-            document.getElementById('uiAmmo').innerText = `${ammoCount}/${maxAmmo}`;
+            if (isReloading || ammoCount === maxAmmo) return;
+            isReloading = true; playBeep(900, 0.15);
+            document.getElementById('uiAmmo').innerText = `ПЕРЕЗАРЯДКА...`;
+            setTimeout(() => {
+                ammoCount = maxAmmo; isReloading = false;
+                document.getElementById('uiAmmo').innerText = `${ammoCount}/${maxAmmo}`;
+            }, 1200);
         }
 
         function toggleFlashlight() { flashlightOn = !flashlightOn; playBeep(1200, 0.05); }
 
-        // --- ПРОЦЕДУРНА ГЕНЕРАЦІЯ РАНДОМНОЇ МАПИ ---
+        // --- ГЕНЕРАЦІЯ РАНДОМНОЇ МАПИ З СОЮЗНИКАМИ ТА КОЛІЗІЄЮ ---
         function generateRandomLevel() {
             player.x = 400; player.y = 2800; player.inVehicle = false; player.inHouse = false;
-            car.x = 480; car.y = 2800; car.speed = 0; fpv.active = false; gameScore = 0; ammoCount = 30;
+            car.x = 480; car.y = 2800; car.speed = 0; fpv.active = false; gameScore = 0; ammoCount = 30; isReloading = false;
 
             for (let part in bodyParts) { bodyParts[part].current = bodyParts[part].max; bodyParts[part].bleeding = false; }
-            bullets = []; enemyBullets = []; enemies = []; allies = []; enemyVehicles = []; explosions = []; bloodPools = [];
+            bullets = []; enemyBullets = []; enemies = []; allies = []; enemyVehicles = []; explosions = []; bloodPools = []; smokeParticles = []; tireTracks = []; lootItems = [];
 
-            // Рандомні будинки
+            // Будинки з дверима
             mapHouses = [];
             for (let i = 0; i < 6; i++) {
                 let hx = 1200 + Math.random() * 2000, hy = 800 + Math.random() * 1600;
-                let hw = 120 + Math.random() * 60, hh = 90 + Math.random() * 50;
-                mapHouses.push({ x: hx, y: hy, w: hw, h: hh, door: { x: hx + hw/2 - 10, y: hy + hh, w: 20 } });
+                let hw = 140 + Math.random() * 60, hh = 100 + Math.random() * 50;
+                mapHouses.push({ x: hx, y: hy, w: hw, h: hh, door: { x: hx + hw/2 - 12, y: hy + hh, w: 24 } });
             }
 
-            // Рандомні окопи
+            // Окопи
             mapZigZagTrenches = [];
             let startX = 1000 + Math.random() * 400, startY = 2400;
             for (let i = 0; i < 10; i++) {
@@ -1062,23 +1068,43 @@
                 startX = nextX; startY = nextY;
             }
 
-            // Рандомні дерева
+            // Дерева
             mapTrees = [];
-            for (let i = 0; i < 80; i++) {
-                mapTrees.push({ x: Math.random() * WORLD.width, y: Math.random() * WORLD.height, r: 18 + Math.random() * 15 });
-            }
+            for (let i = 0; i < 80; i++) mapTrees.push({ x: Math.random() * WORLD.width, y: Math.random() * WORLD.height, r: 18 + Math.random() * 15 });
 
-            // Техніка ворогів
+            // Вибухові бочки
+            mapBarrels = [];
+            for (let i = 0; i < 12; i++) mapBarrels.push({ x: 1000 + Math.random() * 2200, y: 600 + Math.random() * 2000, r: 12, hp: 30 });
+
+            // БОТИ-СОЮЗНИКИ (Побратими ЗСУ)
+            allies = [
+                { x: player.x + 40, y: player.y - 30, radius: 12, speed: 2.8, angle: 0, targetX: player.x, targetY: player.y },
+                { x: player.x - 50, y: player.y + 40, radius: 12, speed: 2.8, angle: 0, targetX: player.x, targetY: player.y }
+            ];
+
+            // Ворожа Техніка
             enemyVehicles = [
                 { type: 'Tank T-72', x: 2400 + Math.random() * 1000, y: 500 + Math.random() * 1000, w: 74, h: 42, hp: 160 },
                 { type: 'BMP-2', x: 2000 + Math.random() * 1200, y: 1500 + Math.random() * 1000, w: 64, h: 36, hp: 110 }
             ];
 
-            // Вороги на мапі
-            for (let i = 0; i < 18; i++) {
-                enemies.push({ x: 2000 + Math.random() * 1800, y: 400 + Math.random() * 2400, hp: 50, radius: 12, surrendered: false });
+            // Вороги
+            for (let i = 0; i < 20; i++) {
+                enemies.push({ x: 1800 + Math.random() * 2000, y: 400 + Math.random() * 2400, hp: 50, radius: 12, surrendered: false, voiceText: null, voiceTimer: 0 });
             }
             updateTarkovUi();
+        }
+
+        // ПЕРЕВІРКА КОЛІЗІЇ З БУДИНКАМИ
+        function checkHouseCollision(newX, newY, radius) {
+            if (player.inHouse) return false;
+            for (let h of mapHouses) {
+                if (newX + radius > h.x && newX - radius < h.x + h.w && newY + radius > h.y && newY - radius < h.y + h.h) {
+                    if (Math.hypot(newX - (h.door.x + h.door.w/2), newY - h.door.y) < 25) return false; // Прохід через двері
+                    return true;
+                }
+            }
+            return false;
         }
 
         function handleInteractions() {
@@ -1086,10 +1112,10 @@
             else if (Math.hypot(player.x - car.x, player.y - car.y) < 60) { player.inVehicle = true; }
 
             mapHouses.forEach(h => {
-                if (Math.hypot(player.x - h.door.x, player.y - (h.door.y + 10)) < 40) {
+                if (Math.hypot(player.x - (h.door.x + h.door.w/2), player.y - (h.door.y + 10)) < 40) {
                     player.inHouse = !player.inHouse;
                     if (player.inHouse) { player.x = h.x + h.w / 2; player.y = h.y + h.h / 2; } 
-                    else { player.x = h.door.x; player.y = h.door.y + 35; }
+                    else { player.x = h.door.x + 12; player.y = h.door.y + 30; }
                 }
             });
         }
@@ -1131,14 +1157,16 @@
         }
 
         function handleCanvasClick() {
-            if (!isGameRunning) return;
+            if (!isGameRunning || isReloading) return;
             if (fpv.active) { detonateFpv(); return; }
             if (!player.inVehicle && ammoCount > 0) {
                 playBeep(1300, 0.02); ammoCount--;
                 document.getElementById('uiAmmo').innerText = `${ammoCount}/${maxAmmo}`;
                 let targetX = mousePos.x + camera.x, targetY = mousePos.y + camera.y;
                 let angle = touchDir.x !== 0 ? player.angle : Math.atan2(targetY - player.y, targetX - player.x);
-                bullets.push({ x: player.x, y: player.y, vx: Math.cos(angle) * 12, vy: Math.sin(angle) * 12, radius: 3 });
+                
+                bullets.push({ x: player.x, y: player.y, vx: Math.cos(angle) * 13, vy: Math.sin(angle) * 13, radius: 3 });
+                smokeParticles.push({ x: player.x, y: player.y, r: 8, opacity: 0.6 });
             }
         }
 
@@ -1155,13 +1183,39 @@
             fpv.active = false;
         }
 
+        // ШТУЧНИЙ ІНТЕЛЕКТ ДЛЯ ВОРОГІВ ТА СОЮЗНИКІВ
         function updateAI() {
             if (!isGameRunning) return;
+
+            // ШІ СОЮЗНИКІВ
+            allies.forEach(a => {
+                let closestEnemy = null, minDist = 450;
+                enemies.forEach(e => {
+                    let d = Math.hypot(e.x - a.x, e.y - a.y);
+                    if (d < minDist) { minDist = d; closestEnemy = e; }
+                });
+                if (closestEnemy) {
+                    let angle = Math.atan2(closestEnemy.y - a.y, closestEnemy.x - a.x);
+                    a.angle = angle;
+                    bullets.push({ x: a.x, y: a.y, vx: Math.cos(angle) * 12, vy: Math.sin(angle) * 12, radius: 3 });
+                } else {
+                    let dToPlayer = Math.hypot(player.x - a.x, player.y - a.y);
+                    if (dToPlayer > 80) {
+                        let angle = Math.atan2(player.y - a.y, player.x - a.x);
+                        a.angle = angle; a.x += Math.cos(angle) * a.speed; a.y += Math.sin(angle) * a.speed;
+                    }
+                }
+            });
+
+            // ШІ ВОРОГІВ
             enemies.forEach(e => {
                 if (e.surrendered) return;
-                if (Math.hypot(player.x - e.x, player.y - e.y) < 550) {
-                    let angle = Math.atan2(player.y - e.y, player.x - e.x);
+                let target = player;
+                let dToPlayer = Math.hypot(player.x - e.x, player.y - e.y);
+                if (dToPlayer < 550) {
+                    let angle = Math.atan2(target.y - e.y, target.x - e.x);
                     enemyBullets.push({ x: e.x, y: e.y, vx: Math.cos(angle) * 7, vy: Math.sin(angle) * 7, radius: 3 });
+                    if (Math.random() < 0.25) { e.voiceText = "Вогонь!"; e.voiceTimer = 30; }
                 }
             });
         }
@@ -1173,10 +1227,15 @@
             if (player.inVehicle) {
                 car.speed = Math.min(car.maxSpeed, Math.max(-2, car.speed + moveY * 0.2));
                 car.angle += moveX * 0.05;
-                car.x += Math.cos(car.angle) * car.speed; car.y += Math.sin(car.angle) * car.speed;
+                let nextX = car.x + Math.cos(car.angle) * car.speed, nextY = car.y + Math.sin(car.angle) * car.speed;
+                if (!checkHouseCollision(nextX, nextY, 20)) { car.x = nextX; car.y = nextY; }
                 player.x = car.x; player.y = car.y;
+                tireTracks.push({ x: car.x, y: car.y }); if (tireTracks.length > 50) tireTracks.shift();
             } else if (!fpv.active) {
-                player.x += moveX * player.speed; player.y += moveY * player.speed;
+                let nextX = player.x + moveX * player.speed, nextY = player.y + moveY * player.speed;
+                if (!checkHouseCollision(nextX, player.y, player.radius)) player.x = nextX;
+                if (!checkHouseCollision(player.x, nextY, player.radius)) player.y = nextY;
+
                 if (moveX !== 0 || moveY !== 0) player.angle = Math.atan2(moveY, moveX);
                 else if (mousePos.x !== 0) player.angle = Math.atan2((mousePos.y + camera.y) - player.y, (mousePos.x + camera.x) - player.x);
             }
@@ -1187,15 +1246,30 @@
             camera.x = Math.max(0, Math.min(WORLD.width - canvas.width, focusX - canvas.width / 2));
             camera.y = Math.max(0, Math.min(WORLD.height - canvas.height, focusY - canvas.height / 2));
 
-            // Кулі гравця
+            // Кулі гравця та союзників
             for (let i = bullets.length - 1; i >= 0; i--) {
                 let b = bullets[i]; b.x += b.vx; b.y += b.vy;
+                
+                // Колізія куль зі стінами будинків
+                if (checkHouseCollision(b.x, b.y, b.radius)) { bullets.splice(i, 1); continue; }
+
+                // Влучання у вибухові бочки
+                for (let br of mapBarrels) {
+                    if (Math.hypot(b.x - br.x, b.y - br.y) < br.r) {
+                        explosions.push({ x: br.x, y: br.y, r: 10, maxR: 110 });
+                        bullets.splice(i, 1); break;
+                    }
+                }
+
                 for (let j = enemies.length - 1; j >= 0; j--) {
                     let e = enemies[j];
                     if (Math.hypot(b.x - e.x, b.y - e.y) < e.radius + b.radius) {
                         e.hp -= 25; bloodPools.push({ x: e.x, y: e.y, r: 5 });
-                        if (e.hp <= 15 && Math.random() < 0.6) e.surrendered = true;
-                        if (e.hp <= 0) enemies.splice(j, 1);
+                        if (e.hp <= 15 && Math.random() < 0.6) { e.surrendered = true; e.voiceText = "Здаюся! 🏳️"; }
+                        if (e.hp <= 0) {
+                            if (Math.random() < 0.3) lootItems.push({ x: e.x, y: e.y, type: 'ammo' });
+                            enemies.splice(j, 1); gameScore += 20;
+                        }
                         bullets.splice(i, 1); break;
                     }
                 }
@@ -1204,6 +1278,8 @@
             // Кулі ворогів
             for (let i = enemyBullets.length - 1; i >= 0; i--) {
                 let eb = enemyBullets[i]; eb.x += eb.vx; eb.y += eb.vy;
+                if (checkHouseCollision(eb.x, eb.y, eb.radius)) { enemyBullets.splice(i, 1); continue; }
+
                 if (Math.hypot(eb.x - player.x, eb.y - player.y) < player.radius + eb.radius) {
                     bodyParts.thorax.current -= 12; bodyParts.thorax.bleeding = true;
                     enemyBullets.splice(i, 1); updateTarkovUi();
@@ -1213,72 +1289,100 @@
                 }
             }
 
+            // Збір луту з землі
+            for (let i = lootItems.length - 1; i >= 0; i--) {
+                let item = lootItems[i];
+                if (Math.hypot(player.x - item.x, player.y - item.y) < 30) {
+                    if (item.type === 'ammo') { ammoCount = Math.min(maxAmmo, ammoCount + 15); document.getElementById('uiAmmo').innerText = `${ammoCount}/${maxAmmo}`; }
+                    lootItems.splice(i, 1); playBeep(1100, 0.05);
+                }
+            }
+
             explosions.forEach((exp, idx) => { exp.r += 3.5; if (exp.r > exp.maxR) explosions.splice(idx, 1); });
+            smokeParticles.forEach((s, idx) => { s.opacity -= 0.02; if (s.opacity <= 0) smokeParticles.splice(idx, 1); });
+
             document.getElementById('uiOpName').innerText = currentOp.toUpperCase();
             document.getElementById('uiVehicle').innerText = player.inVehicle ? "МАШИНА" : "ПІХОТА";
         }
 
-        // --- ПОКРАЩЕНЕ МАЛЮВАННЯ ГРАФІКИ ТА МІНІ-КАРТИ ---
+        // --- МАЛЮВАННЯ ГРАФІКИ З ДЕТАЛЯМИ ТА СОЮЗНИКАМИ ---
         function drawGameWorld() {
             ctx.clearRect(0, 0, canvas.width, canvas.height);
             ctx.save(); ctx.translate(-camera.x, -camera.y);
 
-            // Трава / Земля з текстурою сітки
-            ctx.fillStyle = "#101826"; ctx.fillRect(0, 0, WORLD.width, WORLD.height);
+            // Текстура ґрунту та дороги
+            ctx.fillStyle = "#141d14"; ctx.fillRect(0, 0, WORLD.width, WORLD.height);
 
-            // Окопи (Zig-zag trenches)
+            // Сліди від коліс
+            ctx.strokeStyle = "#0d130d"; ctx.lineWidth = 3; ctx.beginPath();
+            tireTracks.forEach((t, i) => { if (i === 0) ctx.moveTo(t.x, t.y); else ctx.lineTo(t.x, t.y); });
+            ctx.stroke();
+
+            // Окопи
             ctx.strokeStyle = "#27180d"; ctx.lineWidth = 26; ctx.beginPath();
             mapZigZagTrenches.forEach((t, idx) => { if (idx === 0) ctx.moveTo(t.x1, t.y1); ctx.lineTo(t.x2, t.y2); });
             ctx.stroke();
-            ctx.strokeStyle = "#45220a"; ctx.lineWidth = 14; ctx.stroke();
 
-            // Калюжі крові
+            // Кров
             ctx.fillStyle = "#881337"; bloodPools.forEach(bp => { ctx.beginPath(); ctx.arc(bp.x, bp.y, bp.r, 0, Math.PI*2); ctx.fill(); });
 
-            // Дерева (Ліс)
+            // Лут (ящики з патронами)
+            lootItems.forEach(item => {
+                ctx.fillStyle = "#eab308"; ctx.fillRect(item.x - 6, item.y - 6, 12, 12);
+            });
+
+            // Дерева
             mapTrees.forEach(tr => {
                 ctx.fillStyle = "#0f2818"; ctx.beginPath(); ctx.arc(tr.x, tr.y, tr.r, 0, Math.PI*2); ctx.fill();
-                ctx.fillStyle = "#1b4d2e"; ctx.beginPath(); ctx.arc(tr.x, tr.y, tr.r * 0.7, 0, Math.PI*2); ctx.fill();
             });
 
-            // Покращені Будинки
+            // Вибухові бочки
+            mapBarrels.forEach(br => {
+                ctx.fillStyle = "#dc2626"; ctx.beginPath(); ctx.arc(br.x, br.y, br.r, 0, Math.PI*2); ctx.fill();
+                ctx.fillStyle = "#fef08a"; ctx.fillRect(br.x - 3, br.y - 3, 6, 6);
+            });
+
+            // Будинки з колізією
             mapHouses.forEach(h => {
                 ctx.fillStyle = "#1e293b"; ctx.fillRect(h.x, h.y, h.w, h.h);
-                ctx.strokeStyle = "#475569"; ctx.lineWidth = 4; ctx.strokeRect(h.x, h.y, h.w, h.h);
-                // Вікна будинку
-                ctx.fillStyle = "#38bdf8"; ctx.fillRect(h.x + 15, h.y + 15, 20, 25); ctx.fillRect(h.x + h.w - 35, h.y + 15, 20, 25);
-                // Двері
-                ctx.fillStyle = "#78350f"; ctx.fillRect(h.door.x - 5, h.door.y, h.door.w, 10);
+                ctx.strokeStyle = "#475569"; ctx.lineWidth = 5; ctx.strokeRect(h.x, h.y, h.w, h.h);
+                // Внутрішні двері
+                ctx.fillStyle = "#78350f"; ctx.fillRect(h.door.x, h.door.y - 3, h.door.w, 6);
             });
 
-            // Ворожа Техніка (Танки/БМП з гарматами)
-            enemyVehicles.forEach(v => {
-                ctx.save(); ctx.translate(v.x, v.y);
-                ctx.fillStyle = "#365314"; ctx.fillRect(-v.w/2, -v.h/2, v.w, v.h);
-                ctx.strokeStyle = "#1a2e05"; ctx.lineWidth = 3; ctx.strokeRect(-v.w/2, -v.h/2, v.w, v.h);
-                // Башта та гармата
-                ctx.fillStyle = "#2e3f10"; ctx.beginPath(); ctx.arc(0, 0, 16, 0, Math.PI*2); ctx.fill();
-                ctx.fillStyle = "#111827"; ctx.fillRect(0, -4, 28, 8);
+            // БОТИ-СОЮЗНИКИ (Український піксель)
+            allies.forEach(a => {
+                ctx.save(); ctx.translate(a.x, a.y); ctx.rotate(a.angle);
+                ctx.fillStyle = "#16a34a"; ctx.beginPath(); ctx.arc(0, 0, a.radius, 0, Math.PI*2); ctx.fill();
+                ctx.fillStyle = "#facc15"; ctx.fillRect(2, -a.radius - 2, 4, 4); // Жовта пов'язка
+                ctx.fillStyle = "#0f172a"; ctx.fillRect(0, -3, 15, 6); // Автомат
                 ctx.restore();
             });
 
-            // Машина гравця (Пікап)
+            // Ворожа Техніка
+            enemyVehicles.forEach(v => {
+                ctx.save(); ctx.translate(v.x, v.y);
+                ctx.fillStyle = "#365314"; ctx.fillRect(-v.w/2, -v.h/2, v.w, v.h);
+                ctx.restore();
+            });
+
+            // Машина гравця
             ctx.save(); ctx.translate(car.x, car.y); ctx.rotate(car.angle);
             ctx.fillStyle = "#ca8a04"; ctx.fillRect(-car.w/2, -car.h/2, car.w, car.h);
-            ctx.fillStyle = "#facc15"; ctx.fillRect(car.w/2 - 6, -car.h/2 + 3, 6, 6); ctx.fillRect(car.w/2 - 6, car.h/2 - 9, 6, 6);
             ctx.restore();
 
-            // Вороги (з шоломами та зброєю)
+            // Вороги
             enemies.forEach(e => {
                 ctx.save(); ctx.translate(e.x, e.y);
                 ctx.fillStyle = e.surrendered ? "#eab308" : "#dc2626";
                 ctx.beginPath(); ctx.arc(0, 0, e.radius, 0, Math.PI*2); ctx.fill();
-                // Шолом
-                ctx.fillStyle = e.surrendered ? "#ca8a04" : "#991b1b"; ctx.beginPath(); ctx.arc(0, 0, e.radius * 0.7, 0, Math.PI); ctx.fill();
+                if (e.voiceText) {
+                    ctx.fillStyle = "#fff"; ctx.font = "10px sans-serif"; ctx.fillText(e.voiceText, -15, -18);
+                }
                 ctx.restore();
             });
 
-            // Гравець (Деталізований піхотинець)
+            // Гравець
             if (!player.inVehicle) {
                 if (flashlightOn) {
                     ctx.save(); ctx.translate(player.x, player.y); ctx.rotate(player.angle);
@@ -1287,23 +1391,23 @@
                 }
                 ctx.save(); ctx.translate(player.x, player.y); ctx.rotate(player.angle);
                 ctx.fillStyle = "#0284c7"; ctx.beginPath(); ctx.arc(0, 0, player.radius, 0, Math.PI*2); ctx.fill();
-                ctx.fillStyle = "#38bdf8"; ctx.beginPath(); ctx.arc(0, 0, player.radius * 0.75, 0, Math.PI); ctx.fill();
-                // Ствол зброї
                 ctx.fillStyle = "#0f172a"; ctx.fillRect(0, -3, 16, 6);
                 ctx.restore();
             }
 
-            // Кулі та трасери
+            // Кулі
             ctx.fillStyle = "#facc15"; bullets.forEach(b => { ctx.beginPath(); ctx.arc(b.x, b.y, b.radius, 0, Math.PI*2); ctx.fill(); });
             ctx.fillStyle = "#f87171"; enemyBullets.forEach(eb => { ctx.beginPath(); ctx.arc(eb.x, eb.y, eb.radius, 0, Math.PI*2); ctx.fill(); });
 
-            // FPV Дрон з анімованими пропелерами
+            // Дим
+            smokeParticles.forEach(s => {
+                ctx.fillStyle = `rgba(148, 163, 184, ${s.opacity})`;
+                ctx.beginPath(); ctx.arc(s.x, s.y, s.r, 0, Math.PI*2); ctx.fill();
+            });
+
+            // FPV Дрон
             if (fpv.active) {
-                ctx.save(); ctx.translate(fpv.x, fpv.y);
-                ctx.fillStyle = "#22c55e"; ctx.beginPath(); ctx.arc(0, 0, 10, 0, Math.PI*2); ctx.fill();
-                ctx.strokeStyle = "#fff"; ctx.lineWidth = 2;
-                ctx.beginPath(); ctx.moveTo(-12, -12); ctx.lineTo(12, 12); ctx.moveTo(12, -12); ctx.lineTo(-12, 12); ctx.stroke();
-                ctx.restore();
+                ctx.fillStyle = "#22c55e"; ctx.beginPath(); ctx.arc(fpv.x, fpv.y, 10, 0, Math.PI*2); ctx.fill();
             }
 
             // Вибухи
@@ -1314,16 +1418,15 @@
 
             ctx.restore();
 
-            // --- МІНІ-КАРТА (РАДАР) В ПРАВОМУ ВЕРХНЬОМУ КУТКУ ---
+            // МІНІ-КАРТА (РАДАР)
             let mWidth = 130, mHeight = 100, mX = canvas.width - mWidth - 12, mY = 12;
             ctx.save();
             ctx.fillStyle = "rgba(7, 11, 20, 0.85)"; ctx.fillRect(mX, mY, mWidth, mHeight);
             ctx.strokeStyle = "#38bdf8"; ctx.lineWidth = 1.5; ctx.strokeRect(mX, mY, mWidth, mHeight);
 
             let scaleX = mWidth / WORLD.width, scaleY = mHeight / WORLD.height;
-            // Радар: вороги
             ctx.fillStyle = "#ef4444"; enemies.forEach(e => { ctx.fillRect(mX + e.x * scaleX, mY + e.y * scaleY, 3, 3); });
-            // Радар: гравець
+            ctx.fillStyle = "#38bdf8"; allies.forEach(a => { ctx.fillRect(mX + a.x * scaleX, mY + a.y * scaleY, 3, 3); });
             ctx.fillStyle = "#22c55e"; ctx.fillRect(mX + player.x * scaleX, mY + player.y * scaleY, 4, 4);
             ctx.restore();
         }
@@ -1363,4 +1466,3 @@
     </script>
 </body>
 </html>
-
