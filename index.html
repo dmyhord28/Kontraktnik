@@ -306,7 +306,7 @@
                     </div>
                     <div>
                         <h3>Російський добровольчий корпус</h3>
-                        <p>Добровольче формування, що веде запеклі бої та проводить спецоперації на лінії зіткнення.</p>
+                        <p>Добровольче формування, що веде запеклі бої та проводити спецоперації на лінії зіткнення.</p>
                     </div>
                     <span class="footer-note"><span>●</span> СТАТУС: НА ЛБЗ</span>
                 </div>
@@ -431,29 +431,35 @@
         </div>
     </footer>
 
-    <!-- PRZYCISKI DO STRZELANKI I REKORDÓW NA DOLE STRONY -->
+    <!-- PRZYCISKI W STRZELANKĘ I REKORDY -->
     <div style="background: var(--bg-deep); padding: 2rem; border-top: 1px solid var(--accent-border); text-align: center; display: flex; justify-content: center; gap: 1.5rem; flex-wrap: wrap;">
-        <button class="btn-main-trigger" style="margin-bottom: 0; padding: 0.8rem 1.8rem; font-size: 0.95rem;" onclick="openShooterModal()">💥 Strzelanka: Defense Zone</button>
+        <button class="btn-main-trigger" style="margin-bottom: 0; padding: 0.8rem 1.8rem; font-size: 0.95rem;" onclick="openShooterModal()">💥 Tactical Shooter 2D (TCCC + FPV OG-7)</button>
         <button class="btn-main-trigger" style="margin-bottom: 0; padding: 0.8rem 1.8rem; font-size: 0.95rem; border-color: rgba(34, 197, 94, 0.4); color: var(--status-online);" onclick="openLeaderboardModal()">🏆 Tabela Rekordów</button>
     </div>
 
-    <!-- MODAL STRZELANKI (CANVAS SHOOTER) -->
+    <!-- MODAL STRZELANKI CANVAS -->
     <div class="modal-overlay" id="shooterModal">
-        <div class="modal-window" style="max-width: 650px; text-align: center;">
+        <div class="modal-window" style="max-width: 720px; text-align: center;">
             <button class="close-modal" onclick="closeShooterModal()">×</button>
-            <h2 style="color: #f1f5f9; margin-bottom: 0.3rem;">💥 Tactical Defense Zone 2D</h2>
-            <p style="color: var(--text-muted); font-size: 0.85rem; margin-bottom: 0.8rem;">Sterowanie: <b>W, A, S, D</b> (ruch) | <b>Myszka</b> (celowanie i strzał)</p>
+            <h2 style="color: #f1f5f9; margin-bottom: 0.2rem;">💥 Tactical Operations Simulator</h2>
+            <p style="color: var(--text-muted); font-size: 0.8rem; margin-bottom: 0.5rem;">
+                <b>W,A,S,D</b> Ruch | <b>Myszka</b> Celowanie/Strzał | <b>1</b> Turniket (Staza) | <b>2</b> Opatrunek | <b>E</b> Uruchom FPV OG-7
+            </p>
 
-            <div style="display: flex; justify-content: space-around; font-weight: bold; margin-bottom: 0.8rem; background: rgba(0,0,0,0.3); padding: 0.5rem; border-radius: 8px;">
-                <div>Punkty: <span id="shooterScore" style="color: var(--accent);">0</span></div>
-                <div>Życie: <span id="shooterHp" style="color: var(--status-online);">100</span>%</div>
+            <div style="display: flex; justify-content: space-between; font-size: 0.85rem; font-weight: bold; margin-bottom: 0.5rem; background: rgba(0,0,0,0.4); padding: 0.5rem 1rem; border-radius: 8px;">
+                <div>Wynik: <span id="shooterScore" style="color: var(--accent);">0</span></div>
+                <div>HP: <span id="shooterHp" style="color: var(--status-online);">100</span>%</div>
+                <div>Krwawienie: <span id="shooterBleed" style="color: var(--status-online);">NIE</span></div>
+                <div>Turnikety: <span id="cntTourniquet" style="color: #eab308;">2</span></div>
+                <div>Opatrunki: <span id="cntBandage" style="color: #38bdf8;">3</span></div>
+                <div>Dron FPV (OG-7): <span id="cntFpv" style="color: #22c55e;">1</span></div>
             </div>
 
             <div style="position: relative; width: 100%; display: flex; justify-content: center;">
-                <canvas id="shooterCanvas" width="580" height="360" style="background: #05070c; border: 1px solid var(--accent-border); border-radius: 8px; cursor: crosshair;"></canvas>
+                <canvas id="shooterCanvas" width="650" height="400" style="background: #111a10; border: 1px solid var(--accent-border); border-radius: 8px; cursor: crosshair;"></canvas>
             </div>
 
-            <button id="btnStartShooter" class="btn-submit" style="margin-top: 0.8rem;" onclick="startShooterGame()">Rozpocznij Grę</button>
+            <button id="btnStartShooter" class="btn-submit" style="margin-top: 0.8rem;" onclick="startShooterGame()">Rozpocznij Operację</button>
         </div>
     </div>
 
@@ -1000,15 +1006,31 @@
             }, 1000); 
         }
 
-        // --- SILNIK STRZELANKI 2D (TOP-DOWN SHOOTER) ---
+        // =========================================================
+        // --- PEŁNY SYMUATOR TACTICAL SHOOTER 2D (TCCC + FPV OG-7) ---
+        // =========================================================
         let canvas, ctx;
         let isShooterRunning = false;
-        let animationFrameId = null;
-        let spawnIntervalId = null;
+        let animId = null;
+        let enemyShootInterval = null;
 
-        let player = { x: 290, y: 180, radius: 12, speed: 3.5, hp: 100, angle: 0 };
-        let bullets = [];
+        // Stan Gracza & Medycyny TCCC
+        let player = {
+            x: 100, y: 200, radius: 11, speed: 2.8, hp: 100, isBleeding: false, angle: 0,
+            tourniquets: 2, bandages: 3, fpvDrones: 1
+        };
+
+        // Stan FPV Drona
+        let fpv = { active: false, x: 0, y: 0, vx: 0, vy: 0, speed: 4.5, radius: 8 };
+
+        // Obiekty Gry
+        let mapTrees = [];
+        let mapHouses = [];
+        let mapTrenches = [];
         let enemies = [];
+        let bullets = [];
+        let enemyBullets = [];
+        let explosions = [];
         let keys = {};
         let mousePos = { x: 0, y: 0 };
         let shooterScore = 0;
@@ -1021,7 +1043,7 @@
             ctx = canvas.getContext('2d');
             
             canvas.addEventListener('mousemove', handleMouseMove);
-            canvas.addEventListener('click', handleShoot);
+            canvas.addEventListener('click', handleShooterClick);
             window.addEventListener('keydown', handleKeyDown);
             window.addEventListener('keyup', handleKeyUp);
         }
@@ -1036,8 +1058,21 @@
             window.removeEventListener('keyup', handleKeyUp);
         }
 
-        function handleKeyDown(e) { keys[e.key.toLowerCase()] = true; }
-        function handleKeyUp(e) { keys[e.key.toLowerCase()] = false; }
+        function handleKeyDown(e) {
+            let k = e.key.toLowerCase();
+            keys[k] = true;
+
+            // Klawisze Medycyny & FPV
+            if (isShooterRunning) {
+                if (k === '1') applyTourniquet();
+                if (k === '2') applyBandage();
+                if (k === 'e' || k === 'у') toggleFpvDrone();
+            }
+        }
+
+        function handleKeyUp(e) {
+            keys[e.key.toLowerCase()] = false;
+        }
 
         function handleMouseMove(e) {
             const rect = canvas.getBoundingClientRect();
@@ -1045,187 +1080,361 @@
             mousePos.y = e.clientY - rect.top;
         }
 
-        function handleShoot() {
+        function handleShooterClick() {
             if (!isShooterRunning) return;
-            playBeep(1200, 0.02);
-            
-            const angle = Math.atan2(mousePos.y - player.y, mousePos.x - player.x);
+
+            // Jeśli FPV aktywny, wybuch na kliknięcie
+            if (fpv.active) {
+                detonateFpvOG7();
+                return;
+            }
+
+            // Strzał z broni palnej gracza
+            playBeep(1300, 0.02);
+            let angle = Math.atan2(mousePos.y - player.y, mousePos.x - player.x);
             bullets.push({
-                x: player.x,
-                y: player.y,
-                vx: Math.cos(angle) * 7,
-                vy: Math.sin(angle) * 7,
+                x: player.x, y: player.y,
+                vx: Math.cos(angle) * 8, vy: Math.sin(angle) * 8,
                 radius: 3
             });
         }
 
+        function generateProceduralMap() {
+            mapTrees = [];
+            mapHouses = [];
+            mapTrenches = [];
+
+            // 1. Generuj Okopy
+            mapTrenches.push({ x: 180, y: 80, w: 280, h: 25 });
+            mapTrenches.push({ x: 300, y: 250, w: 250, h: 25 });
+
+            // 2. Generuj Domki
+            mapHouses.push({ x: 480, y: 50, w: 100, h: 80 });
+            mapHouses.push({ x: 80, y: 280, w: 110, h: 85 });
+
+            // 3. Generuj Drzewa (Zadrzewienia)
+            for (let i = 0; i < 18; i++) {
+                let tx = Math.random() * (canvas.width - 60) + 30;
+                let ty = Math.random() * (canvas.height - 60) + 30;
+                // Omiń pozycję startową gracza
+                if (Math.hypot(tx - 100, ty - 200) > 80) {
+                    mapTrees.push({ x: tx, y: ty, radius: 14 + Math.random() * 8 });
+                }
+            }
+        }
+
         function startShooterGame() {
-            player.x = canvas.width / 2;
-            player.y = canvas.height / 2;
+            player.x = 80;
+            player.y = 200;
             player.hp = 100;
+            player.isBleeding = false;
+            player.tourniquets = 2;
+            player.bandages = 3;
+            player.fpvDrones = 1;
+
+            fpv.active = false;
             shooterScore = 0;
             bullets = [];
+            enemyBullets = [];
             enemies = [];
+            explosions = [];
             keys = {};
-            isShooterRunning = true;
 
-            document.getElementById('shooterScore').innerText = shooterScore;
-            document.getElementById('shooterHp').innerText = player.hp;
+            generateProceduralMap();
+            spawnEnemies();
+
+            isShooterRunning = true;
+            updateUIStats();
             document.getElementById('btnStartShooter').style.display = 'none';
 
-            if (spawnIntervalId) clearInterval(spawnIntervalId);
-            spawnIntervalId = setInterval(spawnEnemy, 1200);
+            if (enemyShootInterval) clearInterval(enemyShootInterval);
+            enemyShootInterval = setInterval(enemiesAI, 1000);
 
-            if (animationFrameId) cancelAnimationFrame(animationFrameId);
-            gameLoop();
+            if (animId) cancelAnimationFrame(animId);
+            shooterLoop();
+        }
+
+        function spawnEnemies() {
+            // Wrogowie w budynkach i okopach
+            enemies = [
+                { x: 520, y: 90, hp: 50, radius: 11, speed: 1.0 },
+                { x: 320, y: 90, hp: 50, radius: 11, speed: 1.2 },
+                { x: 420, y: 260, hp: 50, radius: 11, speed: 1.1 },
+                { x: 220, y: 320, hp: 50, radius: 11, speed: 0.9 },
+                { x: 580, y: 320, hp: 50, radius: 11, speed: 1.3 }
+            ];
         }
 
         function stopShooterGame() {
             isShooterRunning = false;
-            if (animationFrameId) cancelAnimationFrame(animationFrameId);
-            if (spawnIntervalId) clearInterval(spawnIntervalId);
+            if (animId) cancelAnimationFrame(animId);
+            if (enemyShootInterval) clearInterval(enemyShootInterval);
             document.getElementById('btnStartShooter').style.display = 'block';
         }
 
-        function spawnEnemy() {
-            if (!isShooterRunning) return;
-            
-            let x, y;
-            if (Math.random() < 0.5) {
-                x = Math.random() < 0.5 ? 0 : canvas.width;
-                y = Math.random() * canvas.height;
-            } else {
-                x = Math.random() * canvas.width;
-                y = Math.random() < 0.5 ? 0 : canvas.height;
+        // --- System TCCC (Medycyna) ---
+        function applyTourniquet() {
+            if (player.tourniquets > 0 && player.isBleeding) {
+                playBeep(900, 0.1);
+                player.tourniquets--;
+                player.isBleeding = false;
+                updateUIStats();
             }
-
-            enemies.push({
-                x: x,
-                y: y,
-                radius: 10,
-                speed: 1.2 + Math.random() * 0.8
-            });
         }
 
-        function updateGame() {
-            // Ruch gracza
-            if ((keys['w'] || keys['ц']) && player.y - player.radius > 0) player.y -= player.speed;
-            if ((keys['s'] || keys['і']) && player.y + player.radius < canvas.height) player.y += player.speed;
-            if ((keys['a'] || keys['ф']) && player.x - player.radius > 0) player.x -= player.speed;
-            if ((keys['d'] || keys['в']) && player.x + player.radius < canvas.width) player.x += player.speed;
+        function applyBandage() {
+            if (player.bandages > 0 && player.hp < 100) {
+                playBeep(1100, 0.1);
+                player.bandages--;
+                player.hp = Math.min(100, player.hp + 35);
+                updateUIStats();
+            }
+        }
 
-            // Kąt obrotu celowania
-            player.angle = Math.atan2(mousePos.y - player.y, mousePos.x - player.x);
+        // --- System FPV Drona z OG-7 ---
+        function toggleFpvDrone() {
+            if (fpv.active) {
+                // Wyłącz FPV
+                fpv.active = false;
+            } else if (player.fpvDrones > 0) {
+                // Uruchom FPV
+                playBeep(1500, 0.1);
+                player.fpvDrones--;
+                fpv.active = true;
+                fpv.x = player.x;
+                fpv.y = player.y;
+                fpv.vx = 0; fpv.vy = 0;
+                updateUIStats();
+            }
+        }
 
-            // Aktualizacja pocisków
-            for (let i = bullets.length - 1; i >= 0; i--) {
-                let b = bullets[i];
-                b.x += b.vx;
-                b.y += b.vy;
+        function detonateFpvOG7() {
+            playBeep(200, 0.3);
+            explosions.push({ x: fpv.x, y: fpv.y, radius: 5, maxRadius: 65, color: '#f97316' });
 
-                if (b.x < 0 || b.x > canvas.width || b.y < 0 || b.y > canvas.height) {
-                    bullets.splice(i, 1);
+            // Zadaj obrażenia obszarowe wszystkim wrogom w promieniu rażenia OG-7
+            for (let i = enemies.length - 1; i >= 0; i--) {
+                let e = enemies[i];
+                let dist = Math.hypot(e.x - fpv.x, e.y - fpv.y);
+                if (dist < 65) {
+                    shooterScore += 50;
+                    enemies.splice(i, 1);
                 }
             }
 
-            // Aktualizacja wrogów i kolizji
-            for (let i = enemies.length - 1; i >= 0; i--) {
-                let e = enemies[i];
-                let angle = Math.atan2(player.y - e.y, player.x - e.x);
-                e.x += Math.cos(angle) * e.speed;
-                e.y += Math.sin(angle) * e.speed;
+            fpv.active = false;
+            updateUIStats();
+        }
 
-                // Trafienie pociskiem
-                for (let j = bullets.length - 1; j >= 0; j--) {
-                    let b = bullets[j];
-                    let dist = Math.hypot(b.x - e.x, b.y - e.y);
-                    if (dist < e.radius + b.radius) {
-                        playBeep(900, 0.03);
-                        shooterScore += 20;
-                        document.getElementById('shooterScore').innerText = shooterScore;
-                        enemies.splice(i, 1);
-                        bullets.splice(j, 1);
+        // AI Wrogów: Strzelanie do Gracza
+        function enemiesAI() {
+            if (!isShooterRunning) return;
+
+            enemies.forEach(e => {
+                let dist = Math.hypot(player.x - e.x, player.y - e.y);
+                if (dist < 320) { // Zasięg widzenia
+                    playBeep(400, 0.03);
+                    let angle = Math.atan2(player.y - e.y, player.x - e.x);
+                    enemyBullets.push({
+                        x: e.x, y: e.y,
+                        vx: Math.cos(angle) * 5.5, vy: Math.sin(angle) * 5.5,
+                        radius: 3
+                    });
+                }
+            });
+        }
+
+        function updateShooterLogic() {
+            // 1. Ruch Gracza
+            if (!fpv.active) {
+                let nx = player.x, ny = player.y;
+                if (keys['w'] || keys['ц']) ny -= player.speed;
+                if (keys['s'] || keys['і']) ny += player.speed;
+                if (keys['a'] || keys['ф']) nx -= player.speed;
+                if (keys['d'] || keys['в']) nx += player.speed;
+
+                // Kolizje z domkami
+                let collide = false;
+                mapHouses.forEach(h => {
+                    if (nx > h.x - 5 && nx < h.x + h.w + 5 && ny > h.y - 5 && ny < h.y + h.h + 5) collide = true;
+                });
+
+                if (!collide && nx > 10 && nx < canvas.width - 10 && ny > 10 && ny < canvas.height - 10) {
+                    player.x = nx; player.y = ny;
+                }
+                player.angle = Math.atan2(mousePos.y - player.y, mousePos.x - player.x);
+            }
+
+            // 2. Ruch FPV Drona
+            if (fpv.active) {
+                if (keys['w'] || keys['ц']) fpv.vy -= 0.3;
+                if (keys['s'] || keys['і']) fpv.vy += 0.3;
+                if (keys['a'] || keys['ф']) fpv.vx -= 0.3;
+                if (keys['d'] || keys['в']) fpv.vx += 0.3;
+
+                fpv.x += fpv.vx; fpv.y += fpv.vy;
+                fpv.vx *= 0.95; fpv.vy *= 0.95; // Tłumienie powietrza
+
+                // Detonacja przy uderzeniu w ścianę/dom
+                mapHouses.forEach(h => {
+                    if (fpv.x > h.x && fpv.x < h.x + h.w && fpv.y > h.y && fpv.y < h.y + h.h) {
+                        detonateFpvOG7();
+                    }
+                });
+            }
+
+            // 3. Obsługa krwawienia gracza
+            if (player.isBleeding) {
+                player.hp -= 0.05;
+                if (player.hp <= 0) endShooterGame();
+                updateUIStats();
+            }
+
+            // 4. Pociski Gracza
+            for (let i = bullets.length - 1; i >= 0; i--) {
+                let b = bullets[i];
+                b.x += b.vx; b.y += b.vy;
+
+                // Trafienie wroga
+                for (let j = enemies.length - 1; j >= 0; j--) {
+                    let e = enemies[j];
+                    if (Math.hypot(b.x - e.x, b.y - e.y) < e.radius + b.radius) {
+                        playBeep(1000, 0.02);
+                        shooterScore += 25;
+                        enemies.splice(j, 1);
+                        bullets.splice(i, 1);
+                        updateUIStats();
                         break;
                     }
                 }
+            }
 
-                // Kolizja z graczem
-                let playerDist = Math.hypot(player.x - e.x, player.y - e.y);
-                if (playerDist < player.radius + e.radius) {
-                    playBeep(200, 0.1);
-                    player.hp -= 20;
-                    document.getElementById('shooterHp').innerText = Math.max(0, player.hp);
-                    enemies.splice(i, 1);
+            // 5. Pociski Wrogów (Trafienia w Gracza)
+            for (let i = enemyBullets.length - 1; i >= 0; i--) {
+                let eb = enemyBullets[i];
+                eb.x += eb.vx; eb.y += eb.vy;
 
-                    if (player.hp <= 0) {
-                        endShooterGame();
-                    }
+                if (Math.hypot(eb.x - player.x, eb.y - player.y) < player.radius + eb.radius) {
+                    playBeep(250, 0.08);
+                    player.hp -= 15;
+                    player.isBleeding = true; // Rana wywołuje krwawienie
+                    enemyBullets.splice(i, 1);
+                    updateUIStats();
+
+                    if (player.hp <= 0) endShooterGame();
                 }
             }
+
+            // 6. Animacje Wybuchów
+            explosions.forEach((exp, idx) => {
+                exp.radius += 3;
+                if (exp.radius > exp.maxRadius) explosions.splice(idx, 1);
+            });
         }
 
-        function drawGame() {
+        function drawShooterMap() {
             ctx.clearRect(0, 0, canvas.width, canvas.height);
 
-            // Tło - siatka taktyczna
-            ctx.strokeStyle = "rgba(56, 189, 248, 0.05)";
-            ctx.lineWidth = 1;
-            for (let x = 0; x < canvas.width; x += 30) {
-                ctx.beginPath(); ctx.moveTo(x, 0); ctx.lineTo(x, canvas.height); ctx.stroke();
-            }
-            for (let y = 0; y < canvas.height; y += 30) {
-                ctx.beginPath(); ctx.moveTo(0, y); ctx.lineTo(canvas.width, y); ctx.stroke();
-            }
-
-            // Rysowanie gracza
-            ctx.save();
-            ctx.translate(player.x, player.y);
-            ctx.rotate(player.angle);
-            
-            // Lufa
-            ctx.fillStyle = "#38bdf8";
-            ctx.fillRect(0, -3, 18, 6);
-
-            // Ciało
-            ctx.beginPath();
-            ctx.arc(0, 0, player.radius, 0, Math.PI * 2);
-            ctx.fillStyle = "#0ea5e9";
-            ctx.fill();
-            ctx.strokeStyle = "#fff";
-            ctx.stroke();
-            ctx.restore();
-
-            // Pociski
-            ctx.fillStyle = "#facc15";
-            bullets.forEach(b => {
-                ctx.beginPath();
-                ctx.arc(b.x, b.y, b.radius, 0, Math.PI * 2);
-                ctx.fill();
+            // Okopy
+            ctx.fillStyle = "#2d2417";
+            mapTrenches.forEach(t => {
+                ctx.fillRect(t.x, t.y, t.w, t.h);
+                ctx.strokeStyle = "#4a3b2c";
+                ctx.strokeRect(t.x, t.y, t.w, t.h);
             });
 
-            // Wrogowie (Drony)
+            // Domki
+            ctx.fillStyle = "#3f3f46";
+            mapHouses.forEach(h => {
+                ctx.fillRect(h.x, h.y, h.w, h.h);
+                ctx.strokeStyle = "#71717a";
+                ctx.strokeRect(h.x, h.y, h.w, h.h);
+            });
+
+            // Wrogowie
             ctx.fillStyle = "#ef4444";
             enemies.forEach(e => {
                 ctx.beginPath();
                 ctx.arc(e.x, e.y, e.radius, 0, Math.PI * 2);
                 ctx.fill();
-                ctx.strokeStyle = "#f87171";
-                ctx.stroke();
             });
+
+            // Pociski
+            ctx.fillStyle = "#facc15";
+            bullets.forEach(b => { ctx.beginPath(); ctx.arc(b.x, b.y, b.radius, 0, Math.PI * 2); ctx.fill(); });
+
+            ctx.fillStyle = "#f87171";
+            enemyBullets.forEach(eb => { ctx.beginPath(); ctx.arc(eb.x, eb.y, eb.radius, 0, Math.PI * 2); ctx.fill(); });
+
+            // Drzewa (Zadrzewienia)
+            ctx.fillStyle = "rgba(34, 197, 94, 0.55)";
+            mapTrees.forEach(tr => {
+                ctx.beginPath();
+                ctx.arc(tr.x, tr.y, tr.radius, 0, Math.PI * 2);
+                ctx.fill();
+            });
+
+            // Gracz
+            ctx.save();
+            ctx.translate(player.x, player.y);
+            ctx.rotate(player.angle);
+            ctx.fillStyle = "#38bdf8";
+            ctx.fillRect(0, -3, 16, 6); // Lufa
+            ctx.beginPath();
+            ctx.arc(0, 0, player.radius, 0, Math.PI * 2);
+            ctx.fillStyle = player.isBleeding ? "#ef4444" : "#0ea5e9";
+            ctx.fill();
+            ctx.restore();
+
+            // Efekty Wybuchów
+            explosions.forEach(exp => {
+                ctx.beginPath();
+                ctx.arc(exp.x, exp.y, exp.radius, 0, Math.PI * 2);
+                ctx.fillStyle = exp.color;
+                ctx.globalAlpha = 0.6;
+                ctx.fill();
+                ctx.globalAlpha = 1.0;
+            });
+
+            // Widok z Drona FPV (HUD FPV)
+            if (fpv.active) {
+                ctx.fillStyle = "#22c55e";
+                ctx.beginPath();
+                ctx.arc(fpv.x, fpv.y, fpv.radius, 0, Math.PI * 2);
+                ctx.fill();
+
+                // FPV OSD Overlay
+                ctx.strokeStyle = "rgba(34, 197, 94, 0.8)";
+                ctx.strokeRect(10, 10, canvas.width - 20, canvas.height - 20);
+                ctx.font = "12px monospace";
+                ctx.fillStyle = "#22c55e";
+                ctx.fillText("FPV CAMERA 1 - CAGE OG-7 ACTIVE", 20, 30);
+                ctx.fillText("BATTERY: 98% | LINK: STABLE", 20, 48);
+            }
         }
 
-        function gameLoop() {
+        function updateUIStats() {
+            document.getElementById('shooterScore').innerText = shooterScore;
+            document.getElementById('shooterHp').innerText = Math.max(0, Math.floor(player.hp));
+            document.getElementById('shooterBleed').innerText = player.isBleeding ? "TAK (Użyj 1)" : "NIE";
+            document.getElementById('shooterBleed').style.color = player.isBleeding ? "var(--status-alert)" : "var(--status-online)";
+            document.getElementById('cntTourniquet').innerText = player.tourniquets;
+            document.getElementById('cntBandage').innerText = player.bandages;
+            document.getElementById('cntFpv').innerText = player.fpvDrones;
+        }
+
+        function shooterLoop() {
             if (!isShooterRunning) return;
-            updateGame();
-            drawGame();
-            animationFrameId = requestAnimationFrame(gameLoop);
+            updateShooterLogic();
+            drawShooterMap();
+            animId = requestAnimationFrame(shooterLoop);
         }
 
         function endShooterGame() {
             stopShooterGame();
-            document.getElementById('btnStartShooter').innerText = "Zagraj ponownie";
+            document.getElementById('btnStartShooter').innerText = "Rozpocznij Ponownie";
             
-            let playerName = prompt(`Koniec gry! Twój wynik: ${shooterScore} pkt.\nWpisz swój nick, aby zapisać rekord:`, globalSenderName || "Żołnierz");
+            let playerName = prompt(`Operacja zakończona! Wynik: ${shooterScore} pkt.\nWpisz swój nick, aby zapisać rekord:`, globalSenderName || "Operator");
             if (playerName && playerName.trim() !== '') {
                 scoresRef.push({
                     name: playerName.trim(),
