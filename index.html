@@ -431,33 +431,33 @@
         </div>
     </footer>
 
-    <!-- DODANE PRZYCISKI MINI-GRY I TABELI REKORDÓW NA SAMYM DOLE -->
+    <!-- PRZYCISKI DO STRZELANKI I REKORDÓW NA DOLE STRONY -->
     <div style="background: var(--bg-deep); padding: 2rem; border-top: 1px solid var(--accent-border); text-align: center; display: flex; justify-content: center; gap: 1.5rem; flex-wrap: wrap;">
-        <button class="btn-main-trigger" style="margin-bottom: 0; padding: 0.8rem 1.8rem; font-size: 0.95rem;" onclick="openGameModal()">🎮 Mini-Gra: Target Strike</button>
+        <button class="btn-main-trigger" style="margin-bottom: 0; padding: 0.8rem 1.8rem; font-size: 0.95rem;" onclick="openShooterModal()">💥 Strzelanka: Defense Zone</button>
         <button class="btn-main-trigger" style="margin-bottom: 0; padding: 0.8rem 1.8rem; font-size: 0.95rem; border-color: rgba(34, 197, 94, 0.4); color: var(--status-online);" onclick="openLeaderboardModal()">🏆 Tabela Rekordów</button>
     </div>
 
-    <!-- Modal Mini-Gry -->
-    <div class="modal-overlay" id="gameModal">
-        <div class="modal-window" style="max-width: 500px; text-align: center;">
-            <button class="close-modal" onclick="closeGameModal()">×</button>
-            <h2 style="color: #f1f5f9; margin-bottom: 0.5rem;">🎯 Tactical Target Strike</h2>
-            <p style="color: var(--text-muted); font-size: 0.85rem; margin-bottom: 1rem;">Klikaj w cele przed upływem czasu!</p>
+    <!-- MODAL STRZELANKI (CANVAS SHOOTER) -->
+    <div class="modal-overlay" id="shooterModal">
+        <div class="modal-window" style="max-width: 650px; text-align: center;">
+            <button class="close-modal" onclick="closeShooterModal()">×</button>
+            <h2 style="color: #f1f5f9; margin-bottom: 0.3rem;">💥 Tactical Defense Zone 2D</h2>
+            <p style="color: var(--text-muted); font-size: 0.85rem; margin-bottom: 0.8rem;">Sterowanie: <b>W, A, S, D</b> (ruch) | <b>Myszka</b> (celowanie i strzał)</p>
 
-            <div style="display: flex; justify-content: space-around; font-weight: bold; margin-bottom: 1rem; background: rgba(0,0,0,0.3); padding: 0.6rem; border-radius: 8px;">
-                <div>Wynik: <span id="gameScore" style="color: var(--accent);">0</span></div>
-                <div>Czas: <span id="gameTimer" style="color: var(--status-alert);">15</span>s</div>
+            <div style="display: flex; justify-content: space-around; font-weight: bold; margin-bottom: 0.8rem; background: rgba(0,0,0,0.3); padding: 0.5rem; border-radius: 8px;">
+                <div>Punkty: <span id="shooterScore" style="color: var(--accent);">0</span></div>
+                <div>Życie: <span id="shooterHp" style="color: var(--status-online);">100</span>%</div>
             </div>
 
-            <div id="gameArea" style="width: 100%; height: 260px; background: #070b14; border: 1px solid var(--accent-border); border-radius: 10px; position: relative; overflow: hidden; cursor: crosshair;">
-                <div id="gameTarget" onclick="hitTarget()" style="width: 45px; height: 45px; background: radial-gradient(circle, #ef4444 30%, #38bdf8 70%); border-radius: 50%; position: absolute; display: none; box-shadow: 0 0 12px var(--accent); transform: translate(-50%, -50%);"></div>
+            <div style="position: relative; width: 100%; display: flex; justify-content: center;">
+                <canvas id="shooterCanvas" width="580" height="360" style="background: #05070c; border: 1px solid var(--accent-border); border-radius: 8px; cursor: crosshair;"></canvas>
             </div>
 
-            <button id="btnStartGame" class="btn-submit" style="margin-top: 1rem;" onclick="startGame()">Start Gry</button>
+            <button id="btnStartShooter" class="btn-submit" style="margin-top: 0.8rem;" onclick="startShooterGame()">Rozpocznij Grę</button>
         </div>
     </div>
 
-    <!-- Modal Tabeli Rekordów -->
+    <!-- MODAL TABELI REKORDÓW -->
     <div class="modal-overlay" id="leaderboardModal">
         <div class="modal-window" style="max-width: 500px;">
             <button class="close-modal" onclick="closeLeaderboardModal()">×</button>
@@ -498,7 +498,6 @@
                         <input type="text" id="userContact" required placeholder="@username або номер">
                     </div>
                     
-                    <!-- Бажаний підрозділ зі скролбаром -->
                     <div class="form-group">
                         <label>Бажаний підрозділ</label>
                         <div class="custom-select-wrapper" id="squadSelectWrapper">
@@ -514,7 +513,6 @@
                         </div>
                     </div>
 
-                    <!-- Додатковий вибір напрямку/спеціальності -->
                     <div class="form-group">
                         <label>Військова спеціалізація</label>
                         <div class="custom-select-wrapper" id="specSelectWrapper">
@@ -606,12 +604,6 @@
         let isRecruiter = false;
         let globalSenderName = "Гість";
         let isCheckingCrypto = false;
-
-        // Zmienne do mini-gry
-        let score = 0;
-        let timeLeft = 15;
-        let gameInterval = null;
-        let isPlaying = false;
 
         const playBeep = (freq = 600, duration = 0.05) => {
             try {
@@ -1008,20 +1000,243 @@
             }, 1000); 
         }
 
-        // --- OBSŁUGA MINI-GRY I TABELI REKORDÓW ---
-        function openGameModal() {
+        // --- SILNIK STRZELANKI 2D (TOP-DOWN SHOOTER) ---
+        let canvas, ctx;
+        let isShooterRunning = false;
+        let animationFrameId = null;
+        let spawnIntervalId = null;
+
+        let player = { x: 290, y: 180, radius: 12, speed: 3.5, hp: 100, angle: 0 };
+        let bullets = [];
+        let enemies = [];
+        let keys = {};
+        let mousePos = { x: 0, y: 0 };
+        let shooterScore = 0;
+
+        function openShooterModal() {
             playBeep(800);
-            document.getElementById('gameModal').classList.add('active');
+            document.getElementById('shooterModal').classList.add('active');
             document.body.classList.add('modal-open');
+            canvas = document.getElementById('shooterCanvas');
+            ctx = canvas.getContext('2d');
+            
+            canvas.addEventListener('mousemove', handleMouseMove);
+            canvas.addEventListener('click', handleShoot);
+            window.addEventListener('keydown', handleKeyDown);
+            window.addEventListener('keyup', handleKeyUp);
         }
 
-        function closeGameModal() {
+        function closeShooterModal() {
             playBeep(400);
-            document.getElementById('gameModal').classList.remove('active');
+            document.getElementById('shooterModal').classList.remove('active');
             document.body.classList.remove('modal-open');
-            resetGame();
+            stopShooterGame();
+
+            window.removeEventListener('keydown', handleKeyDown);
+            window.removeEventListener('keyup', handleKeyUp);
         }
 
+        function handleKeyDown(e) { keys[e.key.toLowerCase()] = true; }
+        function handleKeyUp(e) { keys[e.key.toLowerCase()] = false; }
+
+        function handleMouseMove(e) {
+            const rect = canvas.getBoundingClientRect();
+            mousePos.x = e.clientX - rect.left;
+            mousePos.y = e.clientY - rect.top;
+        }
+
+        function handleShoot() {
+            if (!isShooterRunning) return;
+            playBeep(1200, 0.02);
+            
+            const angle = Math.atan2(mousePos.y - player.y, mousePos.x - player.x);
+            bullets.push({
+                x: player.x,
+                y: player.y,
+                vx: Math.cos(angle) * 7,
+                vy: Math.sin(angle) * 7,
+                radius: 3
+            });
+        }
+
+        function startShooterGame() {
+            player.x = canvas.width / 2;
+            player.y = canvas.height / 2;
+            player.hp = 100;
+            shooterScore = 0;
+            bullets = [];
+            enemies = [];
+            keys = {};
+            isShooterRunning = true;
+
+            document.getElementById('shooterScore').innerText = shooterScore;
+            document.getElementById('shooterHp').innerText = player.hp;
+            document.getElementById('btnStartShooter').style.display = 'none';
+
+            if (spawnIntervalId) clearInterval(spawnIntervalId);
+            spawnIntervalId = setInterval(spawnEnemy, 1200);
+
+            if (animationFrameId) cancelAnimationFrame(animationFrameId);
+            gameLoop();
+        }
+
+        function stopShooterGame() {
+            isShooterRunning = false;
+            if (animationFrameId) cancelAnimationFrame(animationFrameId);
+            if (spawnIntervalId) clearInterval(spawnIntervalId);
+            document.getElementById('btnStartShooter').style.display = 'block';
+        }
+
+        function spawnEnemy() {
+            if (!isShooterRunning) return;
+            
+            let x, y;
+            if (Math.random() < 0.5) {
+                x = Math.random() < 0.5 ? 0 : canvas.width;
+                y = Math.random() * canvas.height;
+            } else {
+                x = Math.random() * canvas.width;
+                y = Math.random() < 0.5 ? 0 : canvas.height;
+            }
+
+            enemies.push({
+                x: x,
+                y: y,
+                radius: 10,
+                speed: 1.2 + Math.random() * 0.8
+            });
+        }
+
+        function updateGame() {
+            // Ruch gracza
+            if ((keys['w'] || keys['ц']) && player.y - player.radius > 0) player.y -= player.speed;
+            if ((keys['s'] || keys['і']) && player.y + player.radius < canvas.height) player.y += player.speed;
+            if ((keys['a'] || keys['ф']) && player.x - player.radius > 0) player.x -= player.speed;
+            if ((keys['d'] || keys['в']) && player.x + player.radius < canvas.width) player.x += player.speed;
+
+            // Kąt obrotu celowania
+            player.angle = Math.atan2(mousePos.y - player.y, mousePos.x - player.x);
+
+            // Aktualizacja pocisków
+            for (let i = bullets.length - 1; i >= 0; i--) {
+                let b = bullets[i];
+                b.x += b.vx;
+                b.y += b.vy;
+
+                if (b.x < 0 || b.x > canvas.width || b.y < 0 || b.y > canvas.height) {
+                    bullets.splice(i, 1);
+                }
+            }
+
+            // Aktualizacja wrogów i kolizji
+            for (let i = enemies.length - 1; i >= 0; i--) {
+                let e = enemies[i];
+                let angle = Math.atan2(player.y - e.y, player.x - e.x);
+                e.x += Math.cos(angle) * e.speed;
+                e.y += Math.sin(angle) * e.speed;
+
+                // Trafienie pociskiem
+                for (let j = bullets.length - 1; j >= 0; j--) {
+                    let b = bullets[j];
+                    let dist = Math.hypot(b.x - e.x, b.y - e.y);
+                    if (dist < e.radius + b.radius) {
+                        playBeep(900, 0.03);
+                        shooterScore += 20;
+                        document.getElementById('shooterScore').innerText = shooterScore;
+                        enemies.splice(i, 1);
+                        bullets.splice(j, 1);
+                        break;
+                    }
+                }
+
+                // Kolizja z graczem
+                let playerDist = Math.hypot(player.x - e.x, player.y - e.y);
+                if (playerDist < player.radius + e.radius) {
+                    playBeep(200, 0.1);
+                    player.hp -= 20;
+                    document.getElementById('shooterHp').innerText = Math.max(0, player.hp);
+                    enemies.splice(i, 1);
+
+                    if (player.hp <= 0) {
+                        endShooterGame();
+                    }
+                }
+            }
+        }
+
+        function drawGame() {
+            ctx.clearRect(0, 0, canvas.width, canvas.height);
+
+            // Tło - siatka taktyczna
+            ctx.strokeStyle = "rgba(56, 189, 248, 0.05)";
+            ctx.lineWidth = 1;
+            for (let x = 0; x < canvas.width; x += 30) {
+                ctx.beginPath(); ctx.moveTo(x, 0); ctx.lineTo(x, canvas.height); ctx.stroke();
+            }
+            for (let y = 0; y < canvas.height; y += 30) {
+                ctx.beginPath(); ctx.moveTo(0, y); ctx.lineTo(canvas.width, y); ctx.stroke();
+            }
+
+            // Rysowanie gracza
+            ctx.save();
+            ctx.translate(player.x, player.y);
+            ctx.rotate(player.angle);
+            
+            // Lufa
+            ctx.fillStyle = "#38bdf8";
+            ctx.fillRect(0, -3, 18, 6);
+
+            // Ciało
+            ctx.beginPath();
+            ctx.arc(0, 0, player.radius, 0, Math.PI * 2);
+            ctx.fillStyle = "#0ea5e9";
+            ctx.fill();
+            ctx.strokeStyle = "#fff";
+            ctx.stroke();
+            ctx.restore();
+
+            // Pociski
+            ctx.fillStyle = "#facc15";
+            bullets.forEach(b => {
+                ctx.beginPath();
+                ctx.arc(b.x, b.y, b.radius, 0, Math.PI * 2);
+                ctx.fill();
+            });
+
+            // Wrogowie (Drony)
+            ctx.fillStyle = "#ef4444";
+            enemies.forEach(e => {
+                ctx.beginPath();
+                ctx.arc(e.x, e.y, e.radius, 0, Math.PI * 2);
+                ctx.fill();
+                ctx.strokeStyle = "#f87171";
+                ctx.stroke();
+            });
+        }
+
+        function gameLoop() {
+            if (!isShooterRunning) return;
+            updateGame();
+            drawGame();
+            animationFrameId = requestAnimationFrame(gameLoop);
+        }
+
+        function endShooterGame() {
+            stopShooterGame();
+            document.getElementById('btnStartShooter').innerText = "Zagraj ponownie";
+            
+            let playerName = prompt(`Koniec gry! Twój wynik: ${shooterScore} pkt.\nWpisz swój nick, aby zapisać rekord:`, globalSenderName || "Żołnierz");
+            if (playerName && playerName.trim() !== '') {
+                scoresRef.push({
+                    name: playerName.trim(),
+                    score: shooterScore,
+                    timestamp: Date.now()
+                });
+                openLeaderboardModal();
+            }
+        }
+
+        // --- TABELA REKORDÓW ---
         function openLeaderboardModal() {
             playBeep(800);
             document.getElementById('leaderboardModal').classList.add('active');
@@ -1033,73 +1248,6 @@
             playBeep(400);
             document.getElementById('leaderboardModal').classList.remove('active');
             document.body.classList.remove('modal-open');
-        }
-
-        function startGame() {
-            score = 0;
-            timeLeft = 15;
-            isPlaying = true;
-            document.getElementById('gameScore').innerText = score;
-            document.getElementById('gameTimer').innerText = timeLeft;
-            document.getElementById('btnStartGame').style.display = 'none';
-            
-            moveTarget();
-            document.getElementById('gameTarget').style.display = 'block';
-
-            gameInterval = setInterval(() => {
-                timeLeft--;
-                document.getElementById('gameTimer').innerText = timeLeft;
-                if (timeLeft <= 0) {
-                    endGame();
-                }
-            }, 1000);
-        }
-
-        function moveTarget() {
-            const area = document.getElementById('gameArea');
-            const target = document.getElementById('gameTarget');
-            const maxX = area.clientWidth - 50;
-            const maxY = area.clientHeight - 50;
-
-            const randomX = Math.floor(Math.random() * maxX) + 25;
-            const randomY = Math.floor(Math.random() * maxY) + 25;
-
-            target.style.left = randomX + 'px';
-            target.style.top = randomY + 'px';
-        }
-
-        function hitTarget() {
-            if (!isPlaying) return;
-            playBeep(1200, 0.02);
-            score += 10;
-            document.getElementById('gameScore').innerText = score;
-            moveTarget();
-        }
-
-        function endGame() {
-            isPlaying = false;
-            clearInterval(gameInterval);
-            document.getElementById('gameTarget').style.display = 'none';
-            document.getElementById('btnStartGame').style.display = 'block';
-            document.getElementById('btnStartGame').innerText = 'Graj ponownie';
-            playBeep(300, 0.2);
-
-            let playerName = prompt(`Koniec gry! Twój wynik: ${score} pkt.\nWpisz swój nick, aby zapisać rekord:`, globalSenderName || "Gracz");
-            if (playerName && playerName.trim() !== '') {
-                scoresRef.push({
-                    name: playerName.trim(),
-                    score: score,
-                    timestamp: Date.now()
-                });
-                openLeaderboardModal();
-            }
-        }
-
-        function resetGame() {
-            isPlaying = false;
-            clearInterval(gameInterval);
-            document.getElementById('gameTarget').style.display = 'none';
-            document.getElementById('btnStartGame').style.display = 'block';
         }
 
         function loadLeaderboard() {
