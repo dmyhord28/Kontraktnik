@@ -2,7 +2,7 @@
 <html lang="uk-UA"> 
 <head>
     <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
     <meta name="description" content="Рекрутинг до Інтернаціональних бригад ЗСУ">
     <title>Strike — Рекрутинговий Центр</title> 
     <link class="site-icon" rel="icon" type="image/png" href="strike.jpg">
@@ -29,7 +29,7 @@
 
         * { margin: 0; padding: 0; box-sizing: border-box; font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif; }
         html { scroll-behavior: smooth; }
-        body { background-color: var(--bg-dark); color: var(--text-main); min-height: 100vh; display: flex; flex-direction: column; overflow-x: hidden; }
+        body { background-color: var(--bg-dark); color: var(--text-main); min-height: 100vh; display: flex; flex-direction: column; overflow-x: hidden; touch-action: manipulation; }
         body.modal-open { overflow: hidden; }
 
         button, select { font-family: inherit; user-select: none; -webkit-tap-highlight-color: transparent; }
@@ -46,7 +46,7 @@
         .nav-links a { color: var(--text-subtle); text-decoration: none; font-weight: 500; transition: color var(--transition-speed) ease; }
         .nav-links a:hover { color: #f8fafc; }
         
-        /* Hero Section & Tactical Overlay */
+        /* Hero Section */
         .video-container { position: relative; min-height: 100vh; display: flex; flex-direction: column; justify-content: center; align-items: center; padding: 6rem 2rem 4rem 2rem; overflow: hidden; }
         .bg-video { position: absolute; top: 50%; left: 50%; min-width: 100%; min-height: 100%; width: auto; height: auto; transform: translate(-50%, -50%); object-fit: cover; z-index: 1; opacity: 0.35; }
         .video-overlay { 
@@ -98,7 +98,7 @@
         .footer-note span { animation: blink 1.5s infinite; color: var(--status-alert); }
         @keyframes blink { 0%, 100% { opacity: 0.3; } 50% { opacity: 1; } }
 
-        /* Pay Calculator Section */
+        /* Calculator Section */
         .calculator-section { background: var(--bg-deep); padding: 5rem 2rem; border-top: 1px solid rgba(255, 255, 255, 0.03); display: flex; justify-content: center; }
         .calc-container { max-width: 1000px; width: 100%; background: var(--bg-card); border: 1px solid var(--accent-border); border-radius: 16px; padding: 2.5rem; backdrop-filter: blur(10px); }
         .calc-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 2rem; margin-top: 2rem; }
@@ -109,7 +109,7 @@
         .calc-result-box { background: rgba(10, 15, 26, 0.8); border: 1px solid var(--accent); border-radius: 12px; padding: 1.5rem; text-align: center; display: flex; flex-direction: column; justify-content: center; align-items: center; }
         .calc-amount { font-size: 2.8rem; font-weight: 800; color: var(--status-online); text-shadow: 0 0 15px rgba(34, 197, 94, 0.3); margin: 0.5rem 0; }
 
-        /* Recruitment Steps Section */
+        /* Steps Section */
         .steps-section { padding: 5rem 2rem; max-width: 1300px; margin: 0 auto; text-align: center; }
         .steps-grid { display: grid; grid-template-columns: repeat(auto-fit, minmax(250px, 1fr)); gap: 1.5rem; margin-top: 3rem; }
         .step-card { background: var(--bg-card); border: 1px solid rgba(255,255,255,0.05); border-radius: 12px; padding: 2rem; text-align: left; position: relative; overflow: hidden; }
@@ -273,28 +273,42 @@
             position: absolute;
             top: 50%; left: 50%;
             transform: translate(-50%, -50%);
-            width: 480px;
+            width: 90%; max-width: 480px;
             background: rgba(12, 16, 24, 0.96);
             border: 2px solid #334155;
             border-radius: 12px;
             padding: 20px;
             box-shadow: 0 0 30px rgba(0,0,0,0.9);
-            z-index: 50;
+            z-index: 60;
             color: #e2e8f0;
         }
         .tarkov-header { display: flex; justify-content: space-between; border-bottom: 1px solid #334155; padding-bottom: 10px; margin-bottom: 15px; font-weight: bold; letter-spacing: 1px; color: var(--accent); }
         .tarkov-body { display: flex; gap: 20px; align-items: center; }
-        .skeleton-view { width: 170px; height: 280px; position: relative; border: 1px solid rgba(255,255,255,0.05); border-radius: 8px; background: rgba(0,0,0,0.4); display: flex; justify-content: center; align-items: center; }
-        .skeleton-svg { width: 130px; height: 240px; }
-        .limb-list { flex: 1; display: flex; flex-direction: column; gap: 8px; }
-        .limb-box { background: rgba(30, 41, 59, 0.7); border: 1px solid #334155; border-radius: 6px; padding: 6px 10px; cursor: pointer; transition: all 0.2s; }
+        .skeleton-view { width: 140px; height: 260px; position: relative; border: 1px solid rgba(255,255,255,0.05); border-radius: 8px; background: rgba(0,0,0,0.4); display: flex; justify-content: center; align-items: center; }
+        .skeleton-svg { width: 120px; height: 220px; }
+        .limb-list { flex: 1; display: flex; flex-direction: column; gap: 6px; }
+        .limb-box { background: rgba(30, 41, 59, 0.7); border: 1px solid #334155; border-radius: 6px; padding: 5px 8px; cursor: pointer; transition: all 0.2s; }
         .limb-box:hover, .limb-box.selected { border-color: var(--accent); background: rgba(56, 189, 248, 0.15); }
-        .limb-info { display: flex; justify-content: space-between; font-size: 0.82rem; font-weight: bold; margin-bottom: 3px; }
-        .limb-bar-bg { width: 100%; height: 6px; background: #0f172a; border-radius: 3px; overflow: hidden; }
+        .limb-info { display: flex; justify-content: space-between; font-size: 0.75rem; font-weight: bold; margin-bottom: 2px; }
+        .limb-bar-bg { width: 100%; height: 5px; background: #0f172a; border-radius: 3px; overflow: hidden; }
         .limb-bar-fill { height: 100%; background: var(--status-online); width: 100%; transition: width 0.3s ease, background 0.3s; }
         .med-actions { display: flex; gap: 10px; margin-top: 15px; border-top: 1px solid #334155; padding-top: 12px; }
         .btn-med { flex: 1; padding: 8px; background: #1e293b; border: 1px solid var(--accent-border); color: #fff; border-radius: 6px; font-size: 0.8rem; font-weight: bold; cursor: pointer; transition: all 0.2s; }
         .btn-med:hover { background: var(--accent); color: #000; }
+
+        /* TOUCH CONTROLS FOR MOBILE DEVICE INTEGRATION */
+        .touch-controls { display: none; position: absolute; bottom: 10px; left: 0; width: 100%; padding: 0 15px; justify-content: space-between; align-items: flex-end; z-index: 45; pointer-events: none; }
+        @media (max-width: 900px) { .touch-controls { display: flex; } }
+        
+        .joystick-zone { width: 120px; height: 120px; background: rgba(255,255,255,0.06); border: 2px solid var(--accent-border); border-radius: 50%; position: relative; pointer-events: auto; touch-action: none; }
+        .joystick-knob { width: 50px; height: 50px; background: var(--accent); border-radius: 50%; position: absolute; top: 35px; left: 35px; box-shadow: 0 0 10px var(--accent-glow); opacity: 0.8; }
+        
+        .action-buttons { display: grid; grid-template-columns: repeat(3, 50px); gap: 10px; pointer-events: auto; }
+        .btn-touch { width: 50px; height: 50px; background: rgba(15, 23, 42, 0.85); border: 1px solid var(--accent); color: #fff; border-radius: 50%; font-size: 1.2rem; font-weight: bold; display: flex; justify-content: center; align-items: center; box-shadow: 0 4px 10px rgba(0,0,0,0.5); active { transform: scale(0.9); } }
+
+        /* VIGNETTE RED FLASH ON DAMAGE */
+        .damage-vignette { position: absolute; top: 0; left: 0; width: 100%; height: 100%; pointer-events: none; box-shadow: inset 0 0 60px rgba(239, 68, 68, 0); transition: box-shadow 0.2s; z-index: 40; border-radius: 8px; }
+        .radio-ticker { position: absolute; top: 8px; left: 10px; font-size: 0.75rem; color: var(--accent); font-weight: bold; text-shadow: 0 0 5px rgba(0,0,0,0.8); z-index: 40; background: rgba(0,0,0,0.6); padding: 3px 8px; border-radius: 4px; border: 1px solid var(--accent-border); }
     </style>
 
     <script src="https://www.gstatic.com/firebasejs/8.10.1/firebase-app.js"></script>
@@ -336,7 +350,7 @@
                     <div class="photo-container"><img src="RVC.png" alt="РДК" loading="lazy"></div>
                     <div>
                         <h3>Російський добровольчий корпус</h3>
-                        <p>Добровольче формування, що веде запеклі бої та проводити спецоперації на лінії зіткнення.</p>
+                        <p>Добровольче формування, що веде запеклі бої та проводить спецоперації на лінії зіткнення.</p>
                     </div>
                     <span class="footer-note"><span>●</span> СТАТУС: НА ЛБЗ</span>
                 </div>
@@ -395,26 +409,10 @@
         <p style="color: var(--text-muted); margin-top: 0.5rem;">Від подачі онлайн-заявки до першого виходу на бойове злагодження</p>
 
         <div class="steps-grid">
-            <div class="step-card">
-                <span class="step-num">01</span>
-                <h4>Подача Заявки</h4>
-                <p>Заповнюйте анкету у модальному вікні та переходьте до прямого зв'язку з рекрутером.</p>
-            </div>
-            <div class="step-card">
-                <span class="step-num">02</span>
-                <h4>Співбесіда & МЕК</h4>
-                <p>Проходження онлайн-інтерв'ю та збір первинного пакета медичних документів.</p>
-            </div>
-            <div class="step-card">
-                <span class="step-num">03</span>
-                <h4>Курс БЗВП (30-40 днів)</h4>
-                <p>Інтенсивна вишколова програма з вогневої, тактичної та медичної підготовки.</p>
-            </div>
-            <div class="step-card">
-                <span class="step-num">04</span>
-                <h4>Підписання Контракту</h4>
-                <p>Офіційне зарахування до обраної бригади ЗСУ та отримання спорядження.</p>
-            </div>
+            <div class="step-card"><span class="step-num">01</span><h4>Подача Заявки</h4><p>Заповнюйте анкету у модальному вікні та переходьте до прямого зв'язку з рекрутером.</p></div>
+            <div class="step-card"><span class="step-num">02</span><h4>Співбесіда & МЕК</h4><p>Проходження онлайн-інтерв'ю та збір первинного пакета медичних документов.</p></div>
+            <div class="step-card"><span class="step-num">03</span><h4>Курс БЗВП (30-40 днів)</h4><p>Інтенсивна вишколова програма з вогневої, тактичної та медичної підготовки.</p></div>
+            <div class="step-card"><span class="step-num">04</span><h4>Підписання Контракту</h4><p>Офіційне зарахування до обраної бригади ЗСУ та отримання спорядження.</p></div>
         </div>
     </section>
 
@@ -422,195 +420,157 @@
     <section class="faq-section" id="faq">
         <div class="faq-container">
             <h2 style="color: var(--text-heading); font-size: 2rem; text-transform: uppercase; text-align: center; margin-bottom: 2rem;">Часті запитання (FAQ)</h2>
-            
-            <div class="faq-item" onclick="toggleFaq(this)">
-                <div class="faq-header">1. Чи можу я підписати контракт, якщо я іноземний громадянин? <span>+</span></div>
-                <div class="faq-body">Так, Інтернаціональні бригади офіційно приймають іноземних громадян та осіб без громадянства відповідно до чинного законодавства України.</div>
-            </div>
-            <div class="faq-item" onclick="toggleFaq(this)">
-                <div class="faq-header">2. Які вимоги до физичної підготовки та віку? <span>+</span></div>
-                <div class="faq-body">Віковий поріг — від 18 до 60 років. Вимагається відсутність важких хронічних захворювань та задовільний базовий рівень фізичної витривалості.</div>
-            </div>
-            <div class="faq-item" onclick="toggleFaq(this)">
-                <div class="faq-header">3. Скільки триває контракт і чи є відпустка? <span>+</span></div>
-                <div class="faq-body">Контракт укладається терміном від 1 року або до закінчення воєнного стану. Надається щорічна оплачувана відпустка та додаткові дні за сімейними обставинами.</div>
-            </div>
+            <div class="faq-item" onclick="toggleFaq(this)"><div class="faq-header">1. Чи можу я підписати контракт, якщо я іноземний громадянин? <span>+</span></div><div class="faq-body">Так, Інтернаціональні бригади приймають іноземних громадян відповідно до чинного законодавства України.</div></div>
+            <div class="faq-item" onclick="toggleFaq(this)"><div class="faq-header">2. Які вимоги до фізичної підготовки та віку? <span>+</span></div><div class="faq-body">Віковий поріг — від 18 до 60 років. Вимагається відсутність важких хронічних захворювань.</div></div>
+            <div class="faq-item" onclick="toggleFaq(this)"><div class="faq-header">3. Скільки триває контракт і чи є відпустка? <span>+</span></div><div class="faq-body">Контракт укладається терміном від 1 року або до закінчення воєнного стану.</div></div>
         </div>
     </section>
 
     <footer class="tactical-footer" id="contacts">
         <div class="footer-content">
-            <div class="footer-block">
-                <h4>Штаб рекрутингу</h4>
-                <p>Лінія зв'язку працює цілодобово. Подавай заявку через захищене модальне вікно для отримання детальних інструкцій від наших інструкторів.</p>
-            </div>
-            <div class="footer-block">
-                <h4>Офіційні Канали</h4>
-                <ul class="footer-links">
-                    <li><a href="#">Telegram Канал</a></li>
-                    <li><a href="#">Signal Бойова Лінія</a></li>
-                    <li><a href="#">Офіційний Email</a></li>
-                </ul>
-            </div>
-            <div class="footer-block">
-                <h4>Шифрування</h4>
-                <p style="color: #475569; font-size: 0.85rem;">Усі повідомлення проходять через захищені протоколи кінцевого шифрування баз даних. Ваша приватність повністю захищена.</p>
-            </div>
+            <div class="footer-block"><h4>Штаб рекрутингу</h4><p>Лінія зв'язку працює цілодобово. Подавай заявку через захищене модальне вікно.</p></div>
+            <div class="footer-block"><h4>Офіційні Канали</h4><ul class="footer-links"><li><a href="#">Telegram Канал</a></li><li><a href="#">Signal Бойова Лінія</a></li><li><a href="#">Офіційний Email</a></li></ul></div>
+            <div class="footer-block"><h4>Шифрування</h4><p style="color: #475569; font-size: 0.85rem;">Усі повідомлення проходять через захищені протоколи кінцевого шифрування.</p></div>
         </div>
     </footer>
 
-    <!-- DOLNY PANEL GRY -->
+    <!-- GAME LAUNCHER BOTTOM PANEL -->
     <div style="background: var(--bg-deep); padding: 2rem; border-top: 1px solid var(--accent-border); text-align: center; display: flex; justify-content: center; gap: 1.5rem; flex-wrap: wrap;">
-        <button class="btn-main-trigger" style="margin-bottom: 0; padding: 0.8rem 1.8rem; font-size: 0.95rem;" onclick="openGameModal()">🎮 Graj: Ogromna Mapa + Tarkov Medical UI</button>
-        <button class="btn-main-trigger" style="margin-bottom: 0; padding: 0.8rem 1.8rem; font-size: 0.95rem; border-color: rgba(34, 197, 94, 0.4); color: var(--status-online);" onclick="openLeaderboardModal()">🏆 Tabela Rekordów</button>
+        <button class="btn-main-trigger" style="margin-bottom: 0; padding: 0.8rem 1.8rem; font-size: 0.95rem;" onclick="openGameModal()">🎮 Симулятор: Повномасштабна Операція</button>
+        <button class="btn-main-trigger" style="margin-bottom: 0; padding: 0.8rem 1.8rem; font-size: 0.95rem; border-color: rgba(34, 197, 94, 0.4); color: var(--status-online);" onclick="openLeaderboardModal()">🏆 Таблиця Рекордів</button>
     </div>
 
-    <!-- MODAL GRY -->
+    <!-- GAME MODAL -->
     <div class="modal-overlay" id="gameModal">
         <div class="modal-window" style="max-width: 860px; text-align: center; position: relative;">
             <button class="close-modal" onclick="closeGameModal()">×</button>
             
-            <!-- EKRAN WYBORU OPERACJI -->
+            <!-- OPERATION SELECTION SCREEN -->
             <div id="opSelectScreen">
-                <h2 style="color: #f1f5f9; margin-bottom: 0.5rem;">🎯 Wybierz Rodzaj Operacji</h2>
-                <p style="color: var(--text-muted); font-size: 0.9rem;">Wybierz misję taktyczną na dużej mapie terenu.</p>
+                <h2 style="color: #f1f5f9; margin-bottom: 0.5rem;">🎯 Обирай Бойову Операцію</h2>
+                <p style="color: var(--text-muted); font-size: 0.9rem;">Тактична операція на великій карті (Підтримка керування з ПК та смартфонів).</p>
 
                 <div class="op-card-grid">
                     <div class="op-card" onclick="startOperation('fpv')">
                         <div class="op-icon">🚁</div>
-                        <div class="op-title">Atak FPV</div>
-                        <div class="op-desc">Wylatujesz dronem FPV z bazy. Szukaj i niszcz cele: Czołgi, Transportery BMP i ciężarówki wroga.</div>
+                        <div class="op-title">Удар FPV-Дронами</div>
+                        <div class="op-desc">Знищуй ворожу бронетехніку (Танки Т-72, БМП-2, Урали) з повітря.</div>
                     </div>
                     <div class="op-card" onclick="startOperation('assault')">
                         <div class="op-icon">⚔️</div>
-                        <div class="op-title">Szturm</div>
-                        <div class="op-desc">Wsiądź w auto w bazie, pojedź do wioski i przeprowadź szturm na domy wraz ze sprzymierzeńcami.</div>
+                        <div class="op-title">Зачистка Населеного Пункту</div>
+                        <div class="op-desc">Штурмуй будинки разом із побратимами, примушуй ворогів здаватися в полон.</div>
                     </div>
                     <div class="op-card" onclick="startOperation('defense')">
                         <div class="op-icon">🛡️</div>
-                        <div class="op-title">Obrona Okopów</div>
-                        <div class="op-desc">Pojedź do wielkich okopów zig-zag, zajmij pozycję i z pomocą sojuszników odeprzyj szturmy.</div>
+                        <div class="op-title">Оборона Зигзагоподібних Окопів</div>
+                        <div class="op-desc">Займи позицію у фортифікаційних окопах та відбивай хвилі наступу.</div>
                     </div>
                 </div>
             </div>
 
-            <!-- EKRAN CANVASA GRA -->
+            <!-- GAME CANVAS SCREEN -->
             <div id="canvasScreen" style="display: none; position: relative;">
                 <div style="display: flex; justify-content: space-between; font-size: 0.8rem; font-weight: bold; margin-bottom: 0.4rem; background: rgba(0,0,0,0.5); padding: 0.5rem 0.8rem; border-radius: 8px;">
-                    <div>Operacja: <span id="uiOpName" style="color: var(--accent);">N/A</span></div>
-                    <div>Pojazd: <span id="uiVehicle" style="color: #eab308;">PIECHOTA</span></div>
-                    <div>Medycyna (M / Tab): <span style="color: #22c55e;">TARKOV UI</span></div>
-                    <div>Dron FPV (E): <span id="uiFpv" style="color: #22c55e;">4</span></div>
+                    <div>Операція: <span id="uiOpName" style="color: var(--accent);">N/A</span></div>
+                    <div>Магазин: <span id="uiAmmo" style="color: #22c55e;">30/30</span></div>
+                    <div>Пресет: <span id="uiVehicle" style="color: #eab308;">ПІХОТА</span></div>
+                    <div>Дрон (E / 🚁): <span id="uiFpv" style="color: #22c55e;">4</span></div>
                 </div>
 
                 <div style="position: relative; width: 100%; display: flex; justify-content: center;">
-                    <canvas id="gameCanvas" width="800" height="460" style="background: #111812; border: 1px solid var(--accent-border); border-radius: 8px; cursor: crosshair;"></canvas>
+                    <div class="damage-vignette" id="damageVignette"></div>
+                    <div class="radio-ticker" id="radioTicker">📡 [РАДІО]: Готовність до виходу на позиції!</div>
+                    
+                    <canvas id="gameCanvas" width="800" height="460" style="background: #090d0a; border: 1px solid var(--accent-border); border-radius: 8px; cursor: crosshair; width: 100%; max-height: 70vh; object-fit: contain;"></canvas>
 
-                    <!-- TARKOV MEDICAL UI (INTERFEJS ZE ZDJĘCIA) -->
+                    <!-- TARKOV MEDICAL UI -->
                     <div class="tarkov-ui" id="tarkovMedicalUi">
                         <div class="tarkov-header">
-                            <span>🏥 STAN ZDROWIA (TCCC DIAGNOSTICS)</span>
+                            <span>🏥 МЕДИЧНИЙ СТАН (TCCC DIAGNOSTICS)</span>
                             <span style="cursor: pointer;" onclick="toggleTarkovUi(false)">✕</span>
                         </div>
                         <div class="tarkov-body">
                             <div class="skeleton-view">
                                 <svg class="skeleton-svg" viewBox="0 0 100 200">
-                                    <!-- Głowa -->
-                                    <circle id="svgHead" cx="50" cy="20" r="14" fill="#ef4444" opacity="0.8"/>
-                                    <!-- Klatka piersiowa -->
-                                    <rect id="svgThorax" x="32" y="38" width="36" height="45" rx="5" fill="#ef4444" opacity="0.8"/>
-                                    <!-- Brzuch -->
-                                    <rect id="svgStomach" x="35" y="86" width="30" height="30" rx="4" fill="#ef4444" opacity="0.8"/>
-                                    <!-- Ręce -->
-                                    <rect id="svgRArm" x="12" y="40" width="16" height="55" rx="3" fill="#ef4444" opacity="0.8"/>
-                                    <rect id="svgLArm" x="72" y="40" width="16" height="55" rx="3" fill="#ef4444" opacity="0.8"/>
-                                    <!-- Nogi -->
-                                    <rect id="svgRLeg" x="32" y="120" width="15" height="70" rx="3" fill="#ef4444" opacity="0.8"/>
-                                    <rect id="svgLLeg" x="53" y="120" width="15" height="70" rx="3" fill="#ef4444" opacity="0.8"/>
+                                    <circle id="svgHead" cx="50" cy="20" r="14" fill="#22c55e" opacity="0.85"/>
+                                    <rect id="svgThorax" x="32" y="38" width="36" height="45" rx="5" fill="#22c55e" opacity="0.85"/>
+                                    <rect id="svgStomach" x="35" y="86" width="30" height="30" rx="4" fill="#22c55e" opacity="0.85"/>
+                                    <rect id="svgRArm" x="12" y="40" width="16" height="55" rx="3" fill="#22c55e" opacity="0.85"/>
+                                    <rect id="svgLArm" x="72" y="40" width="16" height="55" rx="3" fill="#22c55e" opacity="0.85"/>
+                                    <rect id="svgRLeg" x="32" y="120" width="15" height="70" rx="3" fill="#22c55e" opacity="0.85"/>
+                                    <rect id="svgLLeg" x="53" y="120" width="15" height="70" rx="3" fill="#22c55e" opacity="0.85"/>
                                 </svg>
                             </div>
                             <div class="limb-list">
-                                <div class="limb-box" id="box-head" onclick="selectLimb('head')">
-                                    <div class="limb-info"><span>GŁOWA (HEAD)</span><span id="hp-head">35/35</span></div>
-                                    <div class="limb-bar-bg"><div class="limb-bar-fill" id="bar-head"></div></div>
-                                </div>
-                                <div class="limb-box" id="box-thorax" onclick="selectLimb('thorax')">
-                                    <div class="limb-info"><span>KLATKA (THORAX)</span><span id="hp-thorax">85/85</span></div>
-                                    <div class="limb-bar-bg"><div class="limb-bar-fill" id="bar-thorax"></div></div>
-                                </div>
-                                <div class="limb-box" id="box-stomach" onclick="selectLimb('stomach')">
-                                    <div class="limb-info"><span>BRZUCH (STOMACH)</span><span id="hp-stomach">70/70</span></div>
-                                    <div class="limb-bar-bg"><div class="limb-bar-fill" id="bar-stomach"></div></div>
-                                </div>
-                                <div class="limb-box" id="box-rarm" onclick="selectLimb('rarm')">
-                                    <div class="limb-info"><span>PRAWA RĘKA</span><span id="hp-rarm">60/60</span></div>
-                                    <div class="limb-bar-bg"><div class="limb-bar-fill" id="bar-rarm"></div></div>
-                                </div>
-                                <div class="limb-box" id="box-larm" onclick="selectLimb('larm')">
-                                    <div class="limb-info"><span>LEWA RĘKA</span><span id="hp-larm">60/60</span></div>
-                                    <div class="limb-bar-bg"><div class="limb-bar-fill" id="bar-larm"></div></div>
-                                </div>
-                                <div class="limb-box" id="box-rleg" onclick="selectLimb('rleg')">
-                                    <div class="limb-info"><span>PRAWA NOGA</span><span id="hp-rleg">65/65</span></div>
-                                    <div class="limb-bar-bg"><div class="limb-bar-fill" id="bar-rleg"></div></div>
-                                </div>
-                                <div class="limb-box" id="box-lleg" onclick="selectLimb('lleg')">
-                                    <div class="limb-info"><span>LEWA NOGA</span><span id="hp-lleg">65/65</span></div>
-                                    <div class="limb-bar-bg"><div class="limb-bar-fill" id="bar-lleg"></div></div>
-                                </div>
+                                <div class="limb-box" id="box-head" onclick="selectLimb('head')"><div class="limb-info"><span>ГОЛОВА</span><span id="hp-head">35/35</span></div><div class="limb-bar-bg"><div class="limb-bar-fill" id="bar-head"></div></div></div>
+                                <div class="limb-box" id="box-thorax" onclick="selectLimb('thorax')"><div class="limb-info"><span>ГРУДИ</span><span id="hp-thorax">85/85</span></div><div class="limb-bar-bg"><div class="limb-bar-fill" id="bar-thorax"></div></div></div>
+                                <div class="limb-box" id="box-stomach" onclick="selectLimb('stomach')"><div class="limb-info"><span>ЖИВІТ</span><span id="hp-stomach">70/70</span></div><div class="limb-bar-bg"><div class="limb-bar-fill" id="bar-stomach"></div></div></div>
+                                <div class="limb-box" id="box-rarm" onclick="selectLimb('rarm')"><div class="limb-info"><span>ПРАВА РУКА</span><span id="hp-rarm">60/60</span></div><div class="limb-bar-bg"><div class="limb-bar-fill" id="bar-rarm"></div></div></div>
+                                <div class="limb-box" id="box-larm" onclick="selectLimb('larm')"><div class="limb-info"><span>ЛІВА РУКА</span><span id="hp-larm">60/60</span></div><div class="limb-bar-bg"><div class="limb-bar-fill" id="bar-larm"></div></div></div>
+                                <div class="limb-box" id="box-rleg" onclick="selectLimb('rleg')"><div class="limb-info"><span>ПРАВА НОГА</span><span id="hp-rleg">65/65</span></div><div class="limb-bar-bg"><div class="limb-bar-fill" id="bar-rleg"></div></div></div>
+                                <div class="limb-box" id="box-lleg" onclick="selectLimb('lleg')"><div class="limb-info"><span>ЛІВА НОГА</span><span id="hp-lleg">65/65</span></div><div class="limb-bar-bg"><div class="limb-bar-fill" id="bar-lleg"></div></div></div>
                             </div>
                         </div>
                         <div class="med-actions">
-                            <button class="btn-med" onclick="useMedItem('tourniquet')">🩸 Turniket (Staza)</button>
-                            <button class="btn-med" onclick="useMedItem('bandage')">🩹 Opatrunek Medyczny</button>
+                            <button class="btn-med" onclick="useMedItem('tourniquet')">🩸 Турнікет (Джгут)</button>
+                            <button class="btn-med" onclick="useMedItem('bandage')">🩹 Медичний Бинт</button>
+                        </div>
+                    </div>
+
+                    <!-- MOBILE TOUCH CONTROLS -->
+                    <div class="touch-controls" id="touchControls">
+                        <div class="joystick-zone" id="joystickZone">
+                            <div class="joystick-knob" id="joystickKnob"></div>
+                        </div>
+                        <div class="action-buttons">
+                            <button class="btn-touch" onclick="handleCanvasClick()" title="Постріл">🎯</button>
+                            <button class="btn-touch" onclick="handleInteractions()" title="Взаємодія">🚪</button>
+                            <button class="btn-touch" onclick="toggleFpvDrone()" title="FPV Дрон">🚁</button>
+                            <button class="btn-touch" onclick="toggleTarkovUi()" title="Медицина">🩺</button>
+                            <button class="btn-touch" onclick="reloadAmmo()" title="Перезарядка">🔄</button>
+                            <button class="btn-touch" onclick="toggleFlashlight()" title="Ліхтар">🔦</button>
                         </div>
                     </div>
                 </div>
 
-                <p style="color: var(--text-subtle); font-size: 0.75rem; margin-top: 0.4rem;">
-                    <b>W,A,S,D</b> Ruch/Auto | <b>Myszka</b> Strzał | <b>F</b> Wejdź do Domu/Auta | <b>M / Tab</b> Otwórz Medycynę (Tarkov UI) | <b>E</b> FPV Dron
+                <p style="color: var(--text-subtle); font-size: 0.75rem; margin-top: 0.4rem;" class="pc-controls-desc">
+                    <b>WASD / Джойстик</b> Рух | <b>Клік / 🎯</b> Постріл | <b>F / 🚪</b> Будинок/Авто | <b>M / Tab / 🩺</b> Медицина | <b>E / 🚁</b> FPV | <b>R / 🔄</b> Перезарядка
                 </p>
             </div>
         </div>
     </div>
 
-    <!-- MODAL TABELI REKORDÓW -->
+    <!-- LEADERBOARD MODAL -->
     <div class="modal-overlay" id="leaderboardModal">
         <div class="modal-window" style="max-width: 500px;">
             <button class="close-modal" onclick="closeLeaderboardModal()">×</button>
-            <h2 style="color: #f1f5f9; margin-bottom: 1rem; text-align: center;">🏆 Tabela Rekordów</h2>
+            <h2 style="color: #f1f5f9; margin-bottom: 1rem; text-align: center;">🏆 Таблиця Рекордів</h2>
             <div style="max-height: 320px; overflow-y: auto; background: var(--bg-dark); border-radius: 8px; border: 1px solid rgba(255,255,255,0.05); padding: 0.8rem;">
                 <table style="width: 100%; color: var(--text-main); border-collapse: collapse; text-align: left;">
                     <thead>
                         <tr style="border-bottom: 1px solid var(--accent-border); color: var(--accent); font-size: 0.85rem;">
-                            <th style="padding: 6px;">#</th><th style="padding: 6px;">Gracz</th><th style="padding: 6px; text-align: right;">Wynik</th>
+                            <th style="padding: 6px;">#</th><th style="padding: 6px;">Гравець</th><th style="padding: 6px; text-align: right;">Очки</th>
                         </tr>
                     </thead>
                     <tbody id="leaderboardBody">
-                        <tr><td colspan="3" style="text-align:center; padding: 1rem; color: var(--text-subtle);">Ładowanie...</td></tr>
+                        <tr><td colspan="3" style="text-align:center; padding: 1rem; color: var(--text-subtle);">Завантаження...</td></tr>
                     </tbody>
                 </table>
             </div>
         </div>
     </div>
 
-    <!-- MODAL APPLICATION & CHAT -->
+    <!-- RECRUITING FORM & CHAT MODAL -->
     <div class="modal-overlay" id="modalOverlay">
         <div class="modal-window">
             <button class="close-modal" onclick="toggleModal(false)" title="Закрити">×</button>
             
-            <!-- STAGE 1: FORM -->
             <div id="formStage" class="fade-stage">
                 <h2 style="margin-bottom: 1.5rem; font-size: 1.6rem; color: #f1f5f9; text-align: center; font-weight: 700;">Подати заявку</h2>
                 <form onsubmit="handleSubmit(event)">
-                    <div class="form-group">
-                        <label for="userName">Позивний або Ім'я</label>
-                        <input type="text" id="userName" required placeholder="Введіть ваш нікнейм">
-                    </div>
-                    <div class="form-group">
-                        <label for="userContact">Контакт у Telegram / Signal</label>
-                        <input type="text" id="userContact" required placeholder="@username або номер">
-                    </div>
+                    <div class="form-group"><label for="userName">Позивний або Ім'я</label><input type="text" id="userName" required placeholder="Введіть ваш нікнейм"></div>
+                    <div class="form-group"><label for="userContact">Контакт у Telegram / Signal</label><input type="text" id="userContact" required placeholder="@username або номер"></div>
                     
                     <div class="form-group">
                         <label>Бажаний підрозділ</label>
@@ -637,7 +597,6 @@
                                 <div class="custom-option" onclick="selectOption(this, 'specSelectWrapper', 'userSpec', 'Оператор БПЛА / РЕБ')">Оператор БПЛА / РЕБ</div>
                                 <div class="custom-option" onclick="selectOption(this, 'specSelectWrapper', 'userSpec', 'Тактичний Медик')">Тактичний Медик</div>
                                 <div class="custom-option" onclick="selectOption(this, 'specSelectWrapper', 'userSpec', 'Артилерія / Мінометник')">Артилерія / Мінометник</div>
-                                <div class="custom-option" onclick="selectOption(this, 'specSelectWrapper', 'userSpec', 'Водій / Механік-водій')">Водій / Механік-водій</div>
                             </div>
                         </div>
                     </div>
@@ -646,14 +605,12 @@
                 </form>
             </div>
 
-            <!-- STAGE 2: CHAT -->
             <div id="chatStage" class="fade-stage entrance" style="display: none;">
                 <h2 style="font-size: 1.5rem; margin-bottom: 1rem; color: #f1f5f9; text-align: center; font-weight: 700;">Захищений Канал Зв'язку</h2>
-                
                 <div class="chat-container">
                     <div class="chat-header" id="chatPartner">
                         <div style="display: flex; align-items: center; gap: 8px;">
-                            <button class="btn-back-chat" onclick="goBackToForm()" title="Назад до анкети">←</button>
+                            <button class="btn-back-chat" onclick="goBackToForm()">←</button>
                             <span class="status-dot"></span>
                             <span id="chatHeaderTitle">Персональний чат</span>
                         </div>
@@ -680,24 +637,18 @@
                 </div>
             </div>
 
-            <!-- STAGE 3: RECRUITER CANDIDATES LIST -->
             <div id="candidatesStage" class="fade-stage entrance" style="display: none;">
                 <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 1rem;">
-                    <h2 style="font-size: 1.4rem; color: #f1f5f9; font-weight: 700; display: flex; align-items: center;">
-                        База Кандидатів <span class="candidate-count-badge" id="candidatesCount">0</span>
-                    </h2>
+                    <h2 style="font-size: 1.4rem; color: #f1f5f9; font-weight: 700;">База Кандидатів <span class="candidate-count-badge" id="candidatesCount">0</span></h2>
                     <button class="btn-back-chat" onclick="backToChatFromCandidates()" style="width: auto; padding: 4px 12px; font-size: 0.85rem;">← В чат</button>
                 </div>
-                
-                <div class="candidates-list" id="candidatesListContainer">
-                    <p style="text-align: center; color: var(--text-subtle); margin-top: 2rem;">Завантаження списку...</p>
-                </div>
+                <div class="candidates-list" id="candidatesListContainer"></div>
             </div>
         </div>
     </div>
 
     <script>
-        // Firebase Configuration
+        // FIREBASE INITIALIZATION
         const firebaseConfig = {
             apiKey: "AIzaSyCeWM1wdHdN6bIXFXTqHXO7WgJNJK53nwk",
             authDomain: "storinka-d7bd6.firebaseapp.com",
@@ -714,11 +665,9 @@
         const candidatesRef = database.ref('candidates');
         const scoresRef = database.ref('leaderboard');
         
-        let currentRoomId = null;
-        let isRecruiter = false;
-        let globalSenderName = "Гість";
-        let isCheckingCrypto = false;
+        let currentRoomId = null, isRecruiter = false, globalSenderName = "Гість", isCheckingCrypto = false;
 
+        // SYNTHESIZER SOUND GENERATOR
         const playBeep = (freq = 600, duration = 0.05) => {
             try {
                 const ctx = new (window.AudioContext || window.webkitAudioContext)();
@@ -745,17 +694,15 @@
             userSpec: document.getElementById('userSpec'),
             recruiterActions: document.getElementById('recruiterActions'),
             chatHeaderTitle: document.getElementById('chatHeaderTitle'),
-            cryptoBtn: document.getElementById('cryptoBtn'),
-            quickTagsArea: document.getElementById('quickTagsArea')
+            cryptoBtn: document.getElementById('cryptoBtn')
         };
 
         const BOT_RESPONSES = {
-            docs: "📋 Довідка Чергової частини: Для підписання контракту необхідні: Паспорт/ID-картка, податковий код (ІПН), військовий квиток або приписне. Для іноземців — закордонний паспорт.",
-            training: "🪖 Навчальний Центр: Базовий курс військової підготовки (БЗВП) триває від 30 до 40 діб. Включає вогневу, тактичну медицину (TCCC) та роботу з дронами.",
+            docs: "📋 Довідка Чергової частини: Для підписання контракту необхідні: Паспорт/ID-картка, ІПН, військовий квиток. Для іноземців — закордонний паспорт.",
+            training: "🪖 Навчальний Центр: Базовий курс військової підготовки (БЗВП) триває від 30 до 40 діб.",
             gear: "📦 Логістичне забезпечення: Надається повне речове майно, шолом, бронежилет 4+ класу, НАТО-аптечка та закріплена зброя.",
-            pay: "💰 Грошове забезпечення: Базова ставка від 20 000 грн + надбавки від 30 000 до 100 000 грн за виконання бойових завдань на передньому краї."
+            pay: "💰 Грошове забезпечення: Базова ставка від 20 000 грн + надбавки від 30 000 до 100 000 грн."
         };
-
         const QUESTIONS_TEXT = {
             docs: 'Які документи необхідні для оформлення контракту?',
             training: 'Скільки триває базовий курс підготовки (БЗВП)?',
@@ -766,38 +713,27 @@
         function calculatePay() {
             const roleVal = parseInt(document.getElementById('roleSelect').value) || 0;
             const zoneVal = parseInt(document.getElementById('zoneSelect').value) || 0;
-            const total = roleVal + zoneVal;
-            document.getElementById('totalPay').innerText = total.toLocaleString('uk-UA') + ' грн';
+            document.getElementById('totalPay').innerText = (roleVal + zoneVal).toLocaleString('uk-UA') + ' грн';
         }
 
-        function toggleFaq(element) {
-            playBeep(700, 0.03);
-            element.classList.toggle('active');
-        }
+        function toggleFaq(element) { playBeep(700, 0.03); element.classList.toggle('active'); }
 
         const observer = new IntersectionObserver((entries) => {
-            entries.forEach(entry => {
-                if(entry.isIntersecting) entry.target.classList.add('visible');
-            });
+            entries.forEach(entry => { if(entry.isIntersecting) entry.target.classList.add('visible'); });
         }, { threshold: 0.1 });
-
         document.querySelectorAll('.team-card').forEach(card => observer.observe(card));
 
         function toggleModal(show) {
             playBeep(show ? 800 : 400);
             DOM.overlay.classList.toggle('active', show);
             document.body.classList.toggle('modal-open', show);
-            if (!show && currentRoomId) {
-                database.ref('rooms/' + currentRoomId).off();
-            }
+            if (!show && currentRoomId) database.ref('rooms/' + currentRoomId).off();
         }
 
         function toggleCustomSelect(wrapperId) {
             playBeep(700);
             const wrapper = document.getElementById(wrapperId);
-            document.querySelectorAll('.custom-select-wrapper').forEach(w => {
-                if (w !== wrapper) w.classList.remove('open');
-            });
+            document.querySelectorAll('.custom-select-wrapper').forEach(w => { if (w !== wrapper) w.classList.remove('open'); });
             wrapper.classList.toggle('open');
         }
 
@@ -806,7 +742,6 @@
             const wrapper = document.getElementById(wrapperId);
             wrapper.querySelectorAll('.custom-option').forEach(opt => opt.classList.remove('selected'));
             element.classList.add('selected');
-            
             wrapper.querySelector('.custom-select-trigger').innerText = element.innerText;
             document.getElementById(inputId).value = value;
             wrapper.classList.remove('open');
@@ -819,41 +754,26 @@
         });
 
         function handleSubmit(e) {
-            e.preventDefault();
-            playBeep(1000);
-            
-            const nameInput = DOM.userName.value.trim();
-            const contactInput = DOM.userContact.value.trim();
-            const squadInput = DOM.userSquad.value;
-            const specInput = DOM.userSpec.value;
-
+            e.preventDefault(); playBeep(1000);
+            const nameInput = DOM.userName.value.trim(), contactInput = DOM.userContact.value.trim();
             globalSenderName = nameInput;
             isRecruiter = (nameInput.toUpperCase() === 'REK' && contactInput.toUpperCase() === 'REK');
 
             DOM.formStage.classList.add('hidden');
-
             setTimeout(() => {
                 DOM.formStage.style.display = 'none';
-                
-                if (isRecruiter) {
-                    DOM.recruiterActions.style.display = 'flex';
-                    openCandidatesList();
-                } else {
+                if (isRecruiter) { DOM.recruiterActions.style.display = 'flex'; openCandidatesList(); } 
+                else {
                     let existingRoom = localStorage.getItem('strike_chat_room_id');
                     if (!existingRoom) {
                         existingRoom = 'room_' + Date.now() + '_' + Math.random().toString(36).substr(2, 5);
                         localStorage.setItem('strike_chat_room_id', existingRoom);
-                        
                         candidatesRef.child(existingRoom).set({
-                            id: existingRoom,
-                            name: nameInput,
-                            contact: contactInput,
-                            squad: squadInput,
-                            spec: specInput,
-                            timestamp: new Date().toLocaleTimeString('uk-UA', { hour: '2-digit', minute: '2-digit', day: '2-digit', month: '2-digit' })
+                            id: existingRoom, name: nameInput, contact: contactInput,
+                            squad: DOM.userSquad.value, spec: DOM.userSpec.value,
+                            timestamp: new Date().toLocaleTimeString('uk-UA', { hour: '2-digit', minute: '2-digit' })
                         });
                     }
-                    
                     DOM.recruiterActions.style.display = 'none';
                     openChatRoom(existingRoom, `Лінія зв'язку: ${nameInput}`);
                 }
@@ -862,235 +782,116 @@
 
         function openChatRoom(roomId, roomTitle) {
             if (currentRoomId) database.ref('rooms/' + currentRoomId).off();
-
             currentRoomId = roomId;
             DOM.chatHeaderTitle.innerText = roomTitle;
             DOM.chatMessages.innerHTML = '';
-
-            DOM.candidatesStage.style.display = 'none';
-            DOM.chatStage.style.display = 'block';
-            
-            setTimeout(() => {
-                DOM.chatStage.classList.remove('entrance');
-                DOM.chatStage.classList.remove('hidden');
-            }, 20);
+            DOM.candidatesStage.style.display = 'none'; DOM.chatStage.style.display = 'block';
+            setTimeout(() => { DOM.chatStage.classList.remove('entrance'); DOM.chatStage.classList.remove('hidden'); }, 20);
 
             const roomRef = database.ref('rooms/' + roomId);
-            
             roomRef.limitToLast(50).on('child_added', (snapshot) => {
-                const data = snapshot.val();
-                if (data) displayMessage(data.sender, data.text, data.type);
+                const data = snapshot.val(); if (data) displayMessage(data.sender, data.text, data.type);
             });
-
-            roomRef.on('value', (snapshot) => {
-                if (!snapshot.exists()) DOM.chatMessages.innerHTML = '';
-            });
+            roomRef.on('value', (snapshot) => { if (!snapshot.exists()) DOM.chatMessages.innerHTML = ''; });
         }
 
         function sendMessage() {
             const messageText = DOM.chatInput.value.trim();
             if (!messageText || !currentRoomId) return;
-            
             playBeep(650);
-            database.ref('rooms/' + currentRoomId).push({
-                sender: isRecruiter ? "Рекрутер" : globalSenderName,
-                text: messageText,
-                type: 'normal'
-            });
-
+            database.ref('rooms/' + currentRoomId).push({ sender: isRecruiter ? "Рекрутер" : globalSenderName, text: messageText, type: 'normal' });
             DOM.chatInput.value = '';
-        }
-
-        function getCurrentTime() {
-            const now = new Date();
-            return now.getHours().toString().padStart(2, '0') + ':' + now.getMinutes().toString().padStart(2, '0');
         }
 
         function displayMessage(sender, text, type = 'normal') {
             playBeep(500, 0.03);
             const msgDiv = document.createElement('div');
-            const timeSpan = `<span class="msg-time">${getCurrentTime()} <span class="msg-status">✓✓</span></span>`;
-            
-            if (type === 'approved') {
-                msgDiv.className = 'message approved';
-                msgDiv.innerHTML = `<strong>✅ ${escapeHtml(text)}</strong>${timeSpan}`;
-            } else if (type === 'rejected') {
-                msgDiv.className = 'message rejected';
-                msgDiv.innerHTML = `<strong>❌ ${escapeHtml(text)}</strong>${timeSpan}`;
-            } else if (sender === globalSenderName || (isRecruiter && sender === "Рекрутер")) {
-                msgDiv.className = 'message friend';
-                msgDiv.innerHTML = `<strong>Ви:</strong> ${escapeHtml(text)}${timeSpan}`;
-            } else {
-                msgDiv.className = 'message intercom';
-                msgDiv.innerHTML = `<strong>${escapeHtml(sender)}:</strong> ${escapeHtml(text)}${timeSpan}`;
-            }
-
-            DOM.chatMessages.appendChild(msgDiv);
-            DOM.chatMessages.scrollTop = DOM.chatMessages.scrollHeight;
+            const timeSpan = `<span class="msg-time">${new Date().toLocaleTimeString('uk-UA', {hour:'2-digit', minute:'2-digit'})} <span class="msg-status">✓✓</span></span>`;
+            if (type === 'approved') { msgDiv.className = 'message approved'; msgDiv.innerHTML = `<strong>✅ ${escapeHtml(text)}</strong>${timeSpan}`; }
+            else if (type === 'rejected') { msgDiv.className = 'message rejected'; msgDiv.innerHTML = `<strong>❌ ${escapeHtml(text)}</strong>${timeSpan}`; }
+            else if (sender === globalSenderName || (isRecruiter && sender === "Рекрутер")) { msgDiv.className = 'message friend'; msgDiv.innerHTML = `<strong>Ви:</strong> ${escapeHtml(text)}${timeSpan}`; }
+            else { msgDiv.className = 'message intercom'; msgDiv.innerHTML = `<strong>${escapeHtml(sender)}:</strong> ${escapeHtml(text)}${timeSpan}`; }
+            DOM.chatMessages.appendChild(msgDiv); DOM.chatMessages.scrollTop = DOM.chatMessages.scrollHeight;
         }
 
-        function escapeHtml(str) {
-            return str.replace(/&/g, "&amp;").replace(/</g, "&lt;").replace(/>/g, "&gt;").replace(/"/g, "&quot;").replace(/'/g, "&#039;");
-        }
-
+        function escapeHtml(str) { return str.replace(/&/g, "&amp;").replace(/</g, "&lt;").replace(/>/g, "&gt;"); }
         function handleKeyPress(e) { if (e.key === 'Enter') sendMessage(); }
-
-        function directClearChat() {
-            if (!currentRoomId) return;
-            playBeep(300, 0.1);
-            database.ref('rooms/' + currentRoomId).remove();
-            DOM.chatMessages.innerHTML = '';
-        }
+        function directClearChat() { if (currentRoomId) { database.ref('rooms/' + currentRoomId).remove(); DOM.chatMessages.innerHTML = ''; } }
 
         function openCandidatesList() {
             playBeep(750);
             DOM.chatStage.classList.add('hidden');
-            
             setTimeout(() => {
-                DOM.chatStage.style.display = 'none';
-                DOM.candidatesStage.style.display = 'block';
-                
-                setTimeout(() => {
-                    DOM.candidatesStage.classList.remove('entrance');
-                    DOM.candidatesStage.classList.remove('hidden');
-                }, 20);
+                DOM.chatStage.style.display = 'none'; DOM.candidatesStage.style.display = 'block';
+                setTimeout(() => { DOM.candidatesStage.classList.remove('entrance'); DOM.candidatesStage.classList.remove('hidden'); }, 20);
             }, 350);
 
             candidatesRef.on('value', (snapshot) => {
                 DOM.candidatesListContainer.innerHTML = '';
-                
-                if (!snapshot.exists()) {
-                    DOM.candidatesCount.innerText = "0";
-                    DOM.candidatesListContainer.innerHTML = '<p style="text-align: center; color: var(--text-subtle); margin-top: 3rem;">Усі заявки опраційовані.</p>';
-                    return;
-                }
-
+                if (!snapshot.exists()) { DOM.candidatesCount.innerText = "0"; DOM.candidatesListContainer.innerHTML = '<p style="text-align:center; color:var(--text-subtle); margin-top:2rem;">Немає кандидатів.</p>'; return; }
                 let count = 0;
                 snapshot.forEach((child) => {
-                    count++;
-                    const c = child.val();
-                    const card = document.createElement('div');
-                    card.className = 'candidate-card';
-
+                    count++; const c = child.val();
+                    const card = document.createElement('div'); card.className = 'candidate-card';
                     card.innerHTML = `
                         <div class="candidate-info">
                             <h4>${escapeHtml(c.name || 'Анонім')} <span>${c.timestamp || ''}</span></h4>
                             <p><strong>Контакт:</strong> ${escapeHtml(c.contact || '-')}</p>
                             <p><strong>Підрозділ:</strong> ${escapeHtml(c.squad || '-')}</p>
-                            <p><strong>Спеціальність:</strong> ${escapeHtml(c.spec || 'Піхота')}</p>
                         </div>
                         <div class="candidate-actions">
-                            <button class="btn-action-open" onclick="openChatRoom('${c.id}', 'Чат: ${escapeHtml(c.name)}')">💬 Чат</button>
+                            <button class="btn-action-open" onclick="openChatRoom('${c.id}', 'Чат: ${escapeHtml(c.name)}')">💬</button>
                             <button class="btn-approve" onclick="processCandidateDecision('${c.id}', '${escapeHtml(c.name)}', 'approved')">✔</button>
                             <button class="btn-reject" onclick="processCandidateDecision('${c.id}', '${escapeHtml(c.name)}', 'rejected')">✖</button>
                         </div>
                     `;
                     DOM.candidatesListContainer.prepend(card);
                 });
-
                 DOM.candidatesCount.innerText = count;
             });
         }
 
         function processCandidateDecision(roomId, candidateName, decision) {
             playBeep(decision === 'approved' ? 900 : 300);
-            const statusText = decision === 'approved' 
-                ? `Рекрутер розглянув вашу заявку: ВАС ПРИЙНЯТО ДО СКЛАДУ!`
-                : `Рекрутер розглянув вашу заявку: На жаль, вашу кандидатуру ВІДХИЛЕНО.`;
-
-            database.ref('rooms/' + roomId).push({
-                sender: "Штаб Рекрутингу", text: statusText, type: decision
-            });
-
+            const statusText = decision === 'approved' ? `Рекрутер розглянув вашу заявку: ВАС ПРИЙНЯТО ДО СКЛАДУ!` : `Рекрутер розглянув вашу заявку: кандидатуру ВІДХИЛЕНО.`;
+            database.ref('rooms/' + roomId).push({ sender: "Штаб Рекрутингу", text: statusText, type: decision });
             candidatesRef.child(roomId).remove();
         }
 
-        function backToChatFromCandidates() {
-            playBeep(400);
-            if (currentRoomId) {
-                DOM.candidatesStage.classList.add('entrance');
-                setTimeout(() => {
-                    DOM.candidatesStage.style.display = 'none';
-                    DOM.chatStage.style.display = 'block';
-                    setTimeout(() => DOM.chatStage.classList.remove('hidden'), 20);
-                }, 350);
-            } else {
-                goBackToForm();
-            }
-        }
-
+        function backToChatFromCandidates() { goBackToForm(); }
         function goBackToForm() {
-            playBeep(400);
-            DOM.chatStage.classList.add('entrance'); 
-            DOM.candidatesStage.classList.add('entrance');
-
+            DOM.chatStage.classList.add('entrance'); DOM.candidatesStage.classList.add('entrance');
             setTimeout(() => {
-                DOM.chatStage.style.display = 'none';
-                DOM.candidatesStage.style.display = 'none';
-                DOM.formStage.style.display = 'block';
+                DOM.chatStage.style.display = 'none'; DOM.candidatesStage.style.display = 'none'; DOM.formStage.style.display = 'block';
                 setTimeout(() => DOM.formStage.classList.remove('hidden'), 20);
             }, 350);
-
             if (currentRoomId) database.ref('rooms/' + currentRoomId).off();
         }
 
         function sendQuickQuestion(type) {
             if (!currentRoomId || !BOT_RESPONSES[type]) return;
             playBeep(700);
-            database.ref('rooms/' + currentRoomId).push({
-                sender: globalSenderName, text: QUESTIONS_TEXT[type], type: 'normal'
-            });
-
-            showTypingIndicator();
+            database.ref('rooms/' + currentRoomId).push({ sender: globalSenderName, text: QUESTIONS_TEXT[type], type: 'normal' });
             setTimeout(() => {
-                removeTypingIndicator();
-                database.ref('rooms/' + currentRoomId).push({
-                    sender: "Черговий інструктор", text: BOT_RESPONSES[type], type: 'normal'
-                });
-            }, 1200);
-        }
-
-        function showTypingIndicator() {
-            removeTypingIndicator();
-            const indicator = document.createElement('div');
-            indicator.id = 'typingIndicator';
-            indicator.className = 'typing-indicator';
-            indicator.innerHTML = '<span></span><span></span><span></span>';
-            DOM.chatMessages.appendChild(indicator);
-            DOM.chatMessages.scrollTop = DOM.chatMessages.scrollHeight;
-        }
-
-        function removeTypingIndicator() {
-            const existing = document.getElementById('typingIndicator');
-            if (existing) existing.remove();
+                database.ref('rooms/' + currentRoomId).push({ sender: "Черговий інструктор", text: BOT_RESPONSES[type], type: 'normal' });
+            }, 1000);
         }
 
         function checkCryptoLink() {
-            if (isCheckingCrypto) return;
-            isCheckingCrypto = true;
-            playBeep(1200, 0.08);
-            const btn = DOM.cryptoBtn;
-            btn.innerText = "⏳ Сканування...";
-            setTimeout(() => {
-                playBeep(1500, 0.1);
-                btn.innerText = "⚡ Шифр: OK";
-                setTimeout(() => { btn.innerText = "🔐 Лінія: Захищена"; isCheckingCrypto = false; }, 2500); 
-            }, 1000); 
+            if (isCheckingCrypto) return; isCheckingCrypto = true;
+            playBeep(1200, 0.08); DOM.cryptoBtn.innerText = "⏳ Сканування...";
+            setTimeout(() => { playBeep(1500, 0.1); DOM.cryptoBtn.innerText = "⚡ Шифр: OK"; setTimeout(() => { DOM.cryptoBtn.innerText = "🔐 Лінія: Захищена"; isCheckingCrypto = false; }, 2000); }, 1000);
         }
 
         // =========================================================================
-        // --- PEŁNY SYMULATOR Z DUŻĄ MAPĄ, ZYGZAKAMI, TARKOV UI I NOWYMI CELEMI ---
+        // --- ПОВНОЦІННИЙ ІГРОВИЙ СИМУЛЯТОР З МОБІЛЬНИМ ДЖОЙСТИКОМ ТА СЕНСОРАМИ ---
         // =========================================================================
-        let canvas, ctx;
-        let isGameRunning = false;
-        let animId = null; let aiInterval = null;
-        let currentOp = 'fpv';
-        let gameScore = 0;
-
+        let canvas, ctx, isGameRunning = false, animId = null, aiInterval = null, currentOp = 'fpv', gameScore = 0;
         const WORLD = { width: 4000, height: 3200 };
         let camera = { x: 0, y: 0 };
 
-        // System Medyczny Tarkov
+        let ammoCount = 30, maxAmmo = 30, flashlightOn = false;
+
         let bodyParts = {
             head: { current: 35, max: 35, bleeding: false },
             thorax: { current: 85, max: 85, bleeding: false },
@@ -1102,31 +903,13 @@
         };
         let selectedLimb = 'thorax';
 
-        let player = {
-            x: 200, y: 3000, radius: 11, speed: 3.5, angle: 0,
-            inVehicle: false, inHouse: false, inTrench: false,
-            tourniquets: 3, bandages: 5, fpvDrones: 4
-        };
-
-        let car = { x: 280, y: 2980, w: 48, h: 26, angle: 0, speed: 0, maxSpeed: 7.5 };
+        let player = { x: 220, y: 2950, radius: 11, speed: 3.5, angle: 0, inVehicle: false, inHouse: false, tourniquets: 3, bandages: 5, fpvDrones: 4 };
+        let car = { x: 280, y: 2950, w: 48, h: 26, angle: 0, speed: 0, maxSpeed: 7.5 };
         let fpv = { active: false, x: 0, y: 0, vx: 0, vy: 0 };
 
-        // Mapa Stref & Lokacji
-        let mapBase = { x: 100, y: 2800, w: 400, h: 300 };
-        let mapHouses = [
-            { x: 1800, y: 1200, w: 140, h: 100, door: { x: 1860, y: 1300, w: 20 } },
-            { x: 2000, y: 1200, w: 150, h: 110, door: { x: 2060, y: 1310, w: 20 } },
-            { x: 1900, y: 1400, w: 160, h: 120, door: { x: 1970, y: 1400, w: 20 } }
-        ];
-
-        // Okopy Zygzakowate (Zig-Zag Trenches)
-        let mapZigZagTrenches = [];
-        let mapTrees = [];
-        let allies = [];
-        let enemies = [];
-        let enemyVehicles = []; // Czołgi, BMP, Ciężarówki
-        let bullets = [], enemyBullets = [], explosions = [], bloodPools = [];
-        let keys = {}, mousePos = { x: 0, y: 0 };
+        let mapHouses = [{ x: 1800, y: 1200, w: 140, h: 100, door: { x: 1860, y: 1300, w: 20 } }, { x: 2000, y: 1200, w: 150, h: 110, door: { x: 2060, y: 1310, w: 20 } }];
+        let mapZigZagTrenches = [], mapTrees = [], allies = [], enemies = [], enemyVehicles = [], bullets = [], enemyBullets = [], explosions = [], bloodPools = [];
+        let keys = {}, touchDir = { x: 0, y: 0 }, mousePos = { x: 0, y: 0 };
 
         function openGameModal() {
             document.getElementById('gameModal').classList.add('active');
@@ -1150,15 +933,12 @@
             ctx = canvas.getContext('2d');
 
             canvas.removeEventListener('mousemove', handleMouseMove);
-            canvas.removeEventListener('click', handleCanvasClick);
             canvas.addEventListener('mousemove', handleMouseMove);
-            canvas.addEventListener('click', handleCanvasClick);
 
-            window.removeEventListener('keydown', handleKeyDown);
-            window.removeEventListener('keyup', handleKeyUp);
-            window.addEventListener('keydown', handleKeyDown);
-            window.addEventListener('keyup', handleKeyUp);
+            window.removeEventListener('keydown', handleKeyDown); window.removeEventListener('keyup', handleKeyUp);
+            window.addEventListener('keydown', handleKeyDown); window.addEventListener('keyup', handleKeyUp);
 
+            initTouchJoystick();
             initWorldMap();
             isGameRunning = true;
 
@@ -1169,96 +949,90 @@
             gameLoop();
         }
 
+        // TOUCH JOYSTICK LOGIC FOR MOBILE
+        function initTouchJoystick() {
+            const zone = document.getElementById('joystickZone');
+            const knob = document.getElementById('joystickKnob');
+
+            const handleTouch = (e) => {
+                const rect = zone.getBoundingClientRect();
+                const touch = e.touches[0];
+                let dx = touch.clientX - (rect.left + rect.width / 2);
+                let dy = touch.clientY - (rect.top + rect.height / 2);
+                let dist = Math.hypot(dx, dy);
+                let maxDist = rect.width / 2;
+
+                if (dist > maxDist) { dx = (dx / dist) * maxDist; dy = (dy / dist) * maxDist; }
+                knob.style.transform = `translate(${dx}px, ${dy}px)`;
+                touchDir.x = dx / maxDist; touchDir.y = dy / maxDist;
+            };
+
+            zone.addEventListener('touchstart', handleTouch, { passive: false });
+            zone.addEventListener('touchmove', handleTouch, { passive: false });
+            zone.addEventListener('touchend', () => {
+                knob.style.transform = `translate(0px, 0px)`;
+                touchDir.x = 0; touchDir.y = 0;
+            });
+        }
+
         function handleKeyDown(e) {
-            let k = e.key.toLowerCase();
-            keys[k] = true;
+            let k = e.key.toLowerCase(); keys[k] = true;
             if (isGameRunning) {
                 if (k === 'm' || e.key === 'Tab') { e.preventDefault(); toggleTarkovUi(); }
                 if (k === 'e' || k === 'у') toggleFpvDrone();
                 if (k === 'f' || k === 'а') handleInteractions();
+                if (k === 'r' || k === 'к') reloadAmmo();
             }
         }
-
         function handleKeyUp(e) { keys[e.key.toLowerCase()] = false; }
         function handleMouseMove(e) {
             const rect = canvas.getBoundingClientRect();
-            mousePos.x = e.clientX - rect.left;
-            mousePos.y = e.clientY - rect.top;
+            mousePos.x = (e.clientX - rect.left) * (canvas.width / rect.width);
+            mousePos.y = (e.clientY - rect.top) * (canvas.height / rect.height);
         }
 
+        function reloadAmmo() {
+            playBeep(900, 0.15); ammoCount = maxAmmo;
+            document.getElementById('uiAmmo').innerText = `${ammoCount}/${maxAmmo}`;
+        }
+
+        function toggleFlashlight() { flashlightOn = !flashlightOn; playBeep(1200, 0.05); }
+
         function initWorldMap() {
-            player.x = 220; player.y = 2950;
-            player.inVehicle = false; player.inHouse = false; player.inTrench = false;
-            car.x = 280; car.y = 2950; car.speed = 0;
-            fpv.active = false;
-            gameScore = 0;
+            player.x = 220; player.y = 2950; player.inVehicle = false; player.inHouse = false;
+            car.x = 280; car.y = 2950; car.speed = 0; fpv.active = false; gameScore = 0; ammoCount = 30;
 
-            // Resetuj Tarkov UI Health
-            for (let part in bodyParts) {
-                bodyParts[part].current = bodyParts[part].max;
-                bodyParts[part].bleeding = false;
-            }
-
+            for (let part in bodyParts) { bodyParts[part].current = bodyParts[part].max; bodyParts[part].bleeding = false; }
             bullets = []; enemyBullets = []; enemies = []; allies = []; enemyVehicles = []; explosions = []; bloodPools = [];
 
-            // Generuj Zygzakowaty Okop (Zig-Zag Trench Line)
             mapZigZagTrenches = [];
             let startX = 1200, startY = 2200;
-            for (let i = 0; i < 14; i++) {
-                let nextX = startX + (i % 2 === 0 ? 120 : -60);
-                let nextY = startY - 100;
-                mapZigZagTrenches.push({ x1: startX, y1: startY, x2: nextX, y2: nextY, width: 28 });
+            for (let i = 0; i < 12; i++) {
+                let nextX = startX + (i % 2 === 0 ? 100 : -50); let nextY = startY - 90;
+                mapZigZagTrenches.push({ x1: startX, y1: startY, x2: nextX, y2: nextY });
                 startX = nextX; startY = nextY;
             }
 
-            // Generuj Drzewa / Lasy
             mapTrees = [];
-            for (let i = 0; i < 160; i++) {
-                mapTrees.push({ x: Math.random() * WORLD.width, y: Math.random() * WORLD.height, r: 18 + Math.random() * 14 });
+            for (let i = 0; i < 140; i++) mapTrees.push({ x: Math.random() * WORLD.width, y: Math.random() * WORLD.height, r: 16 + Math.random() * 12 });
+
+            allies = [{ x: 1220, y: 2100, radius: 11 }, { x: 1850, y: 1250, radius: 11 }];
+            enemyVehicles = [{ type: 'Tank T-72', x: 2800, y: 800, w: 70, h: 40, hp: 150 }, { type: 'BMP-2', x: 3100, y: 1100, w: 60, h: 35, hp: 100 }];
+
+            for (let i = 0; i < 15; i++) {
+                enemies.push({ x: 2400 + Math.random() * 800, y: 600 + Math.random() * 1000, hp: 50, radius: 11, bleeding: false, surrendered: false });
             }
-
-            // Dodaj Sojuszników w Okopach i Domach
-            allies = [
-                { x: 1220, y: 2100, radius: 11, inTrench: true },
-                { x: 1250, y: 1800, radius: 11, inTrench: true },
-                { x: 1850, y: 1250, radius: 11, inHouse: true },
-                { x: 2020, y: 1240, radius: 11, inHouse: true }
-            ];
-
-            // Dodaj Pojazdy Wroga (Cele dla FPV)
-            enemyVehicles = [
-                { type: 'Tank T-72', x: 2800, y: 800, w: 70, h: 40, hp: 150 },
-                { type: 'BMP-2', x: 3100, y: 1100, w: 60, h: 35, hp: 100 },
-                { type: 'Truck Ural', x: 2600, y: 1400, w: 65, h: 32, hp: 80 }
-            ];
-
-            // Dodaj Wrogów
-            for (let i = 0; i < 16; i++) {
-                enemies.push({
-                    x: 2500 + Math.random() * 800,
-                    y: 600 + Math.random() * 1000,
-                    hp: 50, radius: 11, bleeding: false, surrendered: false
-                });
-            }
-
             updateTarkovUi();
         }
 
         function handleInteractions() {
-            // Enter / Exit Vehicle
-            if (player.inVehicle) {
-                player.inVehicle = false; player.x = car.x + 40; player.y = car.y;
-                return;
-            } else if (Math.hypot(player.x - car.x, player.y - car.y) < 55) {
-                player.inVehicle = true; return;
-            }
+            if (player.inVehicle) { player.inVehicle = false; player.x = car.x + 40; player.y = car.y; } 
+            else if (Math.hypot(player.x - car.x, player.y - car.y) < 55) { player.inVehicle = true; }
 
-            // Enter / Exit House via Doors
             mapHouses.forEach(h => {
-                let distDoor = Math.hypot(player.x - h.door.x, player.y - h.door.y);
-                if (distDoor < 35) {
+                if (Math.hypot(player.x - h.door.x, player.y - h.door.y) < 35) {
                     player.inHouse = !player.inHouse;
-                    if (player.inHouse) { player.x = h.x + h.w / 2; player.y = h.y + h.h / 2; }
+                    if (player.inHouse) { player.x = h.x + h.w / 2; player.y = h.y + h.h / 2; } 
                     else { player.x = h.door.x; player.y = h.door.y + 20; }
                 }
             });
@@ -1267,16 +1041,14 @@
         function toggleFpvDrone() {
             if (fpv.active) fpv.active = false;
             else if (player.fpvDrones > 0 && !player.inVehicle) {
-                playBeep(1400, 0.1); player.fpvDrones--;
-                fpv.active = true; fpv.x = player.x; fpv.y = player.y; fpv.vx = 0; fpv.vy = 0;
+                playBeep(1400, 0.1); player.fpvDrones--; fpv.active = true; fpv.x = player.x; fpv.y = player.y; fpv.vx = 0; fpv.vy = 0;
             }
             document.getElementById('uiFpv').innerText = player.fpvDrones;
         }
 
         function toggleTarkovUi(show) {
             let el = document.getElementById('tarkovMedicalUi');
-            if (show !== undefined) el.style.display = show ? 'block' : 'none';
-            else el.style.display = el.style.display === 'block' ? 'none' : 'block';
+            el.style.display = (show !== undefined) ? (show ? 'block' : 'none') : (el.style.display === 'block' ? 'none' : 'block');
             if (el.style.display === 'block') updateTarkovUi();
         }
 
@@ -1288,34 +1060,28 @@
 
         function updateTarkovUi() {
             for (let limb in bodyParts) {
-                let p = bodyParts[limb];
-                let pct = Math.max(0, (p.current / p.max) * 100);
+                let p = bodyParts[limb]; let pct = Math.max(0, (p.current / p.max) * 100);
                 document.getElementById('hp-' + limb).innerText = `${Math.floor(p.current)}/${p.max}`;
                 let fill = document.getElementById('bar-' + limb);
-                fill.style.width = pct + '%';
-                fill.style.background = pct < 30 ? '#ef4444' : (pct < 70 ? '#eab308' : '#22c55e');
+                fill.style.width = pct + '%'; fill.style.background = pct < 30 ? '#ef4444' : (pct < 70 ? '#eab308' : '#22c55e');
             }
         }
 
         function useMedItem(item) {
             let p = bodyParts[selectedLimb];
-            if (item === 'tourniquet' && player.tourniquets > 0 && p.bleeding) {
-                playBeep(900, 0.1); player.tourniquets--; p.bleeding = false;
-            } else if (item === 'bandage' && player.bandages > 0 && p.current < p.max) {
-                playBeep(1100, 0.1); player.bandages--; p.current = Math.min(p.max, p.current + 30);
-            }
+            if (item === 'tourniquet' && player.tourniquets > 0 && p.bleeding) { playBeep(900, 0.1); player.tourniquets--; p.bleeding = false; } 
+            else if (item === 'bandage' && player.bandages > 0 && p.current < p.max) { playBeep(1100, 0.1); player.bandages--; p.current = Math.min(p.max, p.current + 30); }
             updateTarkovUi();
         }
 
         function handleCanvasClick() {
             if (!isGameRunning) return;
-            if (fpv.active) {
-                detonateFpv(); return;
-            }
-            if (!player.inVehicle) {
-                playBeep(1300, 0.02);
+            if (fpv.active) { detonateFpv(); return; }
+            if (!player.inVehicle && ammoCount > 0) {
+                playBeep(1300, 0.02); ammoCount--;
+                document.getElementById('uiAmmo').innerText = `${ammoCount}/${maxAmmo}`;
                 let targetX = mousePos.x + camera.x, targetY = mousePos.y + camera.y;
-                let angle = Math.atan2(targetY - player.y, targetX - player.x);
+                let angle = touchDir.x !== 0 ? player.angle : Math.atan2(targetY - player.y, targetX - player.x);
                 bullets.push({ x: player.x, y: player.y, vx: Math.cos(angle) * 10, vy: Math.sin(angle) * 10, radius: 3 });
             }
         }
@@ -1323,230 +1089,146 @@
         function detonateFpv() {
             playBeep(150, 0.3);
             explosions.push({ x: fpv.x, y: fpv.y, r: 10, maxR: 85 });
-
-            // Zadaj obrażenia piechocie
             for (let i = enemies.length - 1; i >= 0; i--) {
-                if (Math.hypot(enemies[i].x - fpv.x, enemies[i].y - fpv.y) < 85) {
-                    gameScore += 50; enemies.splice(i, 1);
-                }
+                if (Math.hypot(enemies[i].x - fpv.x, enemies[i].y - fpv.y) < 85) { gameScore += 50; enemies.splice(i, 1); }
             }
-            // Zadaj obrażenia pojazdom
             for (let i = enemyVehicles.length - 1; i >= 0; i--) {
                 let v = enemyVehicles[i];
-                if (Math.hypot(v.x - fpv.x, v.y - fpv.y) < 95) {
-                    v.hp -= 100;
-                    if (v.hp <= 0) { gameScore += 150; enemyVehicles.splice(i, 1); }
-                }
+                if (Math.hypot(v.x - fpv.x, v.y - fpv.y) < 95) { v.hp -= 100; if (v.hp <= 0) { gameScore += 150; enemyVehicles.splice(i, 1); } }
             }
             fpv.active = false;
         }
 
         function updateAI() {
             if (!isGameRunning) return;
-
-            // Szturmowanie wrogów
             enemies.forEach(e => {
                 if (e.surrendered) return;
-
-                let target = player;
-                let dist = Math.hypot(target.x - e.x, target.y - e.y);
-                if (dist < 500) {
-                    let angle = Math.atan2(target.y - e.y, target.x - e.x);
+                if (Math.hypot(player.x - e.x, player.y - e.y) < 500) {
+                    let angle = Math.atan2(player.y - e.y, player.x - e.x);
                     enemyBullets.push({ x: e.x, y: e.y, vx: Math.cos(angle) * 6.5, vy: Math.sin(angle) * 6.5, radius: 3 });
                 }
-            });
-
-            // Sojusznicy strzelają do wrogów
-            allies.forEach(a => {
-                enemies.forEach(e => {
-                    if (!e.surrendered && Math.hypot(e.x - a.x, e.y - a.y) < 450) {
-                        let angle = Math.atan2(e.y - a.y, e.x - a.x);
-                        bullets.push({ x: a.x, y: a.y, vx: Math.cos(angle) * 8, vy: Math.sin(angle) * 8, radius: 3 });
-                    }
-                });
             });
         }
 
         function updateGameLogic() {
-            // Ruch Gracza / Auta
+            // Movement via WASD or Mobile Touch Joystick
+            let moveX = (keys['d'] || keys['в'] ? 1 : 0) - (keys['a'] || keys['ф'] ? 1 : 0) + touchDir.x;
+            let moveY = (keys['s'] || keys['і'] ? 1 : 0) - (keys['w'] || keys['ц'] ? 1 : 0) + touchDir.y;
+
             if (player.inVehicle) {
-                if (keys['w'] || keys['ц']) car.speed = Math.min(car.maxSpeed, car.speed + 0.2);
-                else if (keys['s'] || keys['і']) car.speed = Math.max(-2, car.speed - 0.2);
-                else car.speed *= 0.95;
-                if (keys['a'] || keys['ф']) car.angle -= 0.05;
-                if (keys['d'] || keys['в']) car.angle += 0.05;
+                car.speed = Math.min(car.maxSpeed, Math.max(-2, car.speed + moveY * 0.2));
+                car.angle += moveX * 0.05;
                 car.x += Math.cos(car.angle) * car.speed; car.y += Math.sin(car.angle) * car.speed;
                 player.x = car.x; player.y = car.y;
             } else if (!fpv.active) {
-                if (keys['w'] || keys['ц']) player.y -= player.speed;
-                if (keys['s'] || keys['і']) player.y += player.speed;
-                if (keys['a'] || keys['ф']) player.x -= player.speed;
-                if (keys['d'] || keys['в']) player.x += player.speed;
-                let targetX = mousePos.x + camera.x, targetY = mousePos.y + camera.y;
-                player.angle = Math.atan2(targetY - player.y, targetX - player.x);
+                player.x += moveX * player.speed; player.y += moveY * player.speed;
+                if (moveX !== 0 || moveY !== 0) player.angle = Math.atan2(moveY, moveX);
+                else if (mousePos.x !== 0) player.angle = Math.atan2((mousePos.y + camera.y) - player.y, (mousePos.x + camera.x) - player.x);
             }
 
-            // Dron FPV
             if (fpv.active) {
-                if (keys['w'] || keys['ц']) fpv.vy -= 0.35;
-                if (keys['s'] || keys['і']) fpv.vy += 0.35;
-                if (keys['a'] || keys['ф']) fpv.vx -= 0.35;
-                if (keys['d'] || keys['в']) fpv.vx += 0.35;
-                fpv.x += fpv.vx; fpv.y += fpv.vy; fpv.vx *= 0.94; fpv.vy *= 0.94;
-
-                // Detonacja kontaktowa
-                enemies.forEach(e => { if (Math.hypot(e.x - fpv.x, e.y - fpv.y) < 20) detonateFpv(); });
-                enemyVehicles.forEach(v => { if (Math.hypot(v.x - fpv.x, v.y - fpv.y) < 35) detonateFpv(); });
+                fpv.x += moveX * 5; fpv.y += moveY * 5;
             }
 
-            // Kamera
             let focusX = fpv.active ? fpv.x : player.x, focusY = fpv.active ? fpv.y : player.y;
             camera.x = Math.max(0, Math.min(WORLD.width - canvas.width, focusX - canvas.width / 2));
             camera.y = Math.max(0, Math.min(WORLD.height - canvas.height, focusY - canvas.height / 2));
 
-            // Pociski Gracza & Fizyka Drzew/Ścian
+            // Bullets Logic
             for (let i = bullets.length - 1; i >= 0; i--) {
                 let b = bullets[i]; b.x += b.vx; b.y += b.vy;
-
-                // Zwalnianie w drzewach
-                mapTrees.forEach(t => {
-                    if (Math.hypot(b.x - t.x, b.y - t.y) < t.r) { b.vx *= 0.7; b.vy *= 0.7; }
-                });
-
-                // Zderzenie ze ścianą budynku (Blokada)
-                mapHouses.forEach(h => {
-                    if (b.x > h.x && b.x < h.x + h.w && b.y > h.y && b.y < h.y + h.h) {
-                        if (Math.hypot(b.x - h.door.x, b.y - h.door.y) > 25) bullets.splice(i, 1);
-                    }
-                });
-
-                // Trafienie Wroga
                 for (let j = enemies.length - 1; j >= 0; j--) {
                     let e = enemies[j];
                     if (Math.hypot(b.x - e.x, b.y - e.y) < e.radius + b.radius) {
-                        e.hp -= 25; e.bleeding = true;
-                        bloodPools.push({ x: e.x, y: e.y, r: 4 + Math.random() * 5 });
-                        if (e.hp <= 15 && Math.random() < 0.6) e.surrendered = true; // Poddawanie się!
+                        e.hp -= 25; bloodPools.push({ x: e.x, y: e.y, r: 4 });
+                        if (e.hp <= 15 && Math.random() < 0.6) e.surrendered = true;
                         if (e.hp <= 0) enemies.splice(j, 1);
                         bullets.splice(i, 1); break;
                     }
                 }
             }
 
-            // Krwawienie wrogów
-            enemies.forEach(e => {
-                if (e.bleeding && Math.random() < 0.05) bloodPools.push({ x: e.x, y: e.y, r: 3 });
-            });
-
-            // Pociski Wrogów trafiające w Gracza
+            // Enemy Bullets Logic
             for (let i = enemyBullets.length - 1; i >= 0; i--) {
                 let eb = enemyBullets[i]; eb.x += eb.vx; eb.y += eb.vy;
                 if (Math.hypot(eb.x - player.x, eb.y - player.y) < player.radius + eb.radius) {
                     bodyParts.thorax.current -= 12; bodyParts.thorax.bleeding = true;
                     enemyBullets.splice(i, 1); updateTarkovUi();
+                    document.getElementById('damageVignette').style.boxShadow = 'inset 0 0 60px rgba(239, 68, 68, 0.8)';
+                    setTimeout(() => { document.getElementById('damageVignette').style.boxShadow = 'inset 0 0 60px rgba(239, 68, 68, 0)'; }, 200);
                     if (bodyParts.thorax.current <= 0 || bodyParts.head.current <= 0) endGame();
                 }
             }
 
             explosions.forEach((exp, idx) => { exp.r += 3; if (exp.r > exp.maxR) explosions.splice(idx, 1); });
-            
             document.getElementById('uiOpName').innerText = currentOp.toUpperCase();
-            document.getElementById('uiVehicle').innerText = player.inVehicle ? "SAMOCHÓD" : (player.inHouse ? "DOM" : "PIECHOTA");
+            document.getElementById('uiVehicle').innerText = player.inVehicle ? "АВТОМОБІЛЬ" : "ПІХОТА";
         }
 
         function drawGameWorld() {
             ctx.clearRect(0, 0, canvas.width, canvas.height);
-            ctx.save();
-            ctx.translate(-camera.x, -camera.y);
+            ctx.save(); ctx.translate(-camera.x, -camera.y);
 
-            // 1. Ślady Krwi
-            ctx.fillStyle = "#881337";
-            bloodPools.forEach(bp => { ctx.beginPath(); ctx.arc(bp.x, bp.y, bp.r, 0, Math.PI*2); ctx.fill(); });
-
-            // 2. Okopy Zygzakowate
-            ctx.strokeStyle = "#451a03"; ctx.lineWidth = 26; ctx.lineCap = "round"; ctx.lineJoin = "round";
-            ctx.beginPath();
-            mapZigZagTrenches.forEach((t, idx) => {
-                if (idx === 0) ctx.moveTo(t.x1, t.y1);
-                ctx.lineTo(t.x2, t.y2);
-            });
+            // Blood & Trenches
+            ctx.fillStyle = "#881337"; bloodPools.forEach(bp => { ctx.beginPath(); ctx.arc(bp.x, bp.y, bp.r, 0, Math.PI*2); ctx.fill(); });
+            ctx.strokeStyle = "#451a03"; ctx.lineWidth = 24; ctx.beginPath();
+            mapZigZagTrenches.forEach((t, idx) => { if (idx === 0) ctx.moveTo(t.x1, t.y1); ctx.lineTo(t.x2, t.y2); });
             ctx.stroke();
 
-            // 3. Budynki & Drzwi
+            // Houses
             mapHouses.forEach(h => {
                 ctx.fillStyle = "#334155"; ctx.fillRect(h.x, h.y, h.w, h.h);
-                ctx.strokeStyle = "#64748b"; ctx.strokeRect(h.x, h.y, h.w, h.h);
                 ctx.fillStyle = "#78350f"; ctx.fillRect(h.door.x - 10, h.door.y - 3, h.door.w, 6);
             });
 
-            // 4. Pojazdy Wroga (Czołgi, BMP)
-            enemyVehicles.forEach(v => {
-                ctx.fillStyle = "#3f6212"; ctx.fillRect(v.x - v.w/2, v.y - v.h/2, v.w, v.h);
-                ctx.fillStyle = "#1e293b"; ctx.fillRect(v.x, v.y - 3, 25, 6);
-            });
+            // Enemy Vehicles
+            enemyVehicles.forEach(v => { ctx.fillStyle = "#3f6212"; ctx.fillRect(v.x - v.w/2, v.y - v.h/2, v.w, v.h); });
 
-            // 5. Samochód Gracza
+            // Player Car
             ctx.save(); ctx.translate(car.x, car.y); ctx.rotate(car.angle);
-            ctx.fillStyle = "#eab308"; ctx.fillRect(-car.w/2, -car.h/2, car.w, car.h);
-            ctx.restore();
+            ctx.fillStyle = "#eab308"; ctx.fillRect(-car.w/2, -car.h/2, car.w, car.h); ctx.restore();
 
-            // 6. Sojusznicy (Niebiescy)
-            ctx.fillStyle = "#38bdf8";
-            allies.forEach(a => { ctx.beginPath(); ctx.arc(a.x, a.y, a.radius, 0, Math.PI*2); ctx.fill(); });
-
-            // 7. Wrogowie (Czerwoni)
+            // Enemies
             enemies.forEach(e => {
                 ctx.fillStyle = e.surrendered ? "#eab308" : "#ef4444";
                 ctx.beginPath(); ctx.arc(e.x, e.y, e.radius, 0, Math.PI*2); ctx.fill();
-                if (e.surrendered) { ctx.fillStyle = "#ffffff"; ctx.fillText("🏳️ PODDAJĘ SIĘ", e.x - 20, e.y - 15); }
             });
 
-            // 8. Gracz
+            // Player & Flashlight
             if (!player.inVehicle) {
+                if (flashlightOn) {
+                    ctx.save(); ctx.translate(player.x, player.y); ctx.rotate(player.angle);
+                    ctx.fillStyle = "rgba(254, 240, 138, 0.2)";
+                    ctx.beginPath(); ctx.moveTo(0,0); ctx.arc(0, 0, 160, -0.4, 0.4); ctx.fill(); ctx.restore();
+                }
                 ctx.save(); ctx.translate(player.x, player.y); ctx.rotate(player.angle);
-                ctx.fillStyle = "#0284c7"; ctx.fillRect(0, -3, 15, 6);
-                ctx.beginPath(); ctx.arc(0, 0, player.radius, 0, Math.PI*2); ctx.fillStyle = "#0ea5e9"; ctx.fill();
-                ctx.restore();
+                ctx.beginPath(); ctx.arc(0, 0, player.radius, 0, Math.PI*2); ctx.fillStyle = "#0ea5e9"; ctx.fill(); ctx.restore();
             }
 
-            // 9. Pociski
+            // Bullets
             ctx.fillStyle = "#facc15"; bullets.forEach(b => { ctx.beginPath(); ctx.arc(b.x, b.y, b.radius, 0, Math.PI*2); ctx.fill(); });
             ctx.fillStyle = "#f87171"; enemyBullets.forEach(eb => { ctx.beginPath(); ctx.arc(eb.x, eb.y, eb.radius, 0, Math.PI*2); ctx.fill(); });
 
-            // 10. Drzewa (Korony)
-            ctx.fillStyle = "rgba(34, 197, 94, 0.55)";
-            mapTrees.forEach(tr => { ctx.beginPath(); ctx.arc(tr.x, tr.y, tr.r, 0, Math.PI*2); ctx.fill(); });
+            // FPV Drone
+            if (fpv.active) { ctx.fillStyle = "#22c55e"; ctx.beginPath(); ctx.arc(fpv.x, fpv.y, 9, 0, Math.PI*2); ctx.fill(); }
 
-            // 11. Dron FPV
-            if (fpv.active) {
-                ctx.fillStyle = "#22c55e"; ctx.beginPath(); ctx.arc(fpv.x, fpv.y, 9, 0, Math.PI*2); ctx.fill();
-            }
-
-            // 12. Eksplozje
-            explosions.forEach(exp => {
-                ctx.beginPath(); ctx.arc(exp.x, exp.y, exp.r, 0, Math.PI*2);
-                ctx.fillStyle = "rgba(249, 115, 22, 0.65)"; ctx.fill();
-            });
+            // Explosions
+            explosions.forEach(exp => { ctx.beginPath(); ctx.arc(exp.x, exp.y, exp.r, 0, Math.PI*2); ctx.fillStyle = "rgba(249, 115, 22, 0.65)"; ctx.fill(); });
 
             ctx.restore();
         }
 
         function gameLoop() {
             if (!isGameRunning) return;
-            updateGameLogic();
-            drawGameWorld();
+            updateGameLogic(); drawGameWorld();
             animId = requestAnimationFrame(gameLoop);
         }
 
-        function stopGame() {
-            isGameRunning = false;
-            if (animId) cancelAnimationFrame(animId);
-            if (aiInterval) clearInterval(aiInterval);
-        }
+        function stopGame() { isGameRunning = false; if (animId) cancelAnimationFrame(animId); if (aiInterval) clearInterval(aiInterval); }
 
         function endGame() {
             stopGame();
-            let name = prompt(`Koniec operacji! Twój wynik: ${gameScore} pkt.\nWpisz swój nick:`, "Żołnierz");
+            let name = prompt(`Кінець операції! Ваш результат: ${gameScore} очок.\nВведіть ваш нікнейм:`, "Воїн");
             if (name && name.trim() !== '') {
                 scoresRef.push({ name: name.trim(), score: gameScore, timestamp: Date.now() });
                 openLeaderboardModal();
@@ -1556,15 +1238,9 @@
         function openLeaderboardModal() {
             document.getElementById('leaderboardModal').classList.add('active');
             scoresRef.orderByChild('score').limitToLast(10).on('value', (snapshot) => {
-                const tbody = document.getElementById('leaderboardBody');
-                tbody.innerHTML = '';
-                if (!snapshot.exists()) {
-                    tbody.innerHTML = '<tr><td colspan="3" style="text-align:center; padding:1rem;">Brak wyników.</td></tr>';
-                    return;
-                }
-                let list = [];
-                snapshot.forEach(c => list.push(c.val()));
-                list.sort((a,b) => b.score - a.score);
+                const tbody = document.getElementById('leaderboardBody'); tbody.innerHTML = '';
+                if (!snapshot.exists()) { tbody.innerHTML = '<tr><td colspan="3" style="text-align:center; padding:1rem;">Немає рекордів.</td></tr>'; return; }
+                let list = []; snapshot.forEach(c => list.push(c.val())); list.sort((a,b) => b.score - a.score);
                 list.forEach((item, index) => {
                     const tr = document.createElement('tr');
                     tr.innerHTML = `<td style="padding:6px;">${index+1}</td><td style="padding:6px;">${escapeHtml(item.name)}</td><td style="padding:6px; text-align:right;">${item.score}</td>`;
@@ -1573,9 +1249,7 @@
             });
         }
 
-        function closeLeaderboardModal() {
-            document.getElementById('leaderboardModal').classList.remove('active');
-        }
+        function closeLeaderboardModal() { document.getElementById('leaderboardModal').classList.remove('active'); }
     </script>
 </body>
 </html>
