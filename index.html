@@ -163,9 +163,9 @@
         .custom-option.selected { background: rgba(56, 189, 248, 0.15); color: var(--accent); font-weight: 600; }
 
         /* Modal Overlay & Window */
-        .modal-overlay { position: fixed; top: 0; left: 0; width: 100%; height: 100%; background: rgba(7, 11, 20, 0.85); backdrop-filter: blur(8px); z-index: 200; display: flex; align-items: center; justify-content: center; opacity: 0; pointer-events: none; transition: opacity 0.4s ease; padding: 1rem; }
+        .modal-overlay { position: fixed; top: 0; left: 0; width: 100%; height: 100%; background: rgba(7, 11, 20, 0.88); backdrop-filter: blur(8px); z-index: 200; display: flex; align-items: center; justify-content: center; opacity: 0; pointer-events: none; transition: opacity 0.4s ease; padding: 1rem; }
         .modal-overlay.active { opacity: 1; pointer-events: auto; }
-        .modal-window { width: 100%; max-width: 760px; background: #0f172a; border: 1px solid rgba(56, 189, 248, 0.25); border-radius: 16px; padding: 2.2rem; box-shadow: 0 25px 60px rgba(0,0,0,0.6); position: relative; overflow: hidden; }
+        .modal-window { width: 100%; max-width: 860px; background: #0f172a; border: 1px solid rgba(56, 189, 248, 0.25); border-radius: 16px; padding: 2.2rem; box-shadow: 0 25px 60px rgba(0,0,0,0.6); position: relative; overflow: hidden; }
 
         .fade-stage { opacity: 1; transform: translateY(0); transition: opacity 0.35s ease, transform 0.35s ease; }
         .fade-stage.hidden { opacity: 0; transform: translateY(-15px); pointer-events: none; position: absolute; width: calc(100% - 4.4rem); }
@@ -266,6 +266,35 @@
         .op-icon { font-size: 2.5rem; margin-bottom: 0.5rem; }
         .op-title { color: #f1f5f9; font-weight: bold; font-size: 1.1rem; margin-bottom: 0.5rem; }
         .op-desc { color: var(--text-muted); font-size: 0.8rem; line-height: 1.4; }
+
+        /* TARKOV HEALTH UI STYLES */
+        .tarkov-ui {
+            display: none;
+            position: absolute;
+            top: 50%; left: 50%;
+            transform: translate(-50%, -50%);
+            width: 480px;
+            background: rgba(12, 16, 24, 0.96);
+            border: 2px solid #334155;
+            border-radius: 12px;
+            padding: 20px;
+            box-shadow: 0 0 30px rgba(0,0,0,0.9);
+            z-index: 50;
+            color: #e2e8f0;
+        }
+        .tarkov-header { display: flex; justify-content: space-between; border-bottom: 1px solid #334155; padding-bottom: 10px; margin-bottom: 15px; font-weight: bold; letter-spacing: 1px; color: var(--accent); }
+        .tarkov-body { display: flex; gap: 20px; align-items: center; }
+        .skeleton-view { width: 170px; height: 280px; position: relative; border: 1px solid rgba(255,255,255,0.05); border-radius: 8px; background: rgba(0,0,0,0.4); display: flex; justify-content: center; align-items: center; }
+        .skeleton-svg { width: 130px; height: 240px; }
+        .limb-list { flex: 1; display: flex; flex-direction: column; gap: 8px; }
+        .limb-box { background: rgba(30, 41, 59, 0.7); border: 1px solid #334155; border-radius: 6px; padding: 6px 10px; cursor: pointer; transition: all 0.2s; }
+        .limb-box:hover, .limb-box.selected { border-color: var(--accent); background: rgba(56, 189, 248, 0.15); }
+        .limb-info { display: flex; justify-content: space-between; font-size: 0.82rem; font-weight: bold; margin-bottom: 3px; }
+        .limb-bar-bg { width: 100%; height: 6px; background: #0f172a; border-radius: 3px; overflow: hidden; }
+        .limb-bar-fill { height: 100%; background: var(--status-online); width: 100%; transition: width 0.3s ease, background 0.3s; }
+        .med-actions { display: flex; gap: 10px; margin-top: 15px; border-top: 1px solid #334155; padding-top: 12px; }
+        .btn-med { flex: 1; padding: 8px; background: #1e293b; border: 1px solid var(--accent-border); color: #fff; border-radius: 6px; font-size: 0.8rem; font-weight: bold; cursor: pointer; transition: all 0.2s; }
+        .btn-med:hover { background: var(--accent); color: #000; }
     </style>
 
     <script src="https://www.gstatic.com/firebasejs/8.10.1/firebase-app.js"></script>
@@ -274,7 +303,7 @@
 <body>
 
     <nav class="navbar">
-        <a href="#" class="logo">Strike — Рекрутинг ЗСУ</a>
+        <a href="#" class="logo">Strike — Рекрутинговий Центр</a>
         <ul class="nav-links">
             <li><a href="#">Головна</a></li>
             <li><a href="#calc">Калькулятор</a></li>
@@ -285,22 +314,17 @@
     </nav>
 
     <div class="video-container">
-        <video autoplay loop muted playsinline class="bg-video">
-            <source src="mp4/krak.mp4" type="video/mp4">
-        </video>
+        <video autoplay loop muted playsinline class="bg-video"><source src="mp4/krak.mp4" type="video/mp4"></video>
         <div class="video-overlay"></div>
         <div class="tactical-grid"></div>
 
         <main class="main-content">
             <h1>Твій шлях до професійного підрозділу</h1>
-            
             <button class="btn-main-trigger" onclick="toggleModal(true)">Подати заявку зараз →</button>
             
             <div class="cards-grid">
                 <div class="team-card">
-                    <div class="photo-container">
-                        <img src="vovkodav.png" alt="1-й батальйон Вовкодав" loading="lazy">
-                    </div>
+                    <div class="photo-container"><img src="vovkodav.png" alt="1-й батальйон Вовкодав" loading="lazy"></div>
                     <div>
                         <h3>1-й батальйон "Вовкодав"</h3>
                         <p>Інтернаціональний підрозділ, що виконує складні бойові завдання безпосередньо на передньому краї.</p>
@@ -309,9 +333,7 @@
                 </div>
 
                 <div class="team-card">
-                    <div class="photo-container">
-                        <img src="RVC.png" alt="РДК" loading="lazy">
-                    </div>
+                    <div class="photo-container"><img src="RVC.png" alt="РДК" loading="lazy"></div>
                     <div>
                         <h3>Російський добровольчий корпус</h3>
                         <p>Добровольче формування, що веде запеклі бої та проводити спецоперації на лінії зіткнення.</p>
@@ -320,9 +342,7 @@
                 </div>
 
                 <div class="team-card">
-                    <div class="photo-container">
-                        <img src="Norman.png" alt="Норманська бригада" loading="lazy">
-                    </div>
+                    <div class="photo-container"><img src="Norman.png" alt="Норманська бригада" loading="lazy"></div>
                     <div>
                         <h3>Норманська бригада</h3>
                         <p>Згуртований загін іноземних ветеранів, що забезпечує точність і тактичну перевагу в бою.</p>
@@ -439,60 +459,116 @@
         </div>
     </footer>
 
-    <!-- PANEL DLA GRY I REKORDÓW -->
+    <!-- DOLNY PANEL GRY -->
     <div style="background: var(--bg-deep); padding: 2rem; border-top: 1px solid var(--accent-border); text-align: center; display: flex; justify-content: center; gap: 1.5rem; flex-wrap: wrap;">
-        <button class="btn-main-trigger" style="margin-bottom: 0; padding: 0.8rem 1.8rem; font-size: 0.95rem;" onclick="openGameModal()">🎮 Tactical Simulator 2D (Szturm, Obrona, FPV)</button>
+        <button class="btn-main-trigger" style="margin-bottom: 0; padding: 0.8rem 1.8rem; font-size: 0.95rem;" onclick="openGameModal()">🎮 Graj: Ogromna Mapa + Tarkov Medical UI</button>
         <button class="btn-main-trigger" style="margin-bottom: 0; padding: 0.8rem 1.8rem; font-size: 0.95rem; border-color: rgba(34, 197, 94, 0.4); color: var(--status-online);" onclick="openLeaderboardModal()">🏆 Tabela Rekordów</button>
     </div>
 
-    <!-- MODAL GRY (CANVAS + WYBÓR MISJI) -->
+    <!-- MODAL GRY -->
     <div class="modal-overlay" id="gameModal">
-        <div class="modal-window" style="max-width: 820px; text-align: center;">
+        <div class="modal-window" style="max-width: 860px; text-align: center; position: relative;">
             <button class="close-modal" onclick="closeGameModal()">×</button>
             
             <!-- EKRAN WYBORU OPERACJI -->
             <div id="opSelectScreen">
                 <h2 style="color: #f1f5f9; margin-bottom: 0.5rem;">🎯 Wybierz Rodzaj Operacji</h2>
-                <p style="color: var(--text-muted); font-size: 0.9rem;">Twój wybór określi cel misji oraz sprzęt dostępny w bazie.</p>
+                <p style="color: var(--text-muted); font-size: 0.9rem;">Wybierz misję taktyczną na dużej mapie terenu.</p>
 
                 <div class="op-card-grid">
                     <div class="op-card" onclick="startOperation('fpv')">
                         <div class="op-icon">🚁</div>
                         <div class="op-title">Atak FPV</div>
-                        <div class="op-desc">Startujesz w bazie. Podchodzisz do stacji FPV i wylatujesz dronami OG-7 na pozycje wroga.</div>
+                        <div class="op-desc">Wylatujesz dronem FPV z bazy. Szukaj i niszcz cele: Czołgi, Transportery BMP i ciężarówki wroga.</div>
                     </div>
                     <div class="op-card" onclick="startOperation('assault')">
                         <div class="op-icon">⚔️</div>
                         <div class="op-title">Szturm</div>
-                        <div class="op-desc">Wsiadasz w auto w bazie, jedziesz na pozycje wroga i przeprowadzasz szturm piechoty.</div>
+                        <div class="op-desc">Wsiądź w auto w bazie, pojedź do wioski i przeprowadź szturm na domy wraz ze sprzymierzeńcami.</div>
                     </div>
                     <div class="op-card" onclick="startOperation('defense')">
                         <div class="op-icon">🛡️</div>
-                        <div class="op-title">Obrona</div>
-                        <div class="op-desc">Jedziesz autem na pozycję w okopach. Gdy dojedziesz, osłoń się w okopie i odeprzyj szturm wrogów.</div>
+                        <div class="op-title">Obrona Okopów</div>
+                        <div class="op-desc">Pojedź do wielkich okopów zig-zag, zajmij pozycję i z pomocą sojuszników odeprzyj szturmy.</div>
                     </div>
                 </div>
             </div>
 
             <!-- EKRAN CANVASA GRA -->
-            <div id="canvasScreen" style="display: none;">
-                <div style="display: flex; justify-content: space-between; font-size: 0.8rem; font-weight: bold; margin-bottom: 0.4rem; background: rgba(0,0,0,0.4); padding: 0.4rem 0.8rem; border-radius: 8px;">
+            <div id="canvasScreen" style="display: none; position: relative;">
+                <div style="display: flex; justify-content: space-between; font-size: 0.8rem; font-weight: bold; margin-bottom: 0.4rem; background: rgba(0,0,0,0.5); padding: 0.5rem 0.8rem; border-radius: 8px;">
                     <div>Operacja: <span id="uiOpName" style="color: var(--accent);">N/A</span></div>
-                    <div>HP: <span id="uiHp" style="color: var(--status-online);">100</span>%</div>
-                    <div>Krwawienie: <span id="uiBleed" style="color: var(--status-online);">NIE</span></div>
-                    <div>Ochrona: <span id="uiCover" style="color: #38bdf8;">BRAK</span></div>
                     <div>Pojazd: <span id="uiVehicle" style="color: #eab308;">PIECHOTA</span></div>
-                    <div>Staza (1): <span id="uiTourniquet" style="color: #eab308;">2</span></div>
-                    <div>Opatrunek (2): <span id="uiBandage" style="color: #38bdf8;">3</span></div>
-                    <div>FPV (E): <span id="uiFpv" style="color: #22c55e;">3</span></div>
+                    <div>Medycyna (M / Tab): <span style="color: #22c55e;">TARKOV UI</span></div>
+                    <div>Dron FPV (E): <span id="uiFpv" style="color: #22c55e;">4</span></div>
                 </div>
 
                 <div style="position: relative; width: 100%; display: flex; justify-content: center;">
-                    <canvas id="gameCanvas" width="750" height="440" style="background: #141c12; border: 1px solid var(--accent-border); border-radius: 8px; cursor: crosshair;"></canvas>
+                    <canvas id="gameCanvas" width="800" height="460" style="background: #111812; border: 1px solid var(--accent-border); border-radius: 8px; cursor: crosshair;"></canvas>
+
+                    <!-- TARKOV MEDICAL UI (INTERFEJS ZE ZDJĘCIA) -->
+                    <div class="tarkov-ui" id="tarkovMedicalUi">
+                        <div class="tarkov-header">
+                            <span>🏥 STAN ZDROWIA (TCCC DIAGNOSTICS)</span>
+                            <span style="cursor: pointer;" onclick="toggleTarkovUi(false)">✕</span>
+                        </div>
+                        <div class="tarkov-body">
+                            <div class="skeleton-view">
+                                <svg class="skeleton-svg" viewBox="0 0 100 200">
+                                    <!-- Głowa -->
+                                    <circle id="svgHead" cx="50" cy="20" r="14" fill="#ef4444" opacity="0.8"/>
+                                    <!-- Klatka piersiowa -->
+                                    <rect id="svgThorax" x="32" y="38" width="36" height="45" rx="5" fill="#ef4444" opacity="0.8"/>
+                                    <!-- Brzuch -->
+                                    <rect id="svgStomach" x="35" y="86" width="30" height="30" rx="4" fill="#ef4444" opacity="0.8"/>
+                                    <!-- Ręce -->
+                                    <rect id="svgRArm" x="12" y="40" width="16" height="55" rx="3" fill="#ef4444" opacity="0.8"/>
+                                    <rect id="svgLArm" x="72" y="40" width="16" height="55" rx="3" fill="#ef4444" opacity="0.8"/>
+                                    <!-- Nogi -->
+                                    <rect id="svgRLeg" x="32" y="120" width="15" height="70" rx="3" fill="#ef4444" opacity="0.8"/>
+                                    <rect id="svgLLeg" x="53" y="120" width="15" height="70" rx="3" fill="#ef4444" opacity="0.8"/>
+                                </svg>
+                            </div>
+                            <div class="limb-list">
+                                <div class="limb-box" id="box-head" onclick="selectLimb('head')">
+                                    <div class="limb-info"><span>GŁOWA (HEAD)</span><span id="hp-head">35/35</span></div>
+                                    <div class="limb-bar-bg"><div class="limb-bar-fill" id="bar-head"></div></div>
+                                </div>
+                                <div class="limb-box" id="box-thorax" onclick="selectLimb('thorax')">
+                                    <div class="limb-info"><span>KLATKA (THORAX)</span><span id="hp-thorax">85/85</span></div>
+                                    <div class="limb-bar-bg"><div class="limb-bar-fill" id="bar-thorax"></div></div>
+                                </div>
+                                <div class="limb-box" id="box-stomach" onclick="selectLimb('stomach')">
+                                    <div class="limb-info"><span>BRZUCH (STOMACH)</span><span id="hp-stomach">70/70</span></div>
+                                    <div class="limb-bar-bg"><div class="limb-bar-fill" id="bar-stomach"></div></div>
+                                </div>
+                                <div class="limb-box" id="box-rarm" onclick="selectLimb('rarm')">
+                                    <div class="limb-info"><span>PRAWA RĘKA</span><span id="hp-rarm">60/60</span></div>
+                                    <div class="limb-bar-bg"><div class="limb-bar-fill" id="bar-rarm"></div></div>
+                                </div>
+                                <div class="limb-box" id="box-larm" onclick="selectLimb('larm')">
+                                    <div class="limb-info"><span>LEWA RĘKA</span><span id="hp-larm">60/60</span></div>
+                                    <div class="limb-bar-bg"><div class="limb-bar-fill" id="bar-larm"></div></div>
+                                </div>
+                                <div class="limb-box" id="box-rleg" onclick="selectLimb('rleg')">
+                                    <div class="limb-info"><span>PRAWA NOGA</span><span id="hp-rleg">65/65</span></div>
+                                    <div class="limb-bar-bg"><div class="limb-bar-fill" id="bar-rleg"></div></div>
+                                </div>
+                                <div class="limb-box" id="box-lleg" onclick="selectLimb('lleg')">
+                                    <div class="limb-info"><span>LEWA NOGA</span><span id="hp-lleg">65/65</span></div>
+                                    <div class="limb-bar-bg"><div class="limb-bar-fill" id="bar-lleg"></div></div>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="med-actions">
+                            <button class="btn-med" onclick="useMedItem('tourniquet')">🩸 Turniket (Staza)</button>
+                            <button class="btn-med" onclick="useMedItem('bandage')">🩹 Opatrunek Medyczny</button>
+                        </div>
+                    </div>
                 </div>
 
                 <p style="color: var(--text-subtle); font-size: 0.75rem; margin-top: 0.4rem;">
-                    <b>W,A,S,D</b> Ruch / Prowadzenie | <b>Myszka</b> Celowanie/Strzał | <b>F</b> Wsiądź/Wysiądź | <b>1</b> Staza | <b>2</b> Opatrunek | <b>E</b> Dron FPV
+                    <b>W,A,S,D</b> Ruch/Auto | <b>Myszka</b> Strzał | <b>F</b> Wejdź do Domu/Auta | <b>M / Tab</b> Otwórz Medycynę (Tarkov UI) | <b>E</b> FPV Dron
                 </p>
             </div>
         </div>
@@ -621,7 +697,7 @@
     </div>
 
     <script>
-        // Firebase Config
+        // Firebase Configuration
         const firebaseConfig = {
             apiKey: "AIzaSyCeWM1wdHdN6bIXFXTqHXO7WgJNJK53nwk",
             authDomain: "storinka-d7bd6.firebaseapp.com",
@@ -646,8 +722,7 @@
         const playBeep = (freq = 600, duration = 0.05) => {
             try {
                 const ctx = new (window.AudioContext || window.webkitAudioContext)();
-                const osc = ctx.createOscillator();
-                const gain = ctx.createGain();
+                const osc = ctx.createOscillator(); const gain = ctx.createGain();
                 osc.type = 'sine'; osc.frequency.value = freq;
                 gain.gain.setValueAtTime(0.05, ctx.currentTime);
                 osc.connect(gain); gain.connect(ctx.destination);
@@ -1004,37 +1079,56 @@
         }
 
         // =========================================================================
-        // --- SYMULATOR GRY: DETONACJA DRONA PO KONTAKCIE + MECHANIKA OKOPÓW ---
+        // --- PEŁNY SYMULATOR Z DUŻĄ MAPĄ, ZYGZAKAMI, TARKOV UI I NOWYMI CELEMI ---
         // =========================================================================
         let canvas, ctx;
         let isGameRunning = false;
-        let animId = null;
-        let aiInterval = null;
-
-        let currentOp = 'fpv'; 
+        let animId = null; let aiInterval = null;
+        let currentOp = 'fpv';
         let gameScore = 0;
 
-        const WORLD = { width: 2000, height: 1600 };
+        const WORLD = { width: 4000, height: 3200 };
         let camera = { x: 0, y: 0 };
 
+        // System Medyczny Tarkov
+        let bodyParts = {
+            head: { current: 35, max: 35, bleeding: false },
+            thorax: { current: 85, max: 85, bleeding: false },
+            stomach: { current: 70, max: 70, bleeding: false },
+            rarm: { current: 60, max: 60, bleeding: false },
+            larm: { current: 60, max: 60, bleeding: false },
+            rleg: { current: 65, max: 65, bleeding: false },
+            lleg: { current: 65, max: 65, bleeding: false }
+        };
+        let selectedLimb = 'thorax';
+
         let player = {
-            x: 150, y: 1500, radius: 11, speed: 3.2, hp: 100, isBleeding: false, angle: 0,
-            inVehicle: false, tourniquets: 2, bandages: 3, fpvDrones: 3, inTrench: false
+            x: 200, y: 3000, radius: 11, speed: 3.5, angle: 0,
+            inVehicle: false, inHouse: false, inTrench: false,
+            tourniquets: 3, bandages: 5, fpvDrones: 4
         };
 
-        let car = { x: 220, y: 1480, w: 45, h: 25, angle: 0, speed: 0, maxSpeed: 7 };
+        let car = { x: 280, y: 2980, w: 48, h: 26, angle: 0, speed: 0, maxSpeed: 7.5 };
         let fpv = { active: false, x: 0, y: 0, vx: 0, vy: 0 };
 
-        let mapBase = { x: 50, y: 1350, w: 300, h: 220 };
-        let mapDefenseTrench = { x: 950, y: 850, w: 250, h: 120 }; // Strefa Okopów
-        let mapEnemyCamp = { x: 1600, y: 200, w: 300, h: 300 };
+        // Mapa Stref & Lokacji
+        let mapBase = { x: 100, y: 2800, w: 400, h: 300 };
+        let mapHouses = [
+            { x: 1800, y: 1200, w: 140, h: 100, door: { x: 1860, y: 1300, w: 20 } },
+            { x: 2000, y: 1200, w: 150, h: 110, door: { x: 2060, y: 1310, w: 20 } },
+            { x: 1900, y: 1400, w: 160, h: 120, door: { x: 1970, y: 1400, w: 20 } }
+        ];
 
-        let mapRoads = [], mapHouses = [], mapTrees = [];
-        let enemies = [], bullets = [], enemyBullets = [], explosions = [];
+        // Okopy Zygzakowate (Zig-Zag Trenches)
+        let mapZigZagTrenches = [];
+        let mapTrees = [];
+        let allies = [];
+        let enemies = [];
+        let enemyVehicles = []; // Czołgi, BMP, Ciężarówki
+        let bullets = [], enemyBullets = [], explosions = [], bloodPools = [];
         let keys = {}, mousePos = { x: 0, y: 0 };
 
         function openGameModal() {
-            playBeep(800);
             document.getElementById('gameModal').classList.add('active');
             document.body.classList.add('modal-open');
             document.getElementById('opSelectScreen').style.display = 'block';
@@ -1042,7 +1136,6 @@
         }
 
         function closeGameModal() {
-            playBeep(400);
             document.getElementById('gameModal').classList.remove('active');
             document.body.classList.remove('modal-open');
             stopGame();
@@ -1070,7 +1163,7 @@
             isGameRunning = true;
 
             if (aiInterval) clearInterval(aiInterval);
-            aiInterval = setInterval(updateAI, 800);
+            aiInterval = setInterval(updateAI, 700);
 
             if (animId) cancelAnimationFrame(animId);
             gameLoop();
@@ -1080,10 +1173,9 @@
             let k = e.key.toLowerCase();
             keys[k] = true;
             if (isGameRunning) {
-                if (k === '1') applyTourniquet();
-                if (k === '2') applyBandage();
+                if (k === 'm' || e.key === 'Tab') { e.preventDefault(); toggleTarkovUi(); }
                 if (k === 'e' || k === 'у') toggleFpvDrone();
-                if (k === 'f' || k === 'а') toggleVehicleInteraction();
+                if (k === 'f' || k === 'а') handleInteractions();
             }
         }
 
@@ -1095,218 +1187,271 @@
         }
 
         function initWorldMap() {
-            player.x = 150; player.y = 1480;
-            player.hp = 100; player.isBleeding = false; player.inVehicle = false; player.inTrench = false;
-            player.tourniquets = 2; player.bandages = 3; player.fpvDrones = 3;
-            car.x = 220; car.y = 1480; car.speed = 0;
+            player.x = 220; player.y = 2950;
+            player.inVehicle = false; player.inHouse = false; player.inTrench = false;
+            car.x = 280; car.y = 2950; car.speed = 0;
             fpv.active = false;
             gameScore = 0;
 
-            bullets = []; enemyBullets = []; enemies = []; explosions = [];
+            // Resetuj Tarkov UI Health
+            for (let part in bodyParts) {
+                bodyParts[part].current = bodyParts[part].max;
+                bodyParts[part].bleeding = false;
+            }
 
-            mapRoads = [
-                { x1: 200, y1: 1480, x2: 1050, y2: 920 },
-                { x1: 1050, y1: 920, x2: 1750, y2: 350 }
-            ];
+            bullets = []; enemyBullets = []; enemies = []; allies = []; enemyVehicles = []; explosions = []; bloodPools = [];
 
+            // Generuj Zygzakowaty Okop (Zig-Zag Trench Line)
+            mapZigZagTrenches = [];
+            let startX = 1200, startY = 2200;
+            for (let i = 0; i < 14; i++) {
+                let nextX = startX + (i % 2 === 0 ? 120 : -60);
+                let nextY = startY - 100;
+                mapZigZagTrenches.push({ x1: startX, y1: startY, x2: nextX, y2: nextY, width: 28 });
+                startX = nextX; startY = nextY;
+            }
+
+            // Generuj Drzewa / Lasy
             mapTrees = [];
-            for (let i = 0; i < 90; i++) {
-                let tx = Math.random() * WORLD.width;
-                let ty = Math.random() * WORLD.height;
-                if (ty < 1300 || tx > 400) {
-                    mapTrees.push({ x: tx, y: ty, r: 16 + Math.random() * 12 });
-                }
+            for (let i = 0; i < 160; i++) {
+                mapTrees.push({ x: Math.random() * WORLD.width, y: Math.random() * WORLD.height, r: 18 + Math.random() * 14 });
             }
 
-            mapHouses = [
-                { x: 1620, y: 220, w: 120, h: 90 },
-                { x: 1780, y: 350, w: 100, h: 100 },
-                { x: 1000, y: 720, w: 90, h: 70 }
+            // Dodaj Sojuszników w Okopach i Domach
+            allies = [
+                { x: 1220, y: 2100, radius: 11, inTrench: true },
+                { x: 1250, y: 1800, radius: 11, inTrench: true },
+                { x: 1850, y: 1250, radius: 11, inHouse: true },
+                { x: 2020, y: 1240, radius: 11, inHouse: true }
             ];
 
-            if (currentOp === 'assault' || currentOp === 'fpv') {
-                for (let i = 0; i < 12; i++) {
-                    enemies.push({ x: 1600 + Math.random() * 250, y: 200 + Math.random() * 250, hp: 50, radius: 11 });
-                }
-            } else if (currentOp === 'defense') {
-                // Początkowe fale wroga w natarciu na okop
-                for (let i = 0; i < 6; i++) {
-                    enemies.push({ x: 1400 + Math.random() * 200, y: 500 + Math.random() * 300, hp: 50, radius: 11 });
-                }
+            // Dodaj Pojazdy Wroga (Cele dla FPV)
+            enemyVehicles = [
+                { type: 'Tank T-72', x: 2800, y: 800, w: 70, h: 40, hp: 150 },
+                { type: 'BMP-2', x: 3100, y: 1100, w: 60, h: 35, hp: 100 },
+                { type: 'Truck Ural', x: 2600, y: 1400, w: 65, h: 32, hp: 80 }
+            ];
+
+            // Dodaj Wrogów
+            for (let i = 0; i < 16; i++) {
+                enemies.push({
+                    x: 2500 + Math.random() * 800,
+                    y: 600 + Math.random() * 1000,
+                    hp: 50, radius: 11, bleeding: false, surrendered: false
+                });
             }
-            updateUI();
+
+            updateTarkovUi();
         }
 
-        function toggleVehicleInteraction() {
+        function handleInteractions() {
+            // Enter / Exit Vehicle
             if (player.inVehicle) {
-                player.inVehicle = false;
-                player.x = car.x + 35; player.y = car.y;
-            } else {
-                if (Math.hypot(player.x - car.x, player.y - car.y) < 50) {
-                    player.inVehicle = true;
-                    if (fpv.active) fpv.active = false;
-                }
+                player.inVehicle = false; player.x = car.x + 40; player.y = car.y;
+                return;
+            } else if (Math.hypot(player.x - car.x, player.y - car.y) < 55) {
+                player.inVehicle = true; return;
             }
-            updateUI();
+
+            // Enter / Exit House via Doors
+            mapHouses.forEach(h => {
+                let distDoor = Math.hypot(player.x - h.door.x, player.y - h.door.y);
+                if (distDoor < 35) {
+                    player.inHouse = !player.inHouse;
+                    if (player.inHouse) { player.x = h.x + h.w / 2; player.y = h.y + h.h / 2; }
+                    else { player.x = h.door.x; player.y = h.door.y + 20; }
+                }
+            });
         }
 
         function toggleFpvDrone() {
-            if (fpv.active) {
-                fpv.active = false;
-            } else if (player.fpvDrones > 0 && !player.inVehicle) {
-                playBeep(1400, 0.1);
-                player.fpvDrones--;
-                fpv.active = true;
-                fpv.x = player.x; fpv.y = player.y; fpv.vx = 0; fpv.vy = 0;
+            if (fpv.active) fpv.active = false;
+            else if (player.fpvDrones > 0 && !player.inVehicle) {
+                playBeep(1400, 0.1); player.fpvDrones--;
+                fpv.active = true; fpv.x = player.x; fpv.y = player.y; fpv.vx = 0; fpv.vy = 0;
             }
-            updateUI();
+            document.getElementById('uiFpv').innerText = player.fpvDrones;
         }
 
-        function applyTourniquet() {
-            if (player.tourniquets > 0 && player.isBleeding) {
-                playBeep(900, 0.1); player.tourniquets--; player.isBleeding = false; updateUI();
+        function toggleTarkovUi(show) {
+            let el = document.getElementById('tarkovMedicalUi');
+            if (show !== undefined) el.style.display = show ? 'block' : 'none';
+            else el.style.display = el.style.display === 'block' ? 'none' : 'block';
+            if (el.style.display === 'block') updateTarkovUi();
+        }
+
+        function selectLimb(limb) {
+            selectedLimb = limb;
+            document.querySelectorAll('.limb-box').forEach(b => b.classList.remove('selected'));
+            document.getElementById('box-' + limb).classList.add('selected');
+        }
+
+        function updateTarkovUi() {
+            for (let limb in bodyParts) {
+                let p = bodyParts[limb];
+                let pct = Math.max(0, (p.current / p.max) * 100);
+                document.getElementById('hp-' + limb).innerText = `${Math.floor(p.current)}/${p.max}`;
+                let fill = document.getElementById('bar-' + limb);
+                fill.style.width = pct + '%';
+                fill.style.background = pct < 30 ? '#ef4444' : (pct < 70 ? '#eab308' : '#22c55e');
             }
         }
 
-        function applyBandage() {
-            if (player.bandages > 0 && player.hp < 100) {
-                playBeep(1100, 0.1); player.bandages--; player.hp = Math.min(100, player.hp + 35); updateUI();
+        function useMedItem(item) {
+            let p = bodyParts[selectedLimb];
+            if (item === 'tourniquet' && player.tourniquets > 0 && p.bleeding) {
+                playBeep(900, 0.1); player.tourniquets--; p.bleeding = false;
+            } else if (item === 'bandage' && player.bandages > 0 && p.current < p.max) {
+                playBeep(1100, 0.1); player.bandages--; p.current = Math.min(p.max, p.current + 30);
             }
-        }
-
-        function triggerFpvExplosion() {
-            playBeep(150, 0.3);
-            explosions.push({ x: fpv.x, y: fpv.y, r: 10, maxR: 75 });
-            for (let i = enemies.length - 1; i >= 0; i--) {
-                if (Math.hypot(enemies[i].x - fpv.x, enemies[i].y - fpv.y) < 75) {
-                    gameScore += 50; enemies.splice(i, 1);
-                }
-            }
-            fpv.active = false;
-            updateUI();
+            updateTarkovUi();
         }
 
         function handleCanvasClick() {
             if (!isGameRunning) return;
             if (fpv.active) {
-                triggerFpvExplosion();
-                return;
+                detonateFpv(); return;
             }
-
             if (!player.inVehicle) {
                 playBeep(1300, 0.02);
                 let targetX = mousePos.x + camera.x, targetY = mousePos.y + camera.y;
                 let angle = Math.atan2(targetY - player.y, targetX - player.x);
-                bullets.push({ x: player.x, y: player.y, vx: Math.cos(angle) * 9, vy: Math.sin(angle) * 9, radius: 3 });
+                bullets.push({ x: player.x, y: player.y, vx: Math.cos(angle) * 10, vy: Math.sin(angle) * 10, radius: 3 });
             }
+        }
+
+        function detonateFpv() {
+            playBeep(150, 0.3);
+            explosions.push({ x: fpv.x, y: fpv.y, r: 10, maxR: 85 });
+
+            // Zadaj obrażenia piechocie
+            for (let i = enemies.length - 1; i >= 0; i--) {
+                if (Math.hypot(enemies[i].x - fpv.x, enemies[i].y - fpv.y) < 85) {
+                    gameScore += 50; enemies.splice(i, 1);
+                }
+            }
+            // Zadaj obrażenia pojazdom
+            for (let i = enemyVehicles.length - 1; i >= 0; i--) {
+                let v = enemyVehicles[i];
+                if (Math.hypot(v.x - fpv.x, v.y - fpv.y) < 95) {
+                    v.hp -= 100;
+                    if (v.hp <= 0) { gameScore += 150; enemyVehicles.splice(i, 1); }
+                }
+            }
+            fpv.active = false;
         }
 
         function updateAI() {
             if (!isGameRunning) return;
 
-            // W trybie Obrony dodawaj nowe fale szturmujących wrogów
-            if (currentOp === 'defense' && enemies.length < 10 && Math.random() < 0.4) {
-                enemies.push({ x: 1300 + Math.random() * 300, y: 600 + Math.random() * 200, hp: 50, radius: 11 });
-            }
-
+            // Szturmowanie wrogów
             enemies.forEach(e => {
-                let targetX = player.inVehicle ? car.x : player.x;
-                let targetY = player.inVehicle ? car.y : player.y;
+                if (e.surrendered) return;
 
-                // Szturmowanie wrogów w stronę gracza
-                if (currentOp === 'defense') {
-                    let moveAngle = Math.atan2(targetY - e.y, targetX - e.x);
-                    e.x += Math.cos(moveAngle) * 1.5;
-                    e.y += Math.sin(moveAngle) * 1.5;
+                let target = player;
+                let dist = Math.hypot(target.x - e.x, target.y - e.y);
+                if (dist < 500) {
+                    let angle = Math.atan2(target.y - e.y, target.x - e.x);
+                    enemyBullets.push({ x: e.x, y: e.y, vx: Math.cos(angle) * 6.5, vy: Math.sin(angle) * 6.5, radius: 3 });
                 }
+            });
 
-                if (Math.hypot(targetX - e.x, targetY - e.y) < 450) {
-                    let angle = Math.atan2(targetY - e.y, targetX - e.x);
-                    enemyBullets.push({ x: e.x, y: e.y, vx: Math.cos(angle) * 6, vy: Math.sin(angle) * 6, radius: 3 });
-                }
+            // Sojusznicy strzelają do wrogów
+            allies.forEach(a => {
+                enemies.forEach(e => {
+                    if (!e.surrendered && Math.hypot(e.x - a.x, e.y - a.y) < 450) {
+                        let angle = Math.atan2(e.y - a.y, e.x - a.x);
+                        bullets.push({ x: a.x, y: a.y, vx: Math.cos(angle) * 8, vy: Math.sin(angle) * 8, radius: 3 });
+                    }
+                });
             });
         }
 
         function updateGameLogic() {
-            // Sprawdzanie czy gracz znajduje się w okopie
-            player.inTrench = (!player.inVehicle && 
-                player.x >= mapDefenseTrench.x && player.x <= mapDefenseTrench.x + mapDefenseTrench.w &&
-                player.y >= mapDefenseTrench.y && player.y <= mapDefenseTrench.y + mapDefenseTrench.h);
-
+            // Ruch Gracza / Auta
             if (player.inVehicle) {
                 if (keys['w'] || keys['ц']) car.speed = Math.min(car.maxSpeed, car.speed + 0.2);
                 else if (keys['s'] || keys['і']) car.speed = Math.max(-2, car.speed - 0.2);
                 else car.speed *= 0.95;
-
                 if (keys['a'] || keys['ф']) car.angle -= 0.05;
                 if (keys['d'] || keys['в']) car.angle += 0.05;
-
-                car.x += Math.cos(car.angle) * car.speed;
-                car.y += Math.sin(car.angle) * car.speed;
+                car.x += Math.cos(car.angle) * car.speed; car.y += Math.sin(car.angle) * car.speed;
                 player.x = car.x; player.y = car.y;
             } else if (!fpv.active) {
                 if (keys['w'] || keys['ц']) player.y -= player.speed;
                 if (keys['s'] || keys['і']) player.y += player.speed;
                 if (keys['a'] || keys['ф']) player.x -= player.speed;
                 if (keys['d'] || keys['в']) player.x += player.speed;
-
                 let targetX = mousePos.x + camera.x, targetY = mousePos.y + camera.y;
                 player.angle = Math.atan2(targetY - player.y, targetX - player.x);
             }
 
-            // Sterowanie Dronem FPV
+            // Dron FPV
             if (fpv.active) {
                 if (keys['w'] || keys['ц']) fpv.vy -= 0.35;
                 if (keys['s'] || keys['і']) fpv.vy += 0.35;
                 if (keys['a'] || keys['ф']) fpv.vx -= 0.35;
                 if (keys['d'] || keys['в']) fpv.vx += 0.35;
+                fpv.x += fpv.vx; fpv.y += fpv.vy; fpv.vx *= 0.94; fpv.vy *= 0.94;
 
-                fpv.x += fpv.vx; fpv.y += fpv.vy;
-                fpv.vx *= 0.94; fpv.vy *= 0.94;
-
-                // DETONACJA DRONA PO KONTAKCIE Z WROGIEM
-                for (let i = 0; i < enemies.length; i++) {
-                    if (Math.hypot(enemies[i].x - fpv.x, enemies[i].y - fpv.y) < (enemies[i].radius + 10)) {
-                        triggerFpvExplosion();
-                        break;
-                    }
-                }
+                // Detonacja kontaktowa
+                enemies.forEach(e => { if (Math.hypot(e.x - fpv.x, e.y - fpv.y) < 20) detonateFpv(); });
+                enemyVehicles.forEach(v => { if (Math.hypot(v.x - fpv.x, v.y - fpv.y) < 35) detonateFpv(); });
             }
 
-            let focusX = fpv.active ? fpv.x : player.x;
-            let focusY = fpv.active ? fpv.y : player.y;
+            // Kamera
+            let focusX = fpv.active ? fpv.x : player.x, focusY = fpv.active ? fpv.y : player.y;
             camera.x = Math.max(0, Math.min(WORLD.width - canvas.width, focusX - canvas.width / 2));
             camera.y = Math.max(0, Math.min(WORLD.height - canvas.height, focusY - canvas.height / 2));
 
-            if (player.isBleeding) {
-                player.hp -= 0.04;
-                if (player.hp <= 0) endGame();
-                updateUI();
-            }
-
-            // Pociski Gracza
+            // Pociski Gracza & Fizyka Drzew/Ścian
             for (let i = bullets.length - 1; i >= 0; i--) {
                 let b = bullets[i]; b.x += b.vx; b.y += b.vy;
+
+                // Zwalnianie w drzewach
+                mapTrees.forEach(t => {
+                    if (Math.hypot(b.x - t.x, b.y - t.y) < t.r) { b.vx *= 0.7; b.vy *= 0.7; }
+                });
+
+                // Zderzenie ze ścianą budynku (Blokada)
+                mapHouses.forEach(h => {
+                    if (b.x > h.x && b.x < h.x + h.w && b.y > h.y && b.y < h.y + h.h) {
+                        if (Math.hypot(b.x - h.door.x, b.y - h.door.y) > 25) bullets.splice(i, 1);
+                    }
+                });
+
+                // Trafienie Wroga
                 for (let j = enemies.length - 1; j >= 0; j--) {
-                    if (Math.hypot(b.x - enemies[j].x, b.y - enemies[j].y) < enemies[j].radius + b.radius) {
-                        gameScore += 30; enemies.splice(j, 1); bullets.splice(i, 1); updateUI(); break;
+                    let e = enemies[j];
+                    if (Math.hypot(b.x - e.x, b.y - e.y) < e.radius + b.radius) {
+                        e.hp -= 25; e.bleeding = true;
+                        bloodPools.push({ x: e.x, y: e.y, r: 4 + Math.random() * 5 });
+                        if (e.hp <= 15 && Math.random() < 0.6) e.surrendered = true; // Poddawanie się!
+                        if (e.hp <= 0) enemies.splice(j, 1);
+                        bullets.splice(i, 1); break;
                     }
                 }
             }
 
-            // Pociski Wrogów (Uwzględnienie ochrony w okopie)
+            // Krwawienie wrogów
+            enemies.forEach(e => {
+                if (e.bleeding && Math.random() < 0.05) bloodPools.push({ x: e.x, y: e.y, r: 3 });
+            });
+
+            // Pociski Wrogów trafiające w Gracza
             for (let i = enemyBullets.length - 1; i >= 0; i--) {
                 let eb = enemyBullets[i]; eb.x += eb.vx; eb.y += eb.vy;
                 if (Math.hypot(eb.x - player.x, eb.y - player.y) < player.radius + eb.radius) {
-                    let dmg = player.inTrench ? 6 : 15; // Redukcja obrażeń o 60% w okopie
-                    player.hp -= dmg; 
-                    if (!player.inTrench || Math.random() < 0.3) player.isBleeding = true;
-                    enemyBullets.splice(i, 1); updateUI();
-                    if (player.hp <= 0) endGame();
+                    bodyParts.thorax.current -= 12; bodyParts.thorax.bleeding = true;
+                    enemyBullets.splice(i, 1); updateTarkovUi();
+                    if (bodyParts.thorax.current <= 0 || bodyParts.head.current <= 0) endGame();
                 }
             }
 
             explosions.forEach((exp, idx) => { exp.r += 3; if (exp.r > exp.maxR) explosions.splice(idx, 1); });
+            
+            document.getElementById('uiOpName').innerText = currentOp.toUpperCase();
+            document.getElementById('uiVehicle').innerText = player.inVehicle ? "SAMOCHÓD" : (player.inHouse ? "DOM" : "PIECHOTA");
         }
 
         function drawGameWorld() {
@@ -1314,93 +1459,76 @@
             ctx.save();
             ctx.translate(-camera.x, -camera.y);
 
-            // 1. Rysuj Drogi
-            ctx.strokeStyle = "#3a3428"; ctx.lineWidth = 32;
-            mapRoads.forEach(r => { ctx.beginPath(); ctx.moveTo(r.x1, r.y1); ctx.lineTo(r.x2, r.y2); ctx.stroke(); });
+            // 1. Ślady Krwi
+            ctx.fillStyle = "#881337";
+            bloodPools.forEach(bp => { ctx.beginPath(); ctx.arc(bp.x, bp.y, bp.r, 0, Math.PI*2); ctx.fill(); });
 
-            // 2. Rysuj Bazę Główną
-            ctx.fillStyle = "rgba(56, 189, 248, 0.15)";
-            ctx.fillRect(mapBase.x, mapBase.y, mapBase.w, mapBase.h);
-            ctx.strokeStyle = "#38bdf8"; ctx.strokeRect(mapBase.x, mapBase.y, mapBase.w, mapBase.h);
+            // 2. Okopy Zygzakowate
+            ctx.strokeStyle = "#451a03"; ctx.lineWidth = 26; ctx.lineCap = "round"; ctx.lineJoin = "round";
+            ctx.beginPath();
+            mapZigZagTrenches.forEach((t, idx) => {
+                if (idx === 0) ctx.moveTo(t.x1, t.y1);
+                ctx.lineTo(t.x2, t.y2);
+            });
+            ctx.stroke();
 
-            // 3. Rysuj Okopy (Trench)
-            ctx.fillStyle = "#2d2013";
-            ctx.fillRect(mapDefenseTrench.x, mapDefenseTrench.y, mapDefenseTrench.w, mapDefenseTrench.h);
-            ctx.strokeStyle = "#854d0e"; ctx.lineWidth = 3;
-            ctx.strokeRect(mapDefenseTrench.x, mapDefenseTrench.y, mapDefenseTrench.w, mapDefenseTrench.h);
+            // 3. Budynki & Drzwi
+            mapHouses.forEach(h => {
+                ctx.fillStyle = "#334155"; ctx.fillRect(h.x, h.y, h.w, h.h);
+                ctx.strokeStyle = "#64748b"; ctx.strokeRect(h.x, h.y, h.w, h.h);
+                ctx.fillStyle = "#78350f"; ctx.fillRect(h.door.x - 10, h.door.y - 3, h.door.w, 6);
+            });
 
-            // 4. Obóz Wroga
-            ctx.fillStyle = "rgba(239, 68, 68, 0.15)";
-            ctx.fillRect(mapEnemyCamp.x, mapEnemyCamp.y, mapEnemyCamp.w, mapEnemyCamp.h);
+            // 4. Pojazdy Wroga (Czołgi, BMP)
+            enemyVehicles.forEach(v => {
+                ctx.fillStyle = "#3f6212"; ctx.fillRect(v.x - v.w/2, v.y - v.h/2, v.w, v.h);
+                ctx.fillStyle = "#1e293b"; ctx.fillRect(v.x, v.y - 3, 25, 6);
+            });
 
-            // 5. Domki
-            ctx.fillStyle = "#475569";
-            mapHouses.forEach(h => { ctx.fillRect(h.x, h.y, h.w, h.h); });
-
-            // 6. Samochód
-            ctx.save();
-            ctx.translate(car.x, car.y); ctx.rotate(car.angle);
+            // 5. Samochód Gracza
+            ctx.save(); ctx.translate(car.x, car.y); ctx.rotate(car.angle);
             ctx.fillStyle = "#eab308"; ctx.fillRect(-car.w/2, -car.h/2, car.w, car.h);
             ctx.restore();
 
-            // 7. Gracz
+            // 6. Sojusznicy (Niebiescy)
+            ctx.fillStyle = "#38bdf8";
+            allies.forEach(a => { ctx.beginPath(); ctx.arc(a.x, a.y, a.radius, 0, Math.PI*2); ctx.fill(); });
+
+            // 7. Wrogowie (Czerwoni)
+            enemies.forEach(e => {
+                ctx.fillStyle = e.surrendered ? "#eab308" : "#ef4444";
+                ctx.beginPath(); ctx.arc(e.x, e.y, e.radius, 0, Math.PI*2); ctx.fill();
+                if (e.surrendered) { ctx.fillStyle = "#ffffff"; ctx.fillText("🏳️ PODDAJĘ SIĘ", e.x - 20, e.y - 15); }
+            });
+
+            // 8. Gracz
             if (!player.inVehicle) {
-                ctx.save();
-                ctx.translate(player.x, player.y); ctx.rotate(player.angle);
-                ctx.fillStyle = "#38bdf8"; ctx.fillRect(0, -3, 15, 6);
-                ctx.beginPath(); ctx.arc(0, 0, player.radius, 0, Math.PI*2);
-                ctx.fillStyle = player.inTrench ? "#22c55e" : (player.isBleeding ? "#ef4444" : "#0ea5e9");
-                ctx.fill();
+                ctx.save(); ctx.translate(player.x, player.y); ctx.rotate(player.angle);
+                ctx.fillStyle = "#0284c7"; ctx.fillRect(0, -3, 15, 6);
+                ctx.beginPath(); ctx.arc(0, 0, player.radius, 0, Math.PI*2); ctx.fillStyle = "#0ea5e9"; ctx.fill();
                 ctx.restore();
             }
 
-            // 8. Wrogowie
-            ctx.fillStyle = "#ef4444";
-            enemies.forEach(e => { ctx.beginPath(); ctx.arc(e.x, e.y, e.radius, 0, Math.PI*2); ctx.fill(); });
-
             // 9. Pociski
-            ctx.fillStyle = "#facc15";
-            bullets.forEach(b => { ctx.beginPath(); ctx.arc(b.x, b.y, b.radius, 0, Math.PI*2); ctx.fill(); });
-            ctx.fillStyle = "#f87171";
-            enemyBullets.forEach(eb => { ctx.beginPath(); ctx.arc(eb.x, eb.y, eb.radius, 0, Math.PI*2); ctx.fill(); });
+            ctx.fillStyle = "#facc15"; bullets.forEach(b => { ctx.beginPath(); ctx.arc(b.x, b.y, b.radius, 0, Math.PI*2); ctx.fill(); });
+            ctx.fillStyle = "#f87171"; enemyBullets.forEach(eb => { ctx.beginPath(); ctx.arc(eb.x, eb.y, eb.radius, 0, Math.PI*2); ctx.fill(); });
 
-            // 10. Eksplozje
-            explosions.forEach(exp => {
-                ctx.beginPath(); ctx.arc(exp.x, exp.y, exp.r, 0, Math.PI*2);
-                ctx.fillStyle = "rgba(249, 115, 22, 0.6)"; ctx.fill();
-            });
-
-            // 11. Drzewa
-            ctx.fillStyle = "rgba(34, 197, 94, 0.6)";
+            // 10. Drzewa (Korony)
+            ctx.fillStyle = "rgba(34, 197, 94, 0.55)";
             mapTrees.forEach(tr => { ctx.beginPath(); ctx.arc(tr.x, tr.y, tr.r, 0, Math.PI*2); ctx.fill(); });
 
-            // 12. Dron FPV
+            // 11. Dron FPV
             if (fpv.active) {
-                ctx.fillStyle = "#22c55e";
-                ctx.beginPath(); ctx.arc(fpv.x, fpv.y, 8, 0, Math.PI*2); ctx.fill();
+                ctx.fillStyle = "#22c55e"; ctx.beginPath(); ctx.arc(fpv.x, fpv.y, 9, 0, Math.PI*2); ctx.fill();
             }
+
+            // 12. Eksplozje
+            explosions.forEach(exp => {
+                ctx.beginPath(); ctx.arc(exp.x, exp.y, exp.r, 0, Math.PI*2);
+                ctx.fillStyle = "rgba(249, 115, 22, 0.65)"; ctx.fill();
+            });
 
             ctx.restore();
-
-            // Overlay Kamera Drona FPV
-            if (fpv.active) {
-                ctx.strokeStyle = "rgba(34, 197, 94, 0.8)";
-                ctx.strokeRect(10, 10, canvas.width - 20, canvas.height - 20);
-                ctx.fillStyle = "#22c55e"; ctx.font = "12px monospace";
-                ctx.fillText("FPV CAMERA 1 - OG-7 AUTO-DETONATION ON CONTACT", 20, 30);
-            }
-        }
-
-        function updateUI() {
-            document.getElementById('uiOpName').innerText = currentOp.toUpperCase();
-            document.getElementById('uiHp').innerText = Math.max(0, Math.floor(player.hp));
-            document.getElementById('uiBleed').innerText = player.isBleeding ? "TAK (1)" : "NIE";
-            document.getElementById('uiCover').innerText = player.inTrench ? "OKOP (-60% DMG)" : "BRAK";
-            document.getElementById('uiCover').style.color = player.inTrench ? "#22c55e" : "#38bdf8";
-            document.getElementById('uiVehicle').innerText = player.inVehicle ? "SAMOCHÓD" : "PIECHOTA";
-            document.getElementById('uiTourniquet').innerText = player.tourniquets;
-            document.getElementById('uiBandage').innerText = player.bandages;
-            document.getElementById('uiFpv').innerText = player.fpvDrones;
         }
 
         function gameLoop() {
