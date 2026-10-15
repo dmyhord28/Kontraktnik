@@ -164,11 +164,10 @@
         .custom-option:hover { background: var(--accent-light); color: var(--accent); }
         .custom-option.selected { background: rgba(56, 189, 248, 0.15); color: var(--accent); font-weight: 600; }
 
-        /* Modal Overlay & Responsive Window Fix */
+        /* Modal Overlay & Responsive Window */
         .modal-overlay { position: fixed; top: 0; left: 0; width: 100%; height: 100%; background: rgba(7, 11, 20, 0.92); backdrop-filter: blur(8px); z-index: 200; display: flex; align-items: center; justify-content: center; opacity: 0; pointer-events: none; transition: opacity 0.4s ease; padding: 0.5rem; }
         .modal-overlay.active { opacity: 1; pointer-events: auto; }
         
-        /* РОЗШИРЕНО МОДАЛЬНЕ ВІКНО ДЛЯ МОБІЛОК */
         .modal-window { 
             width: 100%; max-width: 960px; background: #0f172a; 
             border: 1px solid rgba(56, 189, 248, 0.25); border-radius: 16px; 
@@ -176,7 +175,7 @@
             position: relative; overflow: hidden; 
         }
         @media (max-width: 768px) {
-            .modal-window { padding: 0.8rem 0.6rem; border-radius: 10px; height: 96vh; display: flex; flex-direction: column; justify-content: center; }
+            .modal-window { padding: 0.6rem 0.5rem; border-radius: 10px; height: 98vh; display: flex; flex-direction: column; justify-content: center; }
         }
 
         .fade-stage { opacity: 1; transform: translateY(0); transition: opacity 0.35s ease, transform 0.35s ease; }
@@ -254,7 +253,7 @@
         .candidate-info p { color: var(--text-muted); font-size: 0.88rem; line-height: 1.5; }
         
         .candidate-actions { display: flex; gap: 8px; align-items: center; }
-        .btn-action-open { background: rgba(56, 189, 248, 0.15); color: var(--accent); border: 1px solid rgba(56, 189, 248, 0.3); padding: 7px 14px; border-radius: 6px; cursor: pointer; font-size: 0.85rem; font-weight: bold; transition: all 0.2s; }
+        .btn-action-open { background: rgba(56, 189, 248, 0.15); color: var(--accent); border: 1px solid rgba(56, 189, 248, 0.3); padding: 7px 14px; border-radius: 6px; cursor: pointer; font-size: 0.85rem; font-weight: bold; }
         .btn-approve { background: rgba(34, 197, 94, 0.15); color: var(--status-online); border: 1px solid rgba(34, 197, 94, 0.4); width: 34px; height: 34px; border-radius: 6px; cursor: pointer; font-size: 1rem; font-weight: bold; display: flex; align-items: center; justify-content: center; }
         .btn-reject { background: rgba(239, 68, 68, 0.15); color: var(--status-alert); border: 1px solid rgba(239, 68, 68, 0.4); width: 34px; height: 34px; border-radius: 6px; cursor: pointer; font-size: 1rem; font-weight: bold; display: flex; align-items: center; justify-content: center; }
 
@@ -297,7 +296,7 @@
         .med-actions { display: flex; gap: 8px; margin-top: 10px; border-top: 1px solid #334155; padding-top: 10px; }
         .btn-med { flex: 1; padding: 8px; background: #1e293b; border: 1px solid var(--accent-border); color: #fff; border-radius: 6px; font-size: 0.75rem; font-weight: bold; cursor: pointer; }
 
-        /* OPITIMIZED TOUCH CONTROLS FOR MOBILE (ROZNESENO OKREMO) */
+        /* TOUCH CONTROLS */
         .touch-controls { 
             display: none; 
             position: absolute; 
@@ -331,7 +330,6 @@
             opacity: 0.85; 
         }
         
-        /* КНОПКИ СПРАВА В СІТЦІ 2x3 */
         .action-buttons { 
             display: grid; 
             grid-template-columns: repeat(3, 42px); 
@@ -484,7 +482,7 @@
         <button class="btn-main-trigger" style="margin-bottom: 0; padding: 0.8rem 1.8rem; font-size: 0.95rem; border-color: rgba(34, 197, 94, 0.4); color: var(--status-online);" onclick="openLeaderboardModal()">🏆 Таблиця Рекордів</button>
     </div>
 
-    <!-- GAME MODAL (FULL WIDTH OPTIMIZED) -->
+    <!-- GAME MODAL -->
     <div class="modal-overlay" id="gameModal">
         <div class="modal-window" style="text-align: center; position: relative;">
             <button class="close-modal" onclick="closeGameModal()">×</button>
@@ -492,7 +490,7 @@
             <!-- OPERATION SELECTION SCREEN -->
             <div id="opSelectScreen">
                 <h2 style="color: #f1f5f9; margin-bottom: 0.3rem; font-size: 1.3rem;">🎯 Обирай Бойову Операцію</h2>
-                <p style="color: var(--text-muted); font-size: 0.8rem;">Тактична операція на великій карті (ПК та смартфони).</p>
+                <p style="color: var(--text-muted); font-size: 0.8rem;">Рандомна генерація мапи та покращена графіка (ПК та Ноутбук/Телефон).</p>
 
                 <div class="op-card-grid">
                     <div class="op-card" onclick="startOperation('fpv')">
@@ -503,12 +501,12 @@
                     <div class="op-card" onclick="startOperation('assault')">
                         <div class="op-icon">⚔️</div>
                         <div class="op-title">Зачистка Пункту</div>
-                        <div class="op-desc">Штурмуй будинки та зачищай позиції.</div>
+                        <div class="op-desc">Штурмуй випадкові будинки та позиції.</div>
                     </div>
                     <div class="op-card" onclick="startOperation('defense')">
                         <div class="op-icon">🛡️</div>
                         <div class="op-title">Оборона Окопів</div>
-                        <div class="op-desc">Займи позицію та відбивай наступальні хвилі.</div>
+                        <div class="op-desc">Тримай укріплені рандомні позиції.</div>
                     </div>
                 </div>
             </div>
@@ -517,16 +515,16 @@
             <div id="canvasScreen" style="display: none; position: relative;">
                 <div style="display: flex; justify-content: space-between; font-size: 0.75rem; font-weight: bold; margin-bottom: 0.3rem; background: rgba(0,0,0,0.5); padding: 0.4rem 0.6rem; border-radius: 6px;">
                     <div>Оп: <span id="uiOpName" style="color: var(--accent);">N/A</span></div>
-                    <div>Наб: <span id="uiAmmo" style="color: #22c55e;">30/30</span></div>
+                    <div>Набої: <span id="uiAmmo" style="color: #22c55e;">30/30</span></div>
                     <div>Режим: <span id="uiVehicle" style="color: #eab308;">ПІХОТА</span></div>
-                    <div>БПЛА: <span id="uiFpv" style="color: #22c55e;">4</span></div>
+                    <div>Дрони: <span id="uiFpv" style="color: #22c55e;">4</span></div>
                 </div>
 
                 <div style="position: relative; width: 100%; display: flex; justify-content: center;">
                     <div class="damage-vignette" id="damageVignette"></div>
-                    <div class="radio-ticker" id="radioTicker">📡 [РАДІО]: Готовність до виходу на позиції!</div>
+                    <div class="radio-ticker" id="radioTicker">📡 [РАДІО]: Мапа згенерована. Погнали!</div>
                     
-                    <canvas id="gameCanvas" width="800" height="460" style="background: #090d0a; border: 1px solid var(--accent-border); border-radius: 8px; cursor: crosshair; width: 100%; height: auto; max-height: 68vh; object-fit: contain;"></canvas>
+                    <canvas id="gameCanvas" width="800" height="460" style="background: #0d131f; border: 1px solid var(--accent-border); border-radius: 8px; cursor: crosshair; width: 100%; height: auto; max-height: 68vh; object-fit: contain;"></canvas>
 
                     <!-- TARKOV MEDICAL UI -->
                     <div class="tarkov-ui" id="tarkovMedicalUi">
@@ -562,7 +560,7 @@
                         </div>
                     </div>
 
-                    <!-- MOBILE TOUCH CONTROLS WITH PERFECT SEPARATION -->
+                    <!-- TOUCH CONTROLS -->
                     <div class="touch-controls" id="touchControls">
                         <div class="joystick-zone" id="joystickZone">
                             <div class="joystick-knob" id="joystickKnob"></div>
@@ -579,7 +577,7 @@
                 </div>
 
                 <p style="color: var(--text-subtle); font-size: 0.7rem; margin-top: 0.3rem;" class="pc-controls-desc">
-                    <b>WASD / Джойстик</b> Рух | <b>Клік / 🎯</b> Постріл | <b>F / 🚪</b> Вхід/Дім | <b>M / 🩺</b> Мед | <b>E / 🚁</b> Дрон | <b>R / 🔄</b> Набої
+                    <b>WASD / Джойстик</b> Рух | <b>Клік / 🎯</b> Постріл | <b>F / 🚪</b> Дім/Авто | <b>M / 🩺</b> Мед | <b>E / 🚁</b> Дрон | <b>R / 🔄</b> Набої
                 </p>
             </div>
         </div>
@@ -927,7 +925,7 @@
         }
 
         // =========================================================================
-        // --- ІГРОВИЙ СИМУЛЯТОР З РОЗШИРЕНИМ ДИСПЛЕЄМ ТА ОКРЕМИМ ДЖОЙСТИКОМ ---
+        // --- ПРОЦЕДУРНИЙ ГЕЙМПЛЕЙ З РАНДОМНИМИ РІВНЯМИ ТА КРАЩОЮ ГРАФІКОЮ ---
         // =========================================================================
         let canvas, ctx, isGameRunning = false, animId = null, aiInterval = null, currentOp = 'fpv', gameScore = 0;
         const WORLD = { width: 4000, height: 3200 };
@@ -946,12 +944,11 @@
         };
         let selectedLimb = 'thorax';
 
-        let player = { x: 220, y: 2950, radius: 11, speed: 3.5, angle: 0, inVehicle: false, inHouse: false, tourniquets: 3, bandages: 5, fpvDrones: 4 };
-        let car = { x: 280, y: 2950, w: 48, h: 26, angle: 0, speed: 0, maxSpeed: 7.5 };
+        let player = { x: 500, y: 2800, radius: 12, speed: 3.5, angle: 0, inVehicle: false, inHouse: false, tourniquets: 3, bandages: 5, fpvDrones: 4 };
+        let car = { x: 580, y: 2800, w: 54, h: 28, angle: 0, speed: 0, maxSpeed: 7.5 };
         let fpv = { active: false, x: 0, y: 0, vx: 0, vy: 0 };
 
-        let mapHouses = [{ x: 1800, y: 1200, w: 140, h: 100, door: { x: 1860, y: 1300, w: 20 } }, { x: 2000, y: 1200, w: 150, h: 110, door: { x: 2060, y: 1310, w: 20 } }];
-        let mapZigZagTrenches = [], mapTrees = [], allies = [], enemies = [], enemyVehicles = [], bullets = [], enemyBullets = [], explosions = [], bloodPools = [];
+        let mapHouses = [], mapZigZagTrenches = [], mapTrees = [], allies = [], enemies = [], enemyVehicles = [], bullets = [], enemyBullets = [], explosions = [], bloodPools = [];
         let keys = {}, touchDir = { x: 0, y: 0 }, mousePos = { x: 0, y: 0 };
 
         function openGameModal() {
@@ -982,7 +979,7 @@
             window.addEventListener('keydown', handleKeyDown); window.addEventListener('keyup', handleKeyUp);
 
             initTouchJoystick();
-            initWorldMap();
+            generateRandomLevel();
             isGameRunning = true;
 
             if (aiInterval) clearInterval(aiInterval);
@@ -992,7 +989,6 @@
             gameLoop();
         }
 
-        // TOUCH JOYSTICK LOGIC
         function initTouchJoystick() {
             const zone = document.getElementById('joystickZone');
             const knob = document.getElementById('joystickKnob');
@@ -1041,42 +1037,59 @@
 
         function toggleFlashlight() { flashlightOn = !flashlightOn; playBeep(1200, 0.05); }
 
-        function initWorldMap() {
-            player.x = 220; player.y = 2950; player.inVehicle = false; player.inHouse = false;
-            car.x = 280; car.y = 2950; car.speed = 0; fpv.active = false; gameScore = 0; ammoCount = 30;
+        // --- ПРОЦЕДУРНА ГЕНЕРАЦІЯ РАНДОМНОЇ МАПИ ---
+        function generateRandomLevel() {
+            player.x = 400; player.y = 2800; player.inVehicle = false; player.inHouse = false;
+            car.x = 480; car.y = 2800; car.speed = 0; fpv.active = false; gameScore = 0; ammoCount = 30;
 
             for (let part in bodyParts) { bodyParts[part].current = bodyParts[part].max; bodyParts[part].bleeding = false; }
             bullets = []; enemyBullets = []; enemies = []; allies = []; enemyVehicles = []; explosions = []; bloodPools = [];
 
+            // Рандомні будинки
+            mapHouses = [];
+            for (let i = 0; i < 6; i++) {
+                let hx = 1200 + Math.random() * 2000, hy = 800 + Math.random() * 1600;
+                let hw = 120 + Math.random() * 60, hh = 90 + Math.random() * 50;
+                mapHouses.push({ x: hx, y: hy, w: hw, h: hh, door: { x: hx + hw/2 - 10, y: hy + hh, w: 20 } });
+            }
+
+            // Рандомні окопи
             mapZigZagTrenches = [];
-            let startX = 1200, startY = 2200;
-            for (let i = 0; i < 12; i++) {
-                let nextX = startX + (i % 2 === 0 ? 100 : -50); let nextY = startY - 90;
+            let startX = 1000 + Math.random() * 400, startY = 2400;
+            for (let i = 0; i < 10; i++) {
+                let nextX = startX + (Math.random() > 0.5 ? 120 : -80); let nextY = startY - 110;
                 mapZigZagTrenches.push({ x1: startX, y1: startY, x2: nextX, y2: nextY });
                 startX = nextX; startY = nextY;
             }
 
+            // Рандомні дерева
             mapTrees = [];
-            for (let i = 0; i < 140; i++) mapTrees.push({ x: Math.random() * WORLD.width, y: Math.random() * WORLD.height, r: 16 + Math.random() * 12 });
+            for (let i = 0; i < 80; i++) {
+                mapTrees.push({ x: Math.random() * WORLD.width, y: Math.random() * WORLD.height, r: 18 + Math.random() * 15 });
+            }
 
-            allies = [{ x: 1220, y: 2100, radius: 11 }, { x: 1850, y: 1250, radius: 11 }];
-            enemyVehicles = [{ type: 'Tank T-72', x: 2800, y: 800, w: 70, h: 40, hp: 150 }, { type: 'BMP-2', x: 3100, y: 1100, w: 60, h: 35, hp: 100 }];
+            // Техніка ворогів
+            enemyVehicles = [
+                { type: 'Tank T-72', x: 2400 + Math.random() * 1000, y: 500 + Math.random() * 1000, w: 74, h: 42, hp: 160 },
+                { type: 'BMP-2', x: 2000 + Math.random() * 1200, y: 1500 + Math.random() * 1000, w: 64, h: 36, hp: 110 }
+            ];
 
-            for (let i = 0; i < 15; i++) {
-                enemies.push({ x: 2400 + Math.random() * 800, y: 600 + Math.random() * 1000, hp: 50, radius: 11, bleeding: false, surrendered: false });
+            // Вороги на мапі
+            for (let i = 0; i < 18; i++) {
+                enemies.push({ x: 2000 + Math.random() * 1800, y: 400 + Math.random() * 2400, hp: 50, radius: 12, surrendered: false });
             }
             updateTarkovUi();
         }
 
         function handleInteractions() {
-            if (player.inVehicle) { player.inVehicle = false; player.x = car.x + 40; player.y = car.y; } 
-            else if (Math.hypot(player.x - car.x, player.y - car.y) < 55) { player.inVehicle = true; }
+            if (player.inVehicle) { player.inVehicle = false; player.x = car.x + 50; player.y = car.y; } 
+            else if (Math.hypot(player.x - car.x, player.y - car.y) < 60) { player.inVehicle = true; }
 
             mapHouses.forEach(h => {
-                if (Math.hypot(player.x - h.door.x, player.y - h.door.y) < 35) {
+                if (Math.hypot(player.x - h.door.x, player.y - (h.door.y + 10)) < 40) {
                     player.inHouse = !player.inHouse;
                     if (player.inHouse) { player.x = h.x + h.w / 2; player.y = h.y + h.h / 2; } 
-                    else { player.x = h.door.x; player.y = h.door.y + 20; }
+                    else { player.x = h.door.x; player.y = h.door.y + 35; }
                 }
             });
         }
@@ -1125,19 +1138,19 @@
                 document.getElementById('uiAmmo').innerText = `${ammoCount}/${maxAmmo}`;
                 let targetX = mousePos.x + camera.x, targetY = mousePos.y + camera.y;
                 let angle = touchDir.x !== 0 ? player.angle : Math.atan2(targetY - player.y, targetX - player.x);
-                bullets.push({ x: player.x, y: player.y, vx: Math.cos(angle) * 10, vy: Math.sin(angle) * 10, radius: 3 });
+                bullets.push({ x: player.x, y: player.y, vx: Math.cos(angle) * 12, vy: Math.sin(angle) * 12, radius: 3 });
             }
         }
 
         function detonateFpv() {
             playBeep(150, 0.3);
-            explosions.push({ x: fpv.x, y: fpv.y, r: 10, maxR: 85 });
+            explosions.push({ x: fpv.x, y: fpv.y, r: 10, maxR: 90 });
             for (let i = enemies.length - 1; i >= 0; i--) {
-                if (Math.hypot(enemies[i].x - fpv.x, enemies[i].y - fpv.y) < 85) { gameScore += 50; enemies.splice(i, 1); }
+                if (Math.hypot(enemies[i].x - fpv.x, enemies[i].y - fpv.y) < 90) { gameScore += 50; enemies.splice(i, 1); }
             }
             for (let i = enemyVehicles.length - 1; i >= 0; i--) {
                 let v = enemyVehicles[i];
-                if (Math.hypot(v.x - fpv.x, v.y - fpv.y) < 95) { v.hp -= 100; if (v.hp <= 0) { gameScore += 150; enemyVehicles.splice(i, 1); } }
+                if (Math.hypot(v.x - fpv.x, v.y - fpv.y) < 100) { v.hp -= 100; if (v.hp <= 0) { gameScore += 150; enemyVehicles.splice(i, 1); } }
             }
             fpv.active = false;
         }
@@ -1146,9 +1159,9 @@
             if (!isGameRunning) return;
             enemies.forEach(e => {
                 if (e.surrendered) return;
-                if (Math.hypot(player.x - e.x, player.y - e.y) < 500) {
+                if (Math.hypot(player.x - e.x, player.y - e.y) < 550) {
                     let angle = Math.atan2(player.y - e.y, player.x - e.x);
-                    enemyBullets.push({ x: e.x, y: e.y, vx: Math.cos(angle) * 6.5, vy: Math.sin(angle) * 6.5, radius: 3 });
+                    enemyBullets.push({ x: e.x, y: e.y, vx: Math.cos(angle) * 7, vy: Math.sin(angle) * 7, radius: 3 });
                 }
             });
         }
@@ -1168,19 +1181,19 @@
                 else if (mousePos.x !== 0) player.angle = Math.atan2((mousePos.y + camera.y) - player.y, (mousePos.x + camera.x) - player.x);
             }
 
-            if (fpv.active) { fpv.x += moveX * 5; fpv.y += moveY * 5; }
+            if (fpv.active) { fpv.x += moveX * 5.5; fpv.y += moveY * 5.5; }
 
             let focusX = fpv.active ? fpv.x : player.x, focusY = fpv.active ? fpv.y : player.y;
             camera.x = Math.max(0, Math.min(WORLD.width - canvas.width, focusX - canvas.width / 2));
             camera.y = Math.max(0, Math.min(WORLD.height - canvas.height, focusY - canvas.height / 2));
 
-            // Bullets
+            // Кулі гравця
             for (let i = bullets.length - 1; i >= 0; i--) {
                 let b = bullets[i]; b.x += b.vx; b.y += b.vy;
                 for (let j = enemies.length - 1; j >= 0; j--) {
                     let e = enemies[j];
                     if (Math.hypot(b.x - e.x, b.y - e.y) < e.radius + b.radius) {
-                        e.hp -= 25; bloodPools.push({ x: e.x, y: e.y, r: 4 });
+                        e.hp -= 25; bloodPools.push({ x: e.x, y: e.y, r: 5 });
                         if (e.hp <= 15 && Math.random() < 0.6) e.surrendered = true;
                         if (e.hp <= 0) enemies.splice(j, 1);
                         bullets.splice(i, 1); break;
@@ -1188,7 +1201,7 @@
                 }
             }
 
-            // Enemy Bullets
+            // Кулі ворогів
             for (let i = enemyBullets.length - 1; i >= 0; i--) {
                 let eb = enemyBullets[i]; eb.x += eb.vx; eb.y += eb.vy;
                 if (Math.hypot(eb.x - player.x, eb.y - player.y) < player.radius + eb.radius) {
@@ -1200,61 +1213,118 @@
                 }
             }
 
-            explosions.forEach((exp, idx) => { exp.r += 3; if (exp.r > exp.maxR) explosions.splice(idx, 1); });
+            explosions.forEach((exp, idx) => { exp.r += 3.5; if (exp.r > exp.maxR) explosions.splice(idx, 1); });
             document.getElementById('uiOpName').innerText = currentOp.toUpperCase();
-            document.getElementById('uiVehicle').innerText = player.inVehicle ? "АВТО" : "ПІХОТА";
+            document.getElementById('uiVehicle').innerText = player.inVehicle ? "МАШИНА" : "ПІХОТА";
         }
 
+        // --- ПОКРАЩЕНЕ МАЛЮВАННЯ ГРАФІКИ ТА МІНІ-КАРТИ ---
         function drawGameWorld() {
             ctx.clearRect(0, 0, canvas.width, canvas.height);
             ctx.save(); ctx.translate(-camera.x, -camera.y);
 
-            // Blood & Trenches
-            ctx.fillStyle = "#881337"; bloodPools.forEach(bp => { ctx.beginPath(); ctx.arc(bp.x, bp.y, bp.r, 0, Math.PI*2); ctx.fill(); });
-            ctx.strokeStyle = "#451a03"; ctx.lineWidth = 24; ctx.beginPath();
+            // Трава / Земля з текстурою сітки
+            ctx.fillStyle = "#101826"; ctx.fillRect(0, 0, WORLD.width, WORLD.height);
+
+            // Окопи (Zig-zag trenches)
+            ctx.strokeStyle = "#27180d"; ctx.lineWidth = 26; ctx.beginPath();
             mapZigZagTrenches.forEach((t, idx) => { if (idx === 0) ctx.moveTo(t.x1, t.y1); ctx.lineTo(t.x2, t.y2); });
             ctx.stroke();
+            ctx.strokeStyle = "#45220a"; ctx.lineWidth = 14; ctx.stroke();
 
-            // Houses
+            // Калюжі крові
+            ctx.fillStyle = "#881337"; bloodPools.forEach(bp => { ctx.beginPath(); ctx.arc(bp.x, bp.y, bp.r, 0, Math.PI*2); ctx.fill(); });
+
+            // Дерева (Ліс)
+            mapTrees.forEach(tr => {
+                ctx.fillStyle = "#0f2818"; ctx.beginPath(); ctx.arc(tr.x, tr.y, tr.r, 0, Math.PI*2); ctx.fill();
+                ctx.fillStyle = "#1b4d2e"; ctx.beginPath(); ctx.arc(tr.x, tr.y, tr.r * 0.7, 0, Math.PI*2); ctx.fill();
+            });
+
+            // Покращені Будинки
             mapHouses.forEach(h => {
-                ctx.fillStyle = "#334155"; ctx.fillRect(h.x, h.y, h.w, h.h);
-                ctx.fillStyle = "#78350f"; ctx.fillRect(h.door.x - 10, h.door.y - 3, h.door.w, 6);
+                ctx.fillStyle = "#1e293b"; ctx.fillRect(h.x, h.y, h.w, h.h);
+                ctx.strokeStyle = "#475569"; ctx.lineWidth = 4; ctx.strokeRect(h.x, h.y, h.w, h.h);
+                // Вікна будинку
+                ctx.fillStyle = "#38bdf8"; ctx.fillRect(h.x + 15, h.y + 15, 20, 25); ctx.fillRect(h.x + h.w - 35, h.y + 15, 20, 25);
+                // Двері
+                ctx.fillStyle = "#78350f"; ctx.fillRect(h.door.x - 5, h.door.y, h.door.w, 10);
             });
 
-            // Enemy Vehicles
-            enemyVehicles.forEach(v => { ctx.fillStyle = "#3f6212"; ctx.fillRect(v.x - v.w/2, v.y - v.h/2, v.w, v.h); });
+            // Ворожа Техніка (Танки/БМП з гарматами)
+            enemyVehicles.forEach(v => {
+                ctx.save(); ctx.translate(v.x, v.y);
+                ctx.fillStyle = "#365314"; ctx.fillRect(-v.w/2, -v.h/2, v.w, v.h);
+                ctx.strokeStyle = "#1a2e05"; ctx.lineWidth = 3; ctx.strokeRect(-v.w/2, -v.h/2, v.w, v.h);
+                // Башта та гармата
+                ctx.fillStyle = "#2e3f10"; ctx.beginPath(); ctx.arc(0, 0, 16, 0, Math.PI*2); ctx.fill();
+                ctx.fillStyle = "#111827"; ctx.fillRect(0, -4, 28, 8);
+                ctx.restore();
+            });
 
-            // Player Car
+            // Машина гравця (Пікап)
             ctx.save(); ctx.translate(car.x, car.y); ctx.rotate(car.angle);
-            ctx.fillStyle = "#eab308"; ctx.fillRect(-car.w/2, -car.h/2, car.w, car.h); ctx.restore();
+            ctx.fillStyle = "#ca8a04"; ctx.fillRect(-car.w/2, -car.h/2, car.w, car.h);
+            ctx.fillStyle = "#facc15"; ctx.fillRect(car.w/2 - 6, -car.h/2 + 3, 6, 6); ctx.fillRect(car.w/2 - 6, car.h/2 - 9, 6, 6);
+            ctx.restore();
 
-            // Enemies
+            // Вороги (з шоломами та зброєю)
             enemies.forEach(e => {
-                ctx.fillStyle = e.surrendered ? "#eab308" : "#ef4444";
-                ctx.beginPath(); ctx.arc(e.x, e.y, e.radius, 0, Math.PI*2); ctx.fill();
+                ctx.save(); ctx.translate(e.x, e.y);
+                ctx.fillStyle = e.surrendered ? "#eab308" : "#dc2626";
+                ctx.beginPath(); ctx.arc(0, 0, e.radius, 0, Math.PI*2); ctx.fill();
+                // Шолом
+                ctx.fillStyle = e.surrendered ? "#ca8a04" : "#991b1b"; ctx.beginPath(); ctx.arc(0, 0, e.radius * 0.7, 0, Math.PI); ctx.fill();
+                ctx.restore();
             });
 
-            // Player & Flashlight
+            // Гравець (Деталізований піхотинець)
             if (!player.inVehicle) {
                 if (flashlightOn) {
                     ctx.save(); ctx.translate(player.x, player.y); ctx.rotate(player.angle);
-                    ctx.fillStyle = "rgba(254, 240, 138, 0.2)";
-                    ctx.beginPath(); ctx.moveTo(0,0); ctx.arc(0, 0, 160, -0.4, 0.4); ctx.fill(); ctx.restore();
+                    ctx.fillStyle = "rgba(254, 240, 138, 0.22)";
+                    ctx.beginPath(); ctx.moveTo(0,0); ctx.arc(0, 0, 180, -0.45, 0.45); ctx.fill(); ctx.restore();
                 }
                 ctx.save(); ctx.translate(player.x, player.y); ctx.rotate(player.angle);
-                ctx.beginPath(); ctx.arc(0, 0, player.radius, 0, Math.PI*2); ctx.fillStyle = "#0ea5e9"; ctx.fill(); ctx.restore();
+                ctx.fillStyle = "#0284c7"; ctx.beginPath(); ctx.arc(0, 0, player.radius, 0, Math.PI*2); ctx.fill();
+                ctx.fillStyle = "#38bdf8"; ctx.beginPath(); ctx.arc(0, 0, player.radius * 0.75, 0, Math.PI); ctx.fill();
+                // Ствол зброї
+                ctx.fillStyle = "#0f172a"; ctx.fillRect(0, -3, 16, 6);
+                ctx.restore();
             }
 
-            // Bullets
+            // Кулі та трасери
             ctx.fillStyle = "#facc15"; bullets.forEach(b => { ctx.beginPath(); ctx.arc(b.x, b.y, b.radius, 0, Math.PI*2); ctx.fill(); });
             ctx.fillStyle = "#f87171"; enemyBullets.forEach(eb => { ctx.beginPath(); ctx.arc(eb.x, eb.y, eb.radius, 0, Math.PI*2); ctx.fill(); });
 
-            // FPV Drone
-            if (fpv.active) { ctx.fillStyle = "#22c55e"; ctx.beginPath(); ctx.arc(fpv.x, fpv.y, 9, 0, Math.PI*2); ctx.fill(); }
+            // FPV Дрон з анімованими пропелерами
+            if (fpv.active) {
+                ctx.save(); ctx.translate(fpv.x, fpv.y);
+                ctx.fillStyle = "#22c55e"; ctx.beginPath(); ctx.arc(0, 0, 10, 0, Math.PI*2); ctx.fill();
+                ctx.strokeStyle = "#fff"; ctx.lineWidth = 2;
+                ctx.beginPath(); ctx.moveTo(-12, -12); ctx.lineTo(12, 12); ctx.moveTo(12, -12); ctx.lineTo(-12, 12); ctx.stroke();
+                ctx.restore();
+            }
 
-            // Explosions
-            explosions.forEach(exp => { ctx.beginPath(); ctx.arc(exp.x, exp.y, exp.r, 0, Math.PI*2); ctx.fillStyle = "rgba(249, 115, 22, 0.65)"; ctx.fill(); });
+            // Вибухи
+            explosions.forEach(exp => {
+                ctx.beginPath(); ctx.arc(exp.x, exp.y, exp.r, 0, Math.PI*2);
+                ctx.fillStyle = "rgba(249, 115, 22, 0.65)"; ctx.fill();
+            });
 
+            ctx.restore();
+
+            // --- МІНІ-КАРТА (РАДАР) В ПРАВОМУ ВЕРХНЬОМУ КУТКУ ---
+            let mWidth = 130, mHeight = 100, mX = canvas.width - mWidth - 12, mY = 12;
+            ctx.save();
+            ctx.fillStyle = "rgba(7, 11, 20, 0.85)"; ctx.fillRect(mX, mY, mWidth, mHeight);
+            ctx.strokeStyle = "#38bdf8"; ctx.lineWidth = 1.5; ctx.strokeRect(mX, mY, mWidth, mHeight);
+
+            let scaleX = mWidth / WORLD.width, scaleY = mHeight / WORLD.height;
+            // Радар: вороги
+            ctx.fillStyle = "#ef4444"; enemies.forEach(e => { ctx.fillRect(mX + e.x * scaleX, mY + e.y * scaleY, 3, 3); });
+            // Радар: гравець
+            ctx.fillStyle = "#22c55e"; ctx.fillRect(mX + player.x * scaleX, mY + player.y * scaleY, 4, 4);
             ctx.restore();
         }
 
