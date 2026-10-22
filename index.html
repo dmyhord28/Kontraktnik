@@ -2,9 +2,9 @@
 <html lang="uk-UA"> 
 <head>
     <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <meta name="description" content="Рекрутинг до Інтернаціональних бригад ЗСУ">
-    <title>Strike — Рекрутинговий Центр (FPS 3D)</title> 
+    <title>Strike — Рекрутинговий Центр</title> 
     <link class="site-icon" rel="icon" type="image/png" href="strike.jpg">
 
     <style>
@@ -29,7 +29,7 @@
 
         * { margin: 0; padding: 0; box-sizing: border-box; font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif; }
         html { scroll-behavior: smooth; }
-        body { background-color: var(--bg-dark); color: var(--text-main); min-height: 100vh; display: flex; flex-direction: column; overflow-x: hidden; touch-action: manipulation; }
+        body { background-color: var(--bg-dark); color: var(--text-main); min-height: 100vh; display: flex; flex-direction: column; overflow-x: hidden; }
         body.modal-open { overflow: hidden; }
 
         button, select { font-family: inherit; user-select: none; -webkit-tap-highlight-color: transparent; }
@@ -41,13 +41,12 @@
             background-color: rgba(15, 23, 42, 0.85); backdrop-filter: blur(12px); 
             padding: 1rem 3rem; border-bottom: 1px solid rgba(255, 255, 255, 0.05); 
         }
-        @media (max-width: 768px) { .navbar { padding: 0.8rem 1rem; } .nav-links { display: none; } }
         .logo { font-size: 1.1rem; font-weight: bold; color: var(--text-muted); text-decoration: none; letter-spacing: 1px; text-transform: uppercase; }
         .nav-links { display: flex; list-style: none; gap: 2rem; }
         .nav-links a { color: var(--text-subtle); text-decoration: none; font-weight: 500; transition: color var(--transition-speed) ease; }
         .nav-links a:hover { color: #f8fafc; }
         
-        /* Hero Section */
+        /* Hero Section & Tactical Overlay */
         .video-container { position: relative; min-height: 100vh; display: flex; flex-direction: column; justify-content: center; align-items: center; padding: 6rem 2rem 4rem 2rem; overflow: hidden; }
         .bg-video { position: absolute; top: 50%; left: 50%; min-width: 100%; min-height: 100%; width: auto; height: auto; transform: translate(-50%, -50%); object-fit: cover; z-index: 1; opacity: 0.35; }
         .video-overlay { 
@@ -66,7 +65,6 @@
         
         .main-content { position: relative; z-index: 3; text-align: center; max-width: 1400px; width: 100%; }
         h1 { font-size: 3.8rem; margin-bottom: 1.5rem; color: var(--text-heading); text-shadow: 0 0 30px rgba(0, 0, 0, 0.9); font-weight: 800; letter-spacing: 1px; }
-        @media (max-width: 768px) { h1 { font-size: 2.2rem; } }
 
         .btn-main-trigger { 
             background: linear-gradient(135deg, rgba(56, 189, 248, 0.2), rgba(56, 189, 248, 0.05)); 
@@ -100,7 +98,7 @@
         .footer-note span { animation: blink 1.5s infinite; color: var(--status-alert); }
         @keyframes blink { 0%, 100% { opacity: 0.3; } 50% { opacity: 1; } }
 
-        /* Calculator Section */
+        /* Pay Calculator Section */
         .calculator-section { background: var(--bg-deep); padding: 5rem 2rem; border-top: 1px solid rgba(255, 255, 255, 0.03); display: flex; justify-content: center; }
         .calc-container { max-width: 1000px; width: 100%; background: var(--bg-card); border: 1px solid var(--accent-border); border-radius: 16px; padding: 2.5rem; backdrop-filter: blur(10px); }
         .calc-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 2rem; margin-top: 2rem; }
@@ -111,7 +109,7 @@
         .calc-result-box { background: rgba(10, 15, 26, 0.8); border: 1px solid var(--accent); border-radius: 12px; padding: 1.5rem; text-align: center; display: flex; flex-direction: column; justify-content: center; align-items: center; }
         .calc-amount { font-size: 2.8rem; font-weight: 800; color: var(--status-online); text-shadow: 0 0 15px rgba(34, 197, 94, 0.3); margin: 0.5rem 0; }
 
-        /* Steps Section */
+        /* Recruitment Steps Section */
         .steps-section { padding: 5rem 2rem; max-width: 1300px; margin: 0 auto; text-align: center; }
         .steps-grid { display: grid; grid-template-columns: repeat(auto-fit, minmax(250px, 1fr)); gap: 1.5rem; margin-top: 3rem; }
         .step-card { background: var(--bg-card); border: 1px solid rgba(255,255,255,0.05); border-radius: 12px; padding: 2rem; text-align: left; position: relative; overflow: hidden; }
@@ -164,176 +162,91 @@
         .custom-option:hover { background: var(--accent-light); color: var(--accent); }
         .custom-option.selected { background: rgba(56, 189, 248, 0.15); color: var(--accent); font-weight: 600; }
 
-        /* Modal Overlay & Responsive Window */
-        .modal-overlay { position: fixed; top: 0; left: 0; width: 100%; height: 100%; background: rgba(7, 11, 20, 0.92); backdrop-filter: blur(8px); z-index: 200; display: flex; align-items: center; justify-content: center; opacity: 0; pointer-events: none; transition: opacity 0.4s ease; padding: 0.5rem; }
+        /* Modal Overlay & Window - FULL SCREEN GAME MODE */
+        .modal-overlay { position: fixed; top: 0; left: 0; width: 100%; height: 100%; background: rgba(7, 11, 20, 0.92); backdrop-filter: blur(8px); z-index: 200; display: flex; align-items: center; justify-content: center; opacity: 0; pointer-events: none; transition: opacity 0.4s ease; padding: 1rem; }
         .modal-overlay.active { opacity: 1; pointer-events: auto; }
         
-        .modal-window { 
-            width: 100%; max-width: 980px; background: #0f172a; 
-            border: 1px solid rgba(56, 189, 248, 0.25); border-radius: 16px; 
-            padding: 1.8rem; box-shadow: 0 25px 60px rgba(0,0,0,0.6); 
-            position: relative; overflow: hidden; 
-        }
-        @media (max-width: 768px) {
-            .modal-window { padding: 0.6rem 0.5rem; border-radius: 10px; height: 98vh; display: flex; flex-direction: column; justify-content: center; }
-        }
+        .modal-window { width: 100%; max-width: 860px; background: #0f172a; border: 1px solid rgba(56, 189, 248, 0.25); border-radius: 16px; padding: 2.2rem; box-shadow: 0 25px 60px rgba(0,0,0,0.6); position: relative; overflow: hidden; }
 
-        .fade-stage { opacity: 1; transform: translateY(0); transition: opacity 0.35s ease, transform 0.35s ease; }
-        .fade-stage.hidden { opacity: 0; transform: translateY(-15px); pointer-events: none; position: absolute; width: calc(100% - 3.6rem); }
-        .fade-stage.entrance { opacity: 0; transform: translateY(15px); pointer-events: none; position: absolute; width: calc(100% - 3.6rem); }
-
-        .form-group { margin-bottom: 1.2rem; }
-        .form-group label { display: block; font-size: 0.85rem; color: var(--text-muted); margin-bottom: 0.5rem; text-transform: uppercase; letter-spacing: 0.5px; }
-        .form-group input { width: 100%; padding: 0.85rem; background: var(--bg-dark); border: 1px solid rgba(255,255,255,0.08); border-radius: 8px; color: #f8fafc; font-size: 1rem; transition: border-color 0.2s; }
-        .form-group input:focus { outline: none; border-color: var(--accent); box-shadow: 0 0 10px rgba(56, 189, 248, 0.2); }
-        
-        .btn-submit { 
-            width: 100%; padding: 1rem; 
-            background: linear-gradient(135deg, var(--accent), var(--accent-hover)); 
-            color: var(--bg-dark); border: none; border-radius: 8px; 
-            font-weight: 700; font-size: 1rem; text-transform: uppercase; letter-spacing: 0.5px; 
-            cursor: pointer; transition: all 0.2s; margin-top: 0.5rem; box-shadow: 0 4px 12px rgba(56, 189, 248, 0.25);
+        /* Fullscreen Game Override */
+        .modal-overlay.game-fullscreen .modal-window {
+            max-width: 100vw !important;
+            width: 100vw !important;
+            height: 100vh !important;
+            border-radius: 0 !important;
+            padding: 0 !important;
+            border: none !important;
         }
-        .btn-submit:hover { transform: translateY(-1px); box-shadow: 0 6px 20px rgba(56, 189, 248, 0.4); }
 
         .close-modal { 
-            position: absolute; top: 0.8rem; right: 0.8rem; width: 32px; height: 32px; border-radius: 50%;
-            background: rgba(255, 255, 255, 0.08); border: 1px solid rgba(255, 255, 255, 0.15); 
-            color: var(--text-heading); font-size: 1.2rem; cursor: pointer; display: flex; align-items: center; justify-content: center;
-            transition: all 0.2s; z-index: 20; 
+            position: absolute; top: 1rem; right: 1rem; width: 36px; height: 36px; border-radius: 50%;
+            background: rgba(0, 0, 0, 0.6); border: 1px solid rgba(255, 255, 255, 0.2); 
+            color: #f8fafc; font-size: 1.4rem; cursor: pointer; display: flex; align-items: center; justify-content: center;
+            transition: all 0.2s; z-index: 120; 
         }
-        .close-modal:hover { color: #f8fafc; background: rgba(239, 68, 68, 0.3); border-color: var(--status-alert); transform: rotate(90deg); }
-
-        /* Chat UI */
-        .chat-container { width: 100%; height: 440px; display: flex; flex-direction: column; background: var(--bg-dark); border: 1px solid rgba(255, 255, 255, 0.05); border-radius: 8px; overflow: hidden; margin-top: 0.5rem; }
-        @media (max-width: 768px) { .chat-container { height: 75vh; } }
-        .chat-header { background: #1e293b; padding: 0.85rem 1.2rem; font-size: 0.9rem; font-weight: bold; color: var(--accent); border-bottom: 1px solid rgba(255, 255, 255, 0.05); display: flex; align-items: center; justify-content: space-between; gap: 8px; }
-        .chat-header .status-dot { width: 8px; height: 8px; background: var(--status-online); border-radius: 50%; box-shadow: 0 0 6px var(--status-online); display: inline-block; }
-        
-        .btn-back-chat {
-            background: rgba(255, 255, 255, 0.05); border: 1px solid rgba(255, 255, 255, 0.1); 
-            color: var(--text-muted); width: 30px; height: 30px; border-radius: 6px;
-            cursor: pointer; font-size: 1rem; display: flex; align-items: center; justify-content: center; 
-            transition: all 0.2s;
-        }
-        .btn-back-chat:hover { background: var(--accent-light); border-color: var(--accent); color: var(--accent); }
-
-        .recruiter-actions { display: none; gap: 8px; align-items: center; }
-        .btn-candidates { background: rgba(56, 189, 248, 0.1); color: var(--accent); border: 1px solid rgba(56, 189, 248, 0.3); padding: 6px 12px; border-radius: 6px; font-size: 0.8rem; cursor: pointer; font-weight: bold; transition: all 0.2s; }
-        .btn-candidates:hover { background: rgba(56, 189, 248, 0.25); border-color: var(--accent); }
-
-        .btn-clear-chat { background: rgba(239, 68, 68, 0.15); color: var(--status-alert); border: 1px solid rgba(239, 68, 68, 0.3); padding: 6px 12px; border-radius: 6px; font-size: 0.8rem; cursor: pointer; font-weight: bold; transition: all 0.2s; }
-        .btn-clear-chat:hover { background: var(--status-alert); color: #fff; box-shadow: 0 0 10px rgba(239, 68, 68, 0.5); }
-
-        .chat-messages { flex: 1; padding: 1.2rem; overflow-y: auto; display: flex; flex-direction: column; gap: 0.9rem; background: var(--bg-deep); }
-        .message { max-width: 80%; padding: 0.7rem 1rem; border-radius: 8px; font-size: 0.92rem; line-height: 1.45; word-break: break-word; position: relative; }
-        .message .msg-time { display: block; font-size: 0.65rem; color: var(--text-subtle); margin-top: 4px; text-align: right; }
-        .message .msg-status { font-size: 0.7rem; margin-left: 4px; color: var(--accent); }
-        
-        .message.intercom { background: rgba(56, 189, 248, 0.06); color: var(--accent); align-self: flex-start; border-left: 3px solid var(--accent); }
-        .message.friend { background: #1e293b; color: #f8fafc; align-self: flex-end; border-right: 3px solid var(--text-subtle); }
-        .message.approved { background: rgba(34, 197, 94, 0.1); color: #4ade80; align-self: center; border: 1px solid rgba(34, 197, 94, 0.3); width: 95%; text-align: center; }
-        .message.rejected { background: rgba(239, 68, 68, 0.1); color: #f87171; align-self: center; border: 1px solid rgba(239, 68, 68, 0.3); width: 95%; text-align: center; }
-        
-        .quick-tags-area { display: flex; gap: 8px; padding: 10px 12px; background: var(--bg-deep); border-top: 1px solid rgba(255,255,255,0.03); overflow-x: auto; white-space: nowrap; align-items: center; scrollbar-width: thin; scrollbar-color: rgba(56, 189, 248, 0.2) transparent; }
-        .quick-tags-area button { flex-shrink: 0; background: linear-gradient(135deg, rgba(56, 189, 248, 0.08), rgba(56, 189, 248, 0.02)); color: var(--accent); border: 1px solid rgba(56, 189, 248, 0.2); padding: 6px 14px; border-radius: 6px; font-size: 0.8rem; cursor: pointer; transition: all 0.2s; font-weight: 600; }
-        .quick-tags-area button:hover { background: rgba(56, 189, 248, 0.18); border-color: var(--accent); color: #f8fafc; }
-        .quick-tags-area #cryptoBtn { margin-left: auto; background: rgba(34, 197, 94, 0.08); color: var(--status-online); border: 1px solid rgba(34, 197, 94, 0.2); }
-
-        .chat-input-area { display: flex; border-top: 1px solid rgba(255, 255, 255, 0.05); background: var(--bg-dark); }
-        .chat-input-area input { flex: 1; padding: 0.9rem 1.2rem; background: transparent; border: none; color: #f8fafc; font-size: 0.95rem; }
-        .chat-input-area input:focus { outline: none; }
-        .btn-send { background: linear-gradient(135deg, #1e293b, #0f172a); color: var(--accent); border: none; border-left: 1px solid rgba(255,255,255,0.05); padding: 0 1.6rem; cursor: pointer; font-weight: bold; transition: all 0.2s; font-size: 0.9rem; }
-
-        /* Candidates List Stage */
-        .candidates-list { height: 380px; overflow-y: auto; background: var(--bg-dark); border-radius: 8px; padding: 12px; border: 1px solid rgba(255, 255, 255, 0.05); margin-top: 10px; }
-        .candidate-card { background: rgba(15, 23, 42, 0.9); border: 1px solid rgba(56, 189, 248, 0.15); border-radius: 8px; padding: 14px 16px; margin-bottom: 10px; text-align: left; display: flex; justify-content: space-between; align-items: center; }
-        .candidate-info h4 { color: #f8fafc; font-size: 1rem; margin-bottom: 4px; display: flex; gap: 10px; align-items: center; }
-        .candidate-info h4 span { font-size: 0.75rem; color: var(--text-subtle); font-weight: normal; }
-        .candidate-info p { color: var(--text-muted); font-size: 0.88rem; line-height: 1.5; }
-        
-        .candidate-actions { display: flex; gap: 8px; align-items: center; }
-        .btn-action-open { background: rgba(56, 189, 248, 0.15); color: var(--accent); border: 1px solid rgba(56, 189, 248, 0.3); padding: 7px 14px; border-radius: 6px; cursor: pointer; font-size: 0.85rem; font-weight: bold; }
-        .btn-approve { background: rgba(34, 197, 94, 0.15); color: var(--status-online); border: 1px solid rgba(34, 197, 94, 0.4); width: 34px; height: 34px; border-radius: 6px; cursor: pointer; font-size: 1rem; font-weight: bold; display: flex; align-items: center; justify-content: center; }
-        .btn-reject { background: rgba(239, 68, 68, 0.15); color: var(--status-alert); border: 1px solid rgba(239, 68, 68, 0.4); width: 34px; height: 34px; border-radius: 6px; cursor: pointer; font-size: 1rem; font-weight: bold; display: flex; align-items: center; justify-content: center; }
-
-        .candidate-count-badge { background: rgba(56, 189, 248, 0.15); color: var(--accent); padding: 3px 8px; border-radius: 12px; font-size: 0.8rem; border: 1px solid rgba(56, 189, 248, 0.3); margin-left: 8px; }
+        .close-modal:hover { color: #f8fafc; background: rgba(239, 68, 68, 0.8); border-color: var(--status-alert); transform: rotate(90deg); }
 
         /* Operation Selection Cards */
         .op-card-grid { display: grid; grid-template-columns: repeat(3, 1fr); gap: 1rem; margin-top: 1.5rem; }
-        @media (max-width: 600px) { .op-card-grid { grid-template-columns: 1fr; gap: 0.6rem; } }
-        .op-card { background: rgba(10, 15, 26, 0.8); border: 1px solid var(--accent-border); border-radius: 12px; padding: 1.2rem 0.8rem; text-align: center; cursor: pointer; transition: all 0.3s; }
+        @media (max-width: 600px) { .op-card-grid { grid-template-columns: 1fr; } }
+        .op-card { background: rgba(10, 15, 26, 0.8); border: 1px solid var(--accent-border); border-radius: 12px; padding: 1.5rem 1rem; text-align: center; cursor: pointer; transition: all 0.3s; }
         .op-card:hover { border-color: var(--accent); background: rgba(56, 189, 248, 0.1); transform: translateY(-3px); }
-        .op-icon { font-size: 2rem; margin-bottom: 0.3rem; }
-        .op-title { color: #f1f5f9; font-weight: bold; font-size: 1rem; margin-bottom: 0.3rem; }
-        .op-desc { color: var(--text-muted); font-size: 0.78rem; line-height: 1.3; }
+        .op-icon { font-size: 2.5rem; margin-bottom: 0.5rem; }
+        .op-title { color: #f1f5f9; font-weight: bold; font-size: 1.1rem; margin-bottom: 0.5rem; }
+        .op-desc { color: var(--text-muted); font-size: 0.8rem; line-height: 1.4; }
 
-        /* FPS CROSSHAIR & HUD */
-        .fps-crosshair {
-            position: absolute; top: 50%; left: 50%; transform: translate(-50%, -50%);
-            width: 10px; height: 10px; border: 2px solid rgba(56, 189, 248, 0.8); border-radius: 50%;
-            pointer-events: none; z-index: 45;
-        }
+        /* 3D FPS Fullscreen Styles */
+        .fps-container { width: 100vw; height: 100vh; position: relative; background: #000; overflow: hidden; }
+        .fps-crosshair { position: absolute; top: 50%; left: 50%; width: 10px; height: 10px; border: 2px solid rgba(56, 189, 248, 0.8); border-radius: 50%; transform: translate(-50%, -50%); pointer-events: none; z-index: 10; }
+        .fps-crosshair::after { content: ''; position: absolute; top: 50%; left: 50%; width: 2px; height: 2px; background: #fff; transform: translate(-50%, -50%); }
 
-        /* TOUCH CONTROLS */
-        .touch-controls { 
-            display: none; 
-            position: absolute; 
-            bottom: 10px; left: 0; 
-            width: 100%; 
-            padding: 0 15px; 
-            justify-content: space-between; 
-            align-items: flex-end; 
-            z-index: 45; 
-            pointer-events: none; 
-        }
-        @media (max-width: 900px) { .touch-controls { display: flex; } }
-        
-        .joystick-zone { 
-            width: 110px; height: 110px; 
-            background: rgba(15, 23, 42, 0.6); 
-            border: 2px solid var(--accent-border); 
-            border-radius: 50%; 
-            position: relative; 
-            pointer-events: auto; 
-            touch-action: none; 
-            backdrop-filter: blur(4px);
-        }
-        .joystick-knob { 
-            width: 45px; height: 45px; 
-            background: var(--accent); 
-            border-radius: 50%; 
-            position: absolute; 
-            top: 32px; left: 32px; 
-            box-shadow: 0 0 10px var(--accent-glow); 
-            opacity: 0.85; 
-        }
-        
-        .action-buttons { 
-            display: grid; 
-            grid-template-columns: repeat(2, 50px); 
-            gap: 10px; 
-            pointer-events: auto; 
-        }
-        .btn-touch { 
-            width: 50px; height: 50px; 
-            background: rgba(15, 23, 42, 0.85); 
-            border: 1px solid var(--accent); 
-            color: #fff; 
-            border-radius: 50%; 
-            font-size: 1.2rem; 
-            font-weight: bold; 
-            display: flex; justify-content: center; align-items: center; 
-            box-shadow: 0 4px 10px rgba(0,0,0,0.5); 
-            touch-action: manipulation;
-        }
+        .radio-ticker { position: absolute; top: 15px; left: 20px; z-index: 10; background: rgba(15, 23, 42, 0.75); border: 1px solid var(--accent-border); padding: 8px 16px; border-radius: 8px; color: var(--accent); font-size: 0.85rem; font-weight: bold; backdrop-filter: blur(4px); }
+        .fps-hud { position: absolute; bottom: 20px; left: 20px; z-index: 10; display: flex; gap: 15px; }
+        .hud-card { background: rgba(15, 23, 42, 0.85); border: 1px solid var(--accent-border); border-radius: 8px; padding: 10px 18px; color: #fff; font-size: 0.9rem; font-weight: bold; backdrop-filter: blur(4px); display: flex; flex-direction: column; }
+        .hud-card span { color: var(--accent); font-size: 1.2rem; }
 
-        .radio-ticker { position: absolute; top: 10px; left: 10px; font-size: 0.75rem; color: var(--accent); font-weight: bold; z-index: 40; background: rgba(0,0,0,0.75); padding: 4px 10px; border-radius: 6px; border: 1px solid var(--accent-border); }
+        .hit-flash { position: absolute; top: 0; left: 0; width: 100%; height: 100%; background: rgba(239, 68, 68, 0.3); pointer-events: none; z-index: 9; opacity: 0; transition: opacity 0.15s ease-out; }
+
+        /* TARKOV HEALTH UI STYLES FOR FPS */
+        .tarkov-ui {
+            display: none;
+            position: absolute;
+            top: 50%; left: 50%;
+            transform: translate(-50%, -50%);
+            width: 480px;
+            background: rgba(12, 16, 24, 0.96);
+            border: 2px solid #334155;
+            border-radius: 12px;
+            padding: 20px;
+            box-shadow: 0 0 40px rgba(0,0,0,0.95);
+            z-index: 100;
+            color: #e2e8f0;
+        }
+        .tarkov-header { display: flex; justify-content: space-between; border-bottom: 1px solid #334155; padding-bottom: 10px; margin-bottom: 15px; font-weight: bold; letter-spacing: 1px; color: var(--accent); }
+        .tarkov-body { display: flex; gap: 20px; align-items: center; }
+        .skeleton-view { width: 170px; height: 280px; position: relative; border: 1px solid rgba(255,255,255,0.05); border-radius: 8px; background: rgba(0,0,0,0.4); display: flex; justify-content: center; align-items: center; }
+        .skeleton-svg { width: 130px; height: 240px; }
+        .limb-list { flex: 1; display: flex; flex-direction: column; gap: 8px; }
+        .limb-box { background: rgba(30, 41, 59, 0.7); border: 1px solid #334155; border-radius: 6px; padding: 6px 10px; cursor: pointer; transition: all 0.2s; }
+        .limb-box:hover, .limb-box.selected { border-color: var(--accent); background: rgba(56, 189, 248, 0.15); }
+        .limb-info { display: flex; justify-content: space-between; font-size: 0.82rem; font-weight: bold; margin-bottom: 3px; }
+        .limb-bar-bg { width: 100%; height: 6px; background: #0f172a; border-radius: 3px; overflow: hidden; }
+        .limb-bar-fill { height: 100%; background: var(--status-online); width: 100%; transition: width 0.3s ease, background 0.3s; }
+        .med-actions { display: flex; gap: 10px; margin-top: 15px; border-top: 1px solid #334155; padding-top: 12px; }
+        .btn-med { flex: 1; padding: 8px; background: #1e293b; border: 1px solid var(--accent-border); color: #fff; border-radius: 6px; font-size: 0.8rem; font-weight: bold; cursor: pointer; transition: all 0.2s; }
+        .btn-med:hover { background: var(--accent); color: #000; }
+
+        /* Touch Controls for Mobile */
+        .touch-controls { position: absolute; bottom: 30px; right: 30px; z-index: 10; display: flex; gap: 15px; }
+        .btn-touch { width: 60px; height: 60px; border-radius: 50%; background: rgba(56, 189, 248, 0.2); border: 2px solid var(--accent); color: #fff; font-size: 1.5rem; cursor: pointer; display: flex; align-items: center; justify-content: center; backdrop-filter: blur(4px); }
+        .btn-touch:active { background: var(--accent); color: #000; }
+        .joystick-zone { position: absolute; bottom: 30px; left: 30px; width: 120px; height: 120px; border-radius: 50%; background: rgba(255,255,255,0.05); border: 1px solid rgba(255,255,255,0.1); z-index: 10; touch-action: none; }
+        .joystick-knob { position: absolute; top: 35px; left: 35px; width: 50px; height: 50px; border-radius: 50%; background: var(--accent); opacity: 0.7; }
     </style>
 
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/three.js/r128/three.min.js"></script>
     <script src="https://www.gstatic.com/firebasejs/8.10.1/firebase-app.js"></script>
     <script src="https://www.gstatic.com/firebasejs/8.10.1/firebase-database.js"></script>
-    <script src="https://cdnjs.cloudflare.com/ajax/libs/three.js/r128/three.min.js"></script>
 </head>
 <body>
 
@@ -358,277 +271,135 @@
             <button class="btn-main-trigger" onclick="toggleModal(true)">Подати заявку зараз →</button>
             
             <div class="cards-grid">
-                <div class="team-card">
-                    <div class="photo-container"><img src="vovkodav.png" alt="1-й батальйон Вовкодав" loading="lazy"></div>
-                    <div>
-                        <h3>1-й батальйон "Вовкодав"</h3>
-                        <p>Інтернаціональний підрозділ, що виконує складні бойові завдання безпосередньо на передньому краї.</p>
-                    </div>
-                    <span class="footer-note"><span>●</span> СТАТУС: НА ЛБЗ</span>
-                </div>
-
-                <div class="team-card">
-                    <div class="photo-container"><img src="RVC.png" alt="РДК" loading="lazy"></div>
-                    <div>
-                        <h3>Російський добровольчий корпус</h3>
-                        <p>Добровольче формування, що веде запеклі бої та проводити спецоперації на лінії зіткнення.</p>
-                    </div>
-                    <span class="footer-note"><span>●</span> СТАТУС: НА ЛБЗ</span>
-                </div>
-
-                <div class="team-card">
-                    <div class="photo-container"><img src="Norman.png" alt="Норманська бригада" loading="lazy"></div>
-                    <div>
-                        <h3>Норманська бригада</h3>
-                        <p>Згуртований загін іноземних ветеранів, що забезпечує точність і тактичну перевагу в бою.</p>
-                    </div>
-                    <span class="footer-note"><span>●</span> СТАТУС: НА ЛБЗ</span>
+                <div class="team-card visible">
+                    <div class="photo-container"><img src="vovkodav.png" alt="1-й батальйон Вовкодав"></div>
+                    <h3>1-й батальйон "Вовкодав"</h3>
+                    <p>Інтернаціональний підрозділ, що виконує складні бойові завдання безпосередньо на передньому краї.</p>
+                    <span class="footer-note">● СТАТУС: НА ЛБЗ</span>
                 </div>
             </div>
         </main>
     </div>
 
-    <!-- CALCULATOR SECTION -->
-    <section class="calculator-section" id="calc">
-        <div class="calc-container">
-            <h2 style="color: var(--text-heading); font-size: 2rem; text-transform: uppercase; text-align: center;">Калькулятор грошового забезпечення</h2>
-            <p style="color: var(--text-muted); text-align: center; margin-top: 0.5rem;">Розрахуй свій щомісячний дохід залежно від обраної спеціальності та зони виконання завдань.</p>
-            
-            <div class="calc-grid">
-                <div>
-                    <div class="calc-input-group" style="margin-bottom: 1.2rem;">
-                        <label>Обирай спеціалізацію:</label>
-                        <select id="roleSelect" class="calc-select" onchange="calculatePay()">
-                            <option value="20000">Стрілець / Піхота</option>
-                            <option value="25000">Оператор БПЛА (FPV)</option>
-                            <option value="23000">Бойовий Медик</option>
-                            <option value="28000">Артилерист / Механік</option>
-                        </select>
-                    </div>
-                    <div class="calc-input-group">
-                        <label>Зона виконання завдань:</label>
-                        <select id="zoneSelect" class="calc-select" onchange="calculatePay()">
-                            <option value="0">Тил / Навчальний центр (+0 грн)</option>
-                            <option value="30000">Завдання в зоні бойових дій (+30 000 грн)</option>
-                            <option value="100000">Передній край / ЛБЗ (+100 000 грн)</option>
-                        </select>
-                    </div>
-                </div>
-
-                <div class="calc-result-box">
-                    <span style="color: var(--text-muted); font-size: 0.9rem; text-transform: uppercase;">Орієнтовний дохід на місяць:</span>
-                    <div class="calc-amount" id="totalPay">20,000 грн</div>
-                    <span style="color: var(--text-subtle); font-size: 0.8rem;">+ Повний пакет соц. забезпечення та медичного страхування</span>
-                </div>
-            </div>
-        </div>
-    </section>
-
-    <!-- RECRUITMENT STEPS -->
-    <section class="steps-section" id="steps">
-        <h2 style="color: var(--text-heading); font-size: 2.2rem; text-transform: uppercase;">Етапи Долучення До Лав</h2>
-        <p style="color: var(--text-muted); margin-top: 0.5rem;">Від подачі онлайн-заявки до першого виходу на бойове злагодження</p>
-
-        <div class="steps-grid">
-            <div class="step-card"><span class="step-num">01</span><h4>Подача Заявки</h4><p>Заповнюйте анкету у модальному вікні та переходьте до прямого зв'язку з рекрутером.</p></div>
-            <div class="step-card"><span class="step-num">02</span><h4>Співбесіда & МЕК</h4><p>Проходження онлайн-інтерв'ю та збір первинного пакета медичних документів.</p></div>
-            <div class="step-card"><span class="step-num">03</span><h4>Курс БЗВП (30-40 днів)</h4><p>Інтенсивна вишколова програма з вогневої, тактичної та медичної підготовки.</p></div>
-            <div class="step-card"><span class="step-num">04</span><h4>Підписання Контракту</h4><p>Офіційне зарахування до обраної бригади ЗСУ та отримання спорядження.</p></div>
-        </div>
-    </section>
-
-    <!-- FAQ SECTION -->
-    <section class="faq-section" id="faq">
-        <div class="faq-container">
-            <h2 style="color: var(--text-heading); font-size: 2rem; text-transform: uppercase; text-align: center; margin-bottom: 2rem;">Часті запитання (FAQ)</h2>
-            <div class="faq-item" onclick="toggleFaq(this)"><div class="faq-header">1. Чи можу я підписати контракт, якщо я іноземний громадянин? <span>+</span></div><div class="faq-body">Так, Інтернаціональні бригади приймають іноземних громадян відповідно до чинного законодавства України.</div></div>
-            <div class="faq-item" onclick="toggleFaq(this)"><div class="faq-header">2. Які вимоги до фізичної підготовки та віку? <span>+</span></div><div class="faq-body">Віковий поріг — від 18 до 60 років. Вимагається відсутність важких хронічних захворювань.</div></div>
-            <div class="faq-item" onclick="toggleFaq(this)"><div class="faq-header">3. Скільки триває контракт і чи є відпустка? <span>+</span></div><div class="faq-body">Контракт укладається терміном від 1 року або до закінчення воєнного стану.</div></div>
-        </div>
-    </section>
-
-    <footer class="tactical-footer" id="contacts">
-        <div class="footer-content">
-            <div class="footer-block"><h4>Штаб рекрутингу</h4><p>Лінія зв'язку працює цілодобово. Подавай заявку через захищене модальне вікно.</p></div>
-            <div class="footer-block"><h4>Офіційні Канали</h4><ul class="footer-links"><li><a href="#">Telegram Канал</a></li><li><a href="#">Signal Бойова Лінія</a></li><li><a href="#">Офіційний Email</a></li></ul></div>
-            <div class="footer-block"><h4>Шифрування</h4><p style="color: #475569; font-size: 0.85rem;">Усі повідомлення проходять через захищені протоколи кінцевого шифрування.</p></div>
-        </div>
-    </footer>
-
-    <!-- GAME LAUNCHER BOTTOM PANEL -->
+    <!-- DOLNY PANEL GRY -->
     <div style="background: var(--bg-deep); padding: 2rem; border-top: 1px solid var(--accent-border); text-align: center; display: flex; justify-content: center; gap: 1.5rem; flex-wrap: wrap;">
-        <button class="btn-main-trigger" style="margin-bottom: 0; padding: 0.8rem 1.8rem; font-size: 0.95rem;" onclick="openGameModal()">🎮 FPS Гра від 1-го Лиця</button>
-        <button class="btn-main-trigger" style="margin-bottom: 0; padding: 0.8rem 1.8rem; font-size: 0.95rem; border-color: rgba(34, 197, 94, 0.4); color: var(--status-online);" onclick="openLeaderboardModal()">🏆 Таблиця Рекордів</button>
+        <button class="btn-main-trigger" style="margin-bottom: 0; padding: 0.8rem 1.8rem; font-size: 0.95rem;" onclick="openGameModal()">🎮 Graj: 3D FPS Повний Екран + Tarkov Meds</button>
+        <button class="btn-main-trigger" style="margin-bottom: 0; padding: 0.8rem 1.8rem; font-size: 0.95rem; border-color: rgba(34, 197, 94, 0.4); color: var(--status-online);" onclick="openLeaderboardModal()">🏆 Tabela Rekordów</button>
     </div>
 
-    <!-- GAME MODAL (FPS 3D ENGINE) -->
+    <!-- MODAL GRY (FULLSCREEN 3D FPS MODE) -->
     <div class="modal-overlay" id="gameModal">
-        <div class="modal-window" style="text-align: center; position: relative;">
+        <div class="modal-window" style="position: relative;">
             <button class="close-modal" onclick="closeGameModal()">×</button>
             
-            <!-- OPERATION SELECTION SCREEN -->
-            <div id="opSelectScreen">
-                <h2 style="color: #f1f5f9; margin-bottom: 0.3rem; font-size: 1.4rem;">🎯 FPS Гра від Першого Лиця</h2>
-                <p style="color: var(--text-muted); font-size: 0.85rem;">Очима бійця: повне 3D з оглядом мишкою, стрільбою та колізією стін.</p>
+            <!-- EKRAN WYBORU OPERACJI -->
+            <div id="opSelectScreen" style="padding: 2rem;">
+                <h2 style="color: #f1f5f9; margin-bottom: 0.5rem; text-align: center;">🎯 Wybierz Rodzaj Operacji 3D FPS</h2>
+                <p style="color: var(--text-muted); font-size: 0.9rem; text-align: center;">Мобільна та ПК підтримка 3D гра від першого лица на весь екран!</p>
 
                 <div class="op-card-grid">
                     <div class="op-card" onclick="startFPSGame('assault')">
-                        <div class="op-icon">⚔️</div>
-                        <div class="op-title">Штурм (FPS)</div>
-                        <div class="op-desc">Зачистка сектору від першого лиця.</div>
+                        <div class="op-icon">🪖</div>
+                        <div class="op-title">Штурм Позицій 3D</div>
+                        <div class="op-desc">Штурмуйте 3D сектор від першої особи. Використовуйте WASD/Мишку або сенсорний джойстик.</div>
                     </div>
                     <div class="op-card" onclick="startFPSGame('defense')">
                         <div class="op-icon">🛡️</div>
-                        <div class="op-title">Оборона (FPS)</div>
-                        <div class="op-desc">Тримай укріплені позиції.</div>
+                        <div class="op-title">Оборона Сектора 3D</div>
+                        <div class="op-desc">Утримуйте 3D блокпост та знищуйте наступаючі сили супротивника.</div>
                     </div>
-                    <div class="op-card" onclick="startFPSGame('patrol')">
-                        <div class="op-icon">🚁</div>
-                        <div class="op-title">Рейд (FPS)</div>
-                        <div class="op-desc">Знищуй ворогів у ближньому бою.</div>
+                    <div class="op-card" onclick="startFPSGame('night')">
+                        <div class="op-icon">🌙</div>
+                        <div class="op-title">Нічна Операція</div>
+                        <div class="op-desc">Зачистка сектора в умовах обмеженої видимості.</div>
                     </div>
                 </div>
             </div>
 
-            <!-- GAME CANVAS SCREEN (FPS CONTAINER) -->
-            <div id="canvasScreen" style="display: none; position: relative;">
-                <div style="display: flex; justify-content: space-between; font-size: 0.8rem; font-weight: bold; margin-bottom: 0.4rem; background: rgba(0,0,0,0.7); padding: 0.5rem 0.8rem; border-radius: 6px;">
-                    <div>Режим: <span id="uiOpName" style="color: var(--accent);">FPS БІЙ</span></div>
-                    <div>Набої: <span id="uiAmmo" style="color: #22c55e;">30/30</span></div>
-                    <div>Очки: <span id="uiScore" style="color: #eab308;">0</span></div>
-                </div>
+            <!-- EKRAN CANVASA / THREE.JS CONTAINER -->
+            <div id="canvasScreen" style="display: none;">
+                <div class="fps-container" id="threeJsContainer"></div>
 
-                <div style="position: relative; width: 100%; height: 60vh; max-height: 520px; border-radius: 8px; overflow: hidden; border: 1px solid var(--accent-border);" id="threeJsContainer">
-                    <div class="radio-ticker" id="radioTicker">📡 [FPS РАДІО]: Клікніть на екран для захоплення мишки!</div>
-                    <div class="fps-crosshair"></div>
-                    
-                    <!-- TOUCH CONTROLS -->
-                    <div class="touch-controls" id="touchControls">
-                        <div class="joystick-zone" id="joystickZone">
-                            <div class="joystick-knob" id="joystickKnob"></div>
+                <!-- TARKOV MEDICAL UI FOR 3D FPS -->
+                <div class="tarkov-ui" id="tarkovMedicalUi">
+                    <div class="tarkov-header">
+                        <span>🏥 STAN ZDROWIA (TCCC DIAGNOSTICS 3D)</span>
+                        <span style="cursor: pointer;" onclick="toggleTarkovUi(false)">✕</span>
+                    </div>
+                    <div class="tarkov-body">
+                        <div class="skeleton-view">
+                            <svg class="skeleton-svg" viewBox="0 0 100 200">
+                                <circle id="svgHead" cx="50" cy="20" r="14" fill="#ef4444" opacity="0.8"/>
+                                <rect id="svgThorax" x="32" y="38" width="36" height="45" rx="5" fill="#ef4444" opacity="0.8"/>
+                                <rect id="svgStomach" x="35" y="86" width="30" height="30" rx="4" fill="#ef4444" opacity="0.8"/>
+                                <rect id="svgRArm" x="12" y="40" width="16" height="55" rx="3" fill="#ef4444" opacity="0.8"/>
+                                <rect id="svgLArm" x="72" y="40" width="16" height="55" rx="3" fill="#ef4444" opacity="0.8"/>
+                                <rect id="svgRLeg" x="32" y="120" width="15" height="70" rx="3" fill="#ef4444" opacity="0.8"/>
+                                <rect id="svgLLeg" x="53" y="120" width="15" height="70" rx="3" fill="#ef4444" opacity="0.8"/>
+                            </svg>
                         </div>
-                        <div class="action-buttons">
-                            <button class="btn-touch" id="btnTouchShoot" title="Постріл">🎯</button>
-                            <button class="btn-touch" id="btnTouchReload" title="Перезарядка">🔄</button>
+                        <div class="limb-list">
+                            <div class="limb-box" id="box-head" onclick="selectLimb('head')">
+                                <div class="limb-info"><span>GŁOWA (HEAD)</span><span id="hp-head">35/35</span></div>
+                                <div class="limb-bar-bg"><div class="limb-bar-fill" id="bar-head"></div></div>
+                            </div>
+                            <div class="limb-box" id="box-thorax" onclick="selectLimb('thorax')">
+                                <div class="limb-info"><span>KLATKA (THORAX)</span><span id="hp-thorax">85/85</span></div>
+                                <div class="limb-bar-bg"><div class="limb-bar-fill" id="bar-thorax"></div></div>
+                            </div>
+                            <div class="limb-box" id="box-stomach" onclick="selectLimb('stomach')">
+                                <div class="limb-info"><span>BRZUCH (STOMACH)</span><span id="hp-stomach">70/70</span></div>
+                                <div class="limb-bar-bg"><div class="limb-bar-fill" id="bar-stomach"></div></div>
+                            </div>
+                            <div class="limb-box" id="box-rarm" onclick="selectLimb('rarm')">
+                                <div class="limb-info"><span>PRAWA RĘKA</span><span id="hp-rarm">60/60</span></div>
+                                <div class="limb-bar-bg"><div class="limb-bar-fill" id="bar-rarm"></div></div>
+                            </div>
+                            <div class="limb-box" id="box-larm" onclick="selectLimb('larm')">
+                                <div class="limb-info"><span>LEWA RĘKA</span><span id="hp-larm">60/60</span></div>
+                                <div class="limb-bar-bg"><div class="limb-bar-fill" id="bar-larm"></div></div>
+                            </div>
+                            <div class="limb-box" id="box-rleg" onclick="selectLimb('rleg')">
+                                <div class="limb-info"><span>PRAWA NOGA</span><span id="hp-rleg">65/65</span></div>
+                                <div class="limb-bar-bg"><div class="limb-bar-fill" id="bar-rleg"></div></div>
+                            </div>
+                            <div class="limb-box" id="box-lleg" onclick="selectLimb('lleg')">
+                                <div class="limb-info"><span>LEWA NOGA</span><span id="hp-lleg">65/65</span></div>
+                                <div class="limb-bar-bg"><div class="limb-bar-fill" id="bar-lleg"></div></div>
+                            </div>
                         </div>
                     </div>
+                    <div class="med-actions">
+                        <button class="btn-med" onclick="useMedItem('tourniquet')">🩸 Turniket (Staza)</button>
+                        <button class="btn-med" onclick="useMedItem('bandage')">🩹 Opatrunek Medyczny</button>
+                    </div>
                 </div>
-
-                <p style="color: var(--text-subtle); font-size: 0.72rem; margin-top: 0.4rem;" class="pc-controls-desc">
-                    <b>WASD</b> — Рух | <b>Мишка</b> — Огляд (Поворот голови) | <b>Клік</b> — Постріл | <b>R</b> — Перезарядка
-                </p>
             </div>
         </div>
     </div>
 
-    <!-- LEADERBOARD MODAL -->
+    <!-- MODAL TABELI REKORDÓW -->
     <div class="modal-overlay" id="leaderboardModal">
         <div class="modal-window" style="max-width: 500px;">
             <button class="close-modal" onclick="closeLeaderboardModal()">×</button>
-            <h2 style="color: #f1f5f9; margin-bottom: 1rem; text-align: center;">🏆 Таблиця Рекордів</h2>
+            <h2 style="color: #f1f5f9; margin-bottom: 1rem; text-align: center;">🏆 Tabela Rekordów</h2>
             <div style="max-height: 320px; overflow-y: auto; background: var(--bg-dark); border-radius: 8px; border: 1px solid rgba(255,255,255,0.05); padding: 0.8rem;">
                 <table style="width: 100%; color: var(--text-main); border-collapse: collapse; text-align: left;">
                     <thead>
                         <tr style="border-bottom: 1px solid var(--accent-border); color: var(--accent); font-size: 0.85rem;">
-                            <th style="padding: 6px;">#</th><th style="padding: 6px;">Гравець</th><th style="padding: 6px; text-align: right;">Очки</th>
+                            <th style="padding: 6px;">#</th><th style="padding: 6px;">Gracz</th><th style="padding: 6px; text-align: right;">Wynik</th>
                         </tr>
                     </thead>
                     <tbody id="leaderboardBody">
-                        <tr><td colspan="3" style="text-align:center; padding: 1rem; color: var(--text-subtle);">Завантаження...</td></tr>
+                        <tr><td colspan="3" style="text-align:center; padding: 1rem; color: var(--text-subtle);">Ładowanie...</td></tr>
                     </tbody>
                 </table>
             </div>
         </div>
     </div>
 
-    <!-- RECRUITING FORM & CHAT MODAL -->
-    <div class="modal-overlay" id="modalOverlay">
-        <div class="modal-window">
-            <button class="close-modal" onclick="toggleModal(false)" title="Закрити">×</button>
-            
-            <div id="formStage" class="fade-stage">
-                <h2 style="margin-bottom: 1.5rem; font-size: 1.6rem; color: #f1f5f9; text-align: center; font-weight: 700;">Подати заявку</h2>
-                <form onsubmit="handleSubmit(event)">
-                    <div class="form-group"><label for="userName">Позивний або Ім'я</label><input type="text" id="userName" required placeholder="Введіть ваш нікнейм"></div>
-                    <div class="form-group"><label for="userContact">Контакт у Telegram / Signal</label><input type="text" id="userContact" required placeholder="@username або номер"></div>
-                    
-                    <div class="form-group">
-                        <label>Бажаний підрозділ</label>
-                        <div class="custom-select-wrapper" id="squadSelectWrapper">
-                            <input type="hidden" id="userSquad" value="1-й батальйон Вовкодав">
-                            <div class="custom-select-trigger" onclick="toggleCustomSelect('squadSelectWrapper')">1-й батальйон "Вовкодав"</div>
-                            <div class="custom-options">
-                                <div class="custom-option selected" onclick="selectOption(this, 'squadSelectWrapper', 'userSquad', '1-й батальйон Вовкодав')">1-й батальйон "Вовкодав"</div>
-                                <div class="custom-option" onclick="selectOption(this, 'squadSelectWrapper', 'userSquad', 'Російський добровольчий корпус')">Російський добровольчий корпус</div>
-                                <div class="custom-option" onclick="selectOption(this, 'squadSelectWrapper', 'userSquad', 'Норманська бригада')">Норманська бригада</div>
-                                <div class="custom-option" onclick="selectOption(this, 'squadSelectWrapper', 'userSquad', 'Легіон Свобода Росії')">Легіон "Свобода Росії"</div>
-                                <div class="custom-option" onclick="selectOption(this, 'squadSelectWrapper', 'userSquad', 'Грузинський Національний Легіон')">Грузинський Національний Легіон</div>
-                            </div>
-                        </div>
-                    </div>
-
-                    <div class="form-group">
-                        <label>Військова спеціалізація</label>
-                        <div class="custom-select-wrapper" id="specSelectWrapper">
-                            <input type="hidden" id="userSpec" value="Піхота / Штурмовик">
-                            <div class="custom-select-trigger" onclick="toggleCustomSelect('specSelectWrapper')">Піхота / Штурмовик</div>
-                            <div class="custom-options">
-                                <div class="custom-option selected" onclick="selectOption(this, 'specSelectWrapper', 'userSpec', 'Піхота / Штурмовик')">Піхота / Штурмовик</div>
-                                <div class="custom-option" onclick="selectOption(this, 'specSelectWrapper', 'userSpec', 'Оператор БПЛА / РЕБ')">Оператор БПЛА / РЕБ</div>
-                                <div class="custom-option" onclick="selectOption(this, 'specSelectWrapper', 'userSpec', 'Тактичний Медик')">Тактичний Медик</div>
-                                <div class="custom-option" onclick="selectOption(this, 'specSelectWrapper', 'userSpec', 'Артилерія / Мінометник')">Артилерія / Мінометник</div>
-                            </div>
-                        </div>
-                    </div>
-                    
-                    <button type="submit" class="btn-submit">Надіслати заявку</button>
-                </form>
-            </div>
-
-            <div id="chatStage" class="fade-stage entrance" style="display: none;">
-                <h2 style="font-size: 1.5rem; margin-bottom: 1rem; color: #f1f5f9; text-align: center; font-weight: 700;">Захищений Канал Зв'язку</h2>
-                <div class="chat-container">
-                    <div class="chat-header" id="chatPartner">
-                        <div style="display: flex; align-items: center; gap: 8px;">
-                            <button class="btn-back-chat" onclick="goBackToForm()">←</button>
-                            <span class="status-dot"></span>
-                            <span id="chatHeaderTitle">Персональний чат</span>
-                        </div>
-                        <div class="recruiter-actions" id="recruiterActions">
-                            <button class="btn-candidates" onclick="openCandidatesList()">👥 Кандидати</button>
-                            <button class="btn-clear-chat" onclick="directClearChat()">Очистити чат</button>
-                        </div>
-                    </div>
-                    
-                    <div class="chat-messages" id="chatMessages"></div>
-                    
-                    <div class="quick-tags-area" id="quickTagsArea">
-                        <button onclick="sendQuickQuestion('docs')">📋 Документи?</button>
-                        <button onclick="sendQuickQuestion('training')">🪖 Навчання?</button>
-                        <button onclick="sendQuickQuestion('gear')">📦 Забезпечення?</button>
-                        <button onclick="sendQuickQuestion('pay')">💰 Виплати?</button>
-                        <button id="cryptoBtn" onclick="checkCryptoLink()">🔐 Лінія: Захищена</button>
-                    </div>
-
-                    <div class="chat-input-area">
-                        <input type="text" id="chatInput" placeholder="Напишіть повідомлення..." onkeypress="handleKeyPress(event)">
-                        <button class="btn-send" onclick="sendMessage()">Друк</button>
-                    </div>
-                </div>
-            </div>
-
-            <div id="candidatesStage" class="fade-stage entrance" style="display: none;">
-                <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 1rem;">
-                    <h2 style="font-size: 1.4rem; color: #f1f5f9; font-weight: 700;">База Кандидатів <span class="candidate-count-badge" id="candidatesCount">0</span></h2>
-                    <button class="btn-back-chat" onclick="backToChatFromCandidates()" style="width: auto; padding: 4px 12px; font-size: 0.85rem;">← В чат</button>
-                </div>
-                <div class="candidates-list" id="candidatesListContainer"></div>
-            </div>
-        </div>
-    </div>
-
     <script>
-        // FIREBASE INITIALIZATION
+        // Firebase Configuration
         const firebaseConfig = {
             apiKey: "AIzaSyCeWM1wdHdN6bIXFXTqHXO7WgJNJK53nwk",
             authDomain: "storinka-d7bd6.firebaseapp.com",
@@ -642,10 +413,7 @@
 
         firebase.initializeApp(firebaseConfig);
         const database = firebase.database();
-        const candidatesRef = database.ref('candidates');
         const scoresRef = database.ref('leaderboard');
-        
-        let currentRoomId = null, isRecruiter = false, globalSenderName = "Гість", isCheckingCrypto = false;
 
         const playBeep = (freq = 600, duration = 0.05) => {
             try {
@@ -658,217 +426,26 @@
             } catch(e) {}
         };
 
-        const DOM = {
-            overlay: document.getElementById('modalOverlay'),
-            formStage: document.getElementById('formStage'),
-            chatStage: document.getElementById('chatStage'),
-            candidatesStage: document.getElementById('candidatesStage'),
-            candidatesListContainer: document.getElementById('candidatesListContainer'),
-            candidatesCount: document.getElementById('candidatesCount'),
-            chatMessages: document.getElementById('chatMessages'),
-            chatInput: document.getElementById('chatInput'),
-            userName: document.getElementById('userName'),
-            userContact: document.getElementById('userContact'),
-            userSquad: document.getElementById('userSquad'),
-            userSpec: document.getElementById('userSpec'),
-            recruiterActions: document.getElementById('recruiterActions'),
-            chatHeaderTitle: document.getElementById('chatHeaderTitle'),
-            cryptoBtn: document.getElementById('cryptoBtn')
-        };
-
-        const BOT_RESPONSES = {
-            docs: "📋 Довідка Чергової частини: Для підписання контракту необхідні: Паспорт/ID-картка, ІПН, військовий квиток. Для іноземців — закордонний паспорт.",
-            training: "🪖 Навчальний Центр: Базовий курс військової підготовки (БЗВП) триває від 30 до 40 діб.",
-            gear: "📦 Логістичне забезпечення: Надається повне речове майно, шолом, бронежилет 4+ класу, НАТО-аптечка та закріплена зброя.",
-            pay: "💰 Грошове забезпечення: Базова ставка від 20 000 грн + надбавки від 30 000 до 100 000 грн."
-        };
-        const QUESTIONS_TEXT = {
-            docs: 'Які документи необхідні для оформлення контракту?',
-            training: 'Скільки триває базовий курс підготовки (БЗВП)?',
-            gear: 'Яке речове забезпечення надає підрозділ?',
-            pay: 'Яка заробітна плата та надбавки передбачені?'
-        };
-
-        function calculatePay() {
-            const roleVal = parseInt(document.getElementById('roleSelect').value) || 0;
-            const zoneVal = parseInt(document.getElementById('zoneSelect').value) || 0;
-            document.getElementById('totalPay').innerText = (roleVal + zoneVal).toLocaleString('uk-UA') + ' грн';
-        }
-
-        function toggleFaq(element) { playBeep(700, 0.03); element.classList.toggle('active'); }
-
-        const observer = new IntersectionObserver((entries) => {
-            entries.forEach(entry => { if(entry.isIntersecting) entry.target.classList.add('visible'); });
-        }, { threshold: 0.1 });
-        document.querySelectorAll('.team-card').forEach(card => observer.observe(card));
-
-        function toggleModal(show) {
-            playBeep(show ? 800 : 400);
-            DOM.overlay.classList.toggle('active', show);
-            document.body.classList.toggle('modal-open', show);
-            if (!show && currentRoomId) database.ref('rooms/' + currentRoomId).off();
-        }
-
-        function toggleCustomSelect(wrapperId) {
-            playBeep(700);
-            const wrapper = document.getElementById(wrapperId);
-            document.querySelectorAll('.custom-select-wrapper').forEach(w => { if (w !== wrapper) w.classList.remove('open'); });
-            wrapper.classList.toggle('open');
-        }
-
-        function selectOption(element, wrapperId, inputId, value) {
-            playBeep(900);
-            const wrapper = document.getElementById(wrapperId);
-            wrapper.querySelectorAll('.custom-option').forEach(opt => opt.classList.remove('selected'));
-            element.classList.add('selected');
-            wrapper.querySelector('.custom-select-trigger').innerText = element.innerText;
-            document.getElementById(inputId).value = value;
-            wrapper.classList.remove('open');
-        }
-
-        window.addEventListener('click', (e) => {
-            if (!e.target.closest('.custom-select-wrapper')) {
-                document.querySelectorAll('.custom-select-wrapper').forEach(w => w.classList.remove('open'));
-            }
-        });
-
-        function handleSubmit(e) {
-            e.preventDefault(); playBeep(1000);
-            const nameInput = DOM.userName.value.trim(), contactInput = DOM.userContact.value.trim();
-            globalSenderName = nameInput;
-            isRecruiter = (nameInput.toUpperCase() === 'REK' && contactInput.toUpperCase() === 'REK');
-
-            DOM.formStage.classList.add('hidden');
-            setTimeout(() => {
-                DOM.formStage.style.display = 'none';
-                if (isRecruiter) { DOM.recruiterActions.style.display = 'flex'; openCandidatesList(); } 
-                else {
-                    let existingRoom = localStorage.getItem('strike_chat_room_id');
-                    if (!existingRoom) {
-                        existingRoom = 'room_' + Date.now() + '_' + Math.random().toString(36).substr(2, 5);
-                        localStorage.setItem('strike_chat_room_id', existingRoom);
-                        candidatesRef.child(existingRoom).set({
-                            id: existingRoom, name: nameInput, contact: contactInput,
-                            squad: DOM.userSquad.value, spec: DOM.userSpec.value,
-                            timestamp: new Date().toLocaleTimeString('uk-UA', { hour: '2-digit', minute: '2-digit' })
-                        });
-                    }
-                    DOM.recruiterActions.style.display = 'none';
-                    openChatRoom(existingRoom, `Лінія зв'язку: ${nameInput}`);
-                }
-            }, 350);
-        }
-
-        function openChatRoom(roomId, roomTitle) {
-            if (currentRoomId) database.ref('rooms/' + currentRoomId).off();
-            currentRoomId = roomId;
-            DOM.chatHeaderTitle.innerText = roomTitle;
-            DOM.chatMessages.innerHTML = '';
-            DOM.candidatesStage.style.display = 'none'; DOM.chatStage.style.display = 'block';
-            setTimeout(() => { DOM.chatStage.classList.remove('entrance'); DOM.chatStage.classList.remove('hidden'); }, 20);
-
-            const roomRef = database.ref('rooms/' + roomId);
-            roomRef.limitToLast(50).on('child_added', (snapshot) => {
-                const data = snapshot.val(); if (data) displayMessage(data.sender, data.text, data.type);
-            });
-            roomRef.on('value', (snapshot) => { if (!snapshot.exists()) DOM.chatMessages.innerHTML = ''; });
-        }
-
-        function sendMessage() {
-            const messageText = DOM.chatInput.value.trim();
-            if (!messageText || !currentRoomId) return;
-            playBeep(650);
-            database.ref('rooms/' + currentRoomId).push({ sender: isRecruiter ? "Рекрутер" : globalSenderName, text: messageText, type: 'normal' });
-            DOM.chatInput.value = '';
-        }
-
-        function displayMessage(sender, text, type = 'normal') {
-            playBeep(500, 0.03);
-            const msgDiv = document.createElement('div');
-            const timeSpan = `<span class="msg-time">${new Date().toLocaleTimeString('uk-UA', {hour:'2-digit', minute:'2-digit'})} <span class="msg-status">✓✓</span></span>`;
-            if (type === 'approved') { msgDiv.className = 'message approved'; msgDiv.innerHTML = `<strong>✅ ${escapeHtml(text)}</strong>${timeSpan}`; }
-            else if (type === 'rejected') { msgDiv.className = 'message rejected'; msgDiv.innerHTML = `<strong>❌ ${escapeHtml(text)}</strong>${timeSpan}`; }
-            else if (sender === globalSenderName || (isRecruiter && sender === "Рекрутер")) { msgDiv.className = 'message friend'; msgDiv.innerHTML = `<strong>Ви:</strong> ${escapeHtml(text)}${timeSpan}`; }
-            else { msgDiv.className = 'message intercom'; msgDiv.innerHTML = `<strong>${escapeHtml(sender)}:</strong> ${escapeHtml(text)}${timeSpan}`; }
-            DOM.chatMessages.appendChild(msgDiv); DOM.chatMessages.scrollTop = DOM.chatMessages.scrollHeight;
-        }
-
-        function escapeHtml(str) { return str.replace(/&/g, "&amp;").replace(/</g, "&lt;").replace(/>/g, "&gt;"); }
-        function handleKeyPress(e) { if (e.key === 'Enter') sendMessage(); }
-        function directClearChat() { if (currentRoomId) { database.ref('rooms/' + currentRoomId).remove(); DOM.chatMessages.innerHTML = ''; } }
-
-        function openCandidatesList() {
-            playBeep(750);
-            DOM.chatStage.classList.add('hidden');
-            setTimeout(() => {
-                DOM.chatStage.style.display = 'none'; DOM.candidatesStage.style.display = 'block';
-                setTimeout(() => { DOM.candidatesStage.classList.remove('entrance'); DOM.candidatesStage.classList.remove('hidden'); }, 20);
-            }, 350);
-
-            candidatesRef.on('value', (snapshot) => {
-                DOM.candidatesListContainer.innerHTML = '';
-                if (!snapshot.exists()) { DOM.candidatesCount.innerText = "0"; DOM.candidatesListContainer.innerHTML = '<p style="text-align:center; color:var(--text-subtle); margin-top:2rem;">Немає кандидатів.</p>'; return; }
-                let count = 0;
-                snapshot.forEach((child) => {
-                    count++; const c = child.val();
-                    const card = document.createElement('div'); card.className = 'candidate-card';
-                    card.innerHTML = `
-                        <div class="candidate-info">
-                            <h4>${escapeHtml(c.name || 'Анонім')} <span>${c.timestamp || ''}</span></h4>
-                            <p><strong>Контакт:</strong> ${escapeHtml(c.contact || '-')}</p>
-                            <p><strong>Підрозділ:</strong> ${escapeHtml(c.squad || '-')}</p>
-                        </div>
-                        <div class="candidate-actions">
-                            <button class="btn-action-open" onclick="openChatRoom('${c.id}', 'Чат: ${escapeHtml(c.name)}')">💬</button>
-                            <button class="btn-approve" onclick="processCandidateDecision('${c.id}', '${escapeHtml(c.name)}', 'approved')">✔</button>
-                            <button class="btn-reject" onclick="processCandidateDecision('${c.id}', '${escapeHtml(c.name)}', 'rejected')">✖</button>
-                        </div>
-                    `;
-                    DOM.candidatesListContainer.prepend(card);
-                });
-                DOM.candidatesCount.innerText = count;
-            });
-        }
-
-        function processCandidateDecision(roomId, candidateName, decision) {
-            playBeep(decision === 'approved' ? 900 : 300);
-            const statusText = decision === 'approved' ? `Рекрутер розглянув вашу заявку: ВАС ПРИЙНЯТО ДО СКЛАДУ!` : `Рекрутер розглянув вашу заявку: кандидатуру ВІДХИЛЕНО.`;
-            database.ref('rooms/' + roomId).push({ sender: "Штаб Рекрутингу", text: statusText, type: decision });
-            candidatesRef.child(roomId).remove();
-        }
-
-        function backToChatFromCandidates() { goBackToForm(); }
-        function goBackToForm() {
-            DOM.chatStage.classList.add('entrance'); DOM.candidatesStage.classList.add('entrance');
-            setTimeout(() => {
-                DOM.chatStage.style.display = 'none'; DOM.candidatesStage.style.display = 'none'; DOM.formStage.style.display = 'block';
-                setTimeout(() => DOM.formStage.classList.remove('hidden'), 20);
-            }, 350);
-            if (currentRoomId) database.ref('rooms/' + currentRoomId).off();
-        }
-
-        function sendQuickQuestion(type) {
-            if (!currentRoomId || !BOT_RESPONSES[type]) return;
-            playBeep(700);
-            database.ref('rooms/' + currentRoomId).push({ sender: globalSenderName, text: QUESTIONS_TEXT[type], type: 'normal' });
-            setTimeout(() => {
-                database.ref('rooms/' + currentRoomId).push({ sender: "Черговий інструктор", text: BOT_RESPONSES[type], type: 'normal' });
-            }, 1000);
-        }
-
-        function checkCryptoLink() {
-            if (isCheckingCrypto) return; isCheckingCrypto = true;
-            playBeep(1200, 0.08); DOM.cryptoBtn.innerText = "⏳ Сканування...";
-            setTimeout(() => { playBeep(1500, 0.1); DOM.cryptoBtn.innerText = "⚡ Шифр: OK"; setTimeout(() => { DOM.cryptoBtn.innerText = "🔐 Лінія: Захищена"; isCheckingCrypto = false; }, 2000); }, 1000);
-        }
-
         // =========================================================================
-        // --- 3D FPS (ГРА ВІД ПЕРШОГО ЛИЦЯ) ДВИЖОК ---
+        // --- 3D FPS (ГРА ВІД ПЕРШОГО ЛИЦЯ) ДВИЖОК - FULLSCREEN + TARKOV MEDS ---
         // =========================================================================
         let scene, cameraFPS, rendererFPS, isFPSRunning = false, animFPSId = null, aiIntervalFPS = null;
         let ammoFPS = 30, scoreFPS = 0, playerYaw = 0;
         let keysFPS = {}, touchFPSDir = { x: 0, y: 0 };
-        let bulletsFPS = [], enemiesFPS = [], obstaclesFPS = [];
+        let bulletsFPS = [], enemiesFPS = [], obstaclesFPS = [], enemyBulletsFPS = [];
+
+        // Tarkov Body Parts System
+        let bodyParts = {
+            head: { current: 35, max: 35, bleeding: false },
+            thorax: { current: 85, max: 85, bleeding: false },
+            stomach: { current: 70, max: 70, bleeding: false },
+            rarm: { current: 60, max: 60, bleeding: false },
+            larm: { current: 60, max: 60, bleeding: false },
+            rleg: { current: 65, max: 65, bleeding: false },
+            lleg: { current: 65, max: 65, bleeding: false }
+        };
+        let selectedLimb = 'thorax';
+        let tourniquetsCount = 3, bandagesCount = 5;
 
         function openGameModal() {
             document.getElementById('gameModal').classList.add('active');
@@ -878,12 +455,13 @@
         }
 
         function closeGameModal() {
-            document.getElementById('gameModal').classList.remove('active');
+            document.getElementById('gameModal').classList.remove('active', 'game-fullscreen');
             document.body.classList.remove('modal-open');
             stopFPSGame();
         }
 
         function startFPSGame(opType) {
+            document.getElementById('gameModal').classList.add('game-fullscreen');
             document.getElementById('opSelectScreen').style.display = 'none';
             document.getElementById('canvasScreen').style.display = 'block';
 
@@ -897,7 +475,7 @@
             initMouseLook();
 
             if (aiIntervalFPS) clearInterval(aiIntervalFPS);
-            aiIntervalFPS = setInterval(updateFPSAI, 700);
+            aiIntervalFPS = setInterval(updateFPSAI, 800);
 
             gameFPSLoop();
         }
@@ -905,60 +483,84 @@
         function initFPSScene() {
             const container = document.getElementById('threeJsContainer');
             container.innerHTML = `
-                <div class="radio-ticker">📡 [FPS РАДІО]: Гра від першого лиця активована! Рух WASD, мишка — огляд.</div>
+                <div class="hit-flash" id="hitFlash"></div>
+                <div class="radio-ticker">📡 [FPS РАДІО]: Повноекранна 3D Операція! WASD — Рух | Мишка — Огляд | M/Tab — Медицина</div>
                 <div class="fps-crosshair"></div>
+                <div class="fps-hud">
+                    <div class="hud-card">Набої: <span id="uiAmmo">30/30</span></div>
+                    <div class="hud-card">Бали: <span id="uiScore">0</span></div>
+                    <div class="hud-card" onclick="toggleTarkovUi()" style="cursor:pointer; border-color:var(--status-online);">🏥 Медицина (M)</div>
+                </div>
                 <div class="touch-controls" id="touchControls">
                     <div class="joystick-zone" id="joystickZone"><div class="joystick-knob" id="joystickKnob"></div></div>
-                    <div class="action-buttons"><button class="btn-touch" id="btnTouchShoot">🎯</button><button class="btn-touch" id="btnTouchReload">🔄</button></div>
+                    <div class="action-buttons" style="display:flex; flex-direction:column; gap:10px;">
+                        <button class="btn-touch" id="btnTouchShoot">🎯</button>
+                        <button class="btn-touch" id="btnTouchMed" onclick="toggleTarkovUi()">🏥</button>
+                        <button class="btn-touch" id="btnTouchReload">🔄</button>
+                    </div>
                 </div>
             `;
 
+            // Reset Tarkov Health System
+            for (let part in bodyParts) {
+                bodyParts[part].current = bodyParts[part].max;
+                bodyParts[part].bleeding = false;
+            }
+
             scene = new THREE.Scene();
             scene.background = new THREE.Color(0x0b131a);
-            scene.fog = new THREE.FogExp2(0x0b131a, 0.02);
+            scene.fog = new THREE.FogExp2(0x0b131a, 0.018);
 
-            cameraFPS = new THREE.PerspectiveCamera(70, container.clientWidth / container.clientHeight, 0.1, 1000);
-            cameraFPS.position.set(0, 1.6, 0); // Висота очей бійця
+            cameraFPS = new THREE.PerspectiveCamera(75, window.innerWidth / window.innerHeight, 0.1, 1000);
+            cameraFPS.position.set(0, 1.6, 0);
 
             rendererFPS = new THREE.WebGLRenderer({ antialias: true });
-            rendererFPS.setSize(container.clientWidth, container.clientHeight);
+            rendererFPS.setSize(window.innerWidth, window.innerHeight);
             rendererFPS.shadowMap.enabled = true;
             container.appendChild(rendererFPS.domElement);
 
-            const ambientLight = new THREE.AmbientLight(0xffffff, 0.5);
+            const ambientLight = new THREE.AmbientLight(0xffffff, 0.6);
             scene.add(ambientLight);
 
-            const dirLight = new THREE.DirectionalLight(0xfffaed, 0.7);
-            dirLight.position.set(20, 40, 20);
+            const dirLight = new THREE.DirectionalLight(0xfffaed, 0.8);
+            dirLight.position.set(30, 50, 30);
             scene.add(dirLight);
 
-            // Земля
+            // Ground
             const ground = new THREE.Mesh(
-                new THREE.PlaneGeometry(150, 150),
+                new THREE.PlaneGeometry(300, 300),
                 new THREE.MeshStandardMaterial({ color: 0x162216, roughness: 0.8 })
             );
             ground.rotation.x = -Math.PI / 2;
             scene.add(ground);
 
-            bulletsFPS = []; enemiesFPS = []; obstaclesFPS = [];
+            bulletsFPS = []; enemyBulletsFPS = []; enemiesFPS = []; obstaclesFPS = [];
             scoreFPS = 0; ammoFPS = 30; playerYaw = 0; updateFPSUI();
 
-            // Генерація 3D будинків з колізією
-            for (let i = 0; i < 6; i++) {
-                let bx = (Math.random() - 0.5) * 70, bz = (Math.random() - 0.5) * 70;
-                if (Math.hypot(bx, bz) < 10) continue;
-                createFPSHouse(bx, bz, 8, 5, 8);
+            // Houses
+            for (let i = 0; i < 10; i++) {
+                let bx = (Math.random() - 0.5) * 120, bz = (Math.random() - 0.5) * 120;
+                if (Math.hypot(bx, bz) < 15) continue;
+                createFPSHouse(bx, bz, 10, 6, 10);
             }
 
-            // Вороги
-            for (let i = 0; i < 10; i++) {
+            // Enemies
+            for (let i = 0; i < 14; i++) {
                 let enemy = createEnemy3D();
-                enemy.position.set((Math.random() - 0.5) * 80, 0, (Math.random() - 0.5) * 80);
+                enemy.position.set((Math.random() - 0.5) * 140, 0, (Math.random() - 0.5) * 140);
                 scene.add(enemy);
                 enemiesFPS.push({ mesh: enemy, hp: 50 });
             }
 
             container.addEventListener('click', shootFPSBullet);
+            window.addEventListener('resize', onWindowResize);
+        }
+
+        function onWindowResize() {
+            if (!isFPSRunning || !rendererFPS || !cameraFPS) return;
+            cameraFPS.aspect = window.innerWidth / window.innerHeight;
+            cameraFPS.updateProjectionMatrix();
+            rendererFPS.setSize(window.innerWidth, window.innerHeight);
         }
 
         function createFPSHouse(x, z, w, h, d) {
@@ -975,7 +577,7 @@
             const group = new THREE.Group();
             const body = new THREE.Mesh(new THREE.BoxGeometry(0.8, 1.5, 0.6), new THREE.MeshStandardMaterial({ color: 0xdc2626 }));
             body.position.y = 0.75; group.add(body);
-            const head = new THREE.Mesh(new THREE.SphereGeometry(0.35, 6, 6), new THREE.MeshStandardMaterial({ color: 0x7f1d1d }));
+            const head = new THREE.Mesh(new THREE.SphereGeometry(0.35, 8, 8), new THREE.MeshStandardMaterial({ color: 0x7f1d1d }));
             head.position.y = 1.6; group.add(head);
             return group;
         }
@@ -988,7 +590,12 @@
             });
         }
 
-        function handleFPSKeyDown(e) { keysFPS[e.key.toLowerCase()] = true; if (e.key.toLowerCase() === 'r') { ammoFPS = 30; updateFPSUI(); } }
+        function handleFPSKeyDown(e) { 
+            let k = e.key.toLowerCase();
+            keysFPS[k] = true; 
+            if (k === 'r') { ammoFPS = 30; updateFPSUI(); }
+            if (k === 'm' || e.key === 'Tab') { e.preventDefault(); toggleTarkovUi(); }
+        }
         function handleFPSKeyUp(e) { keysFPS[e.key.toLowerCase()] = false; }
 
         function initFPSTouchControls() {
@@ -1028,33 +635,105 @@
             bullet.position.copy(cameraFPS.position);
 
             let dir = new THREE.Vector3(0, 0, -1).applyAxisAngle(new THREE.Vector3(0, 1, 0), playerYaw);
-            bulletsFPS.push({ mesh: bullet, dir: dir, life: 50 });
+            bulletsFPS.push({ mesh: bullet, dir: dir, life: 60 });
             scene.add(bullet);
         }
 
         function updateFPSAI() {
             if (!isFPSRunning) return;
             enemiesFPS.forEach(e => {
-                let dx = cameraFPS.position.x - e.mesh.position.x, dz = cameraFPS.position.z - e.mesh.position.z;
-                if (Math.hypot(dx, dz) < 30) {
-                    e.mesh.position.x += Math.sign(dx) * 0.05;
-                    e.mesh.position.z += Math.sign(dz) * 0.05;
+                let dx = cameraFPS.position.x - e.mesh.position.x;
+                let dz = cameraFPS.position.z - e.mesh.position.z;
+                let dist = Math.hypot(dx, dz);
+
+                if (dist < 40) {
+                    e.mesh.position.x += (dx / dist) * 0.1;
+                    e.mesh.position.z += (dz / dist) * 0.1;
+
+                    // Enemy shoots back
+                    if (Math.random() < 0.35) {
+                        const eb = new THREE.Mesh(
+                            new THREE.SphereGeometry(0.1, 6, 6),
+                            new THREE.MeshBasicMaterial({ color: 0xef4444 })
+                        );
+                        eb.position.copy(e.mesh.position);
+                        eb.position.y = 1.4;
+                        let dir = new THREE.Vector3(dx, 0, dz).normalize();
+                        enemyBulletsFPS.push({ mesh: eb, dir: dir, life: 50 });
+                        scene.add(eb);
+                    }
                 }
             });
+        }
+
+        function triggerPlayerDamage(amount) {
+            playBeep(200, 0.15);
+            const flash = document.getElementById('hitFlash');
+            if (flash) { flash.style.opacity = '1'; setTimeout(() => flash.style.opacity = '0', 200); }
+
+            // Randomly damage Tarkov body parts
+            const parts = ['thorax', 'head', 'stomach', 'rarm', 'larm', 'rleg', 'lleg'];
+            let hitPart = parts[Math.floor(Math.random() * parts.length)];
+            bodyParts[hitPart].current -= amount;
+            if (Math.random() < 0.4) bodyParts[hitPart].bleeding = true;
+
+            updateTarkovUi();
+
+            if (bodyParts.head.current <= 0 || bodyParts.thorax.current <= 0) {
+                alert("Вас було смертельно поранено! Операцію завершено.");
+                closeGameModal();
+            }
+        }
+
+        function toggleTarkovUi(show) {
+            let el = document.getElementById('tarkovMedicalUi');
+            if (!el) return;
+            if (show !== undefined) el.style.display = show ? 'block' : 'none';
+            else el.style.display = el.style.display === 'block' ? 'none' : 'block';
+            if (el.style.display === 'block') updateTarkovUi();
+        }
+
+        function selectLimb(limb) {
+            selectedLimb = limb;
+            document.querySelectorAll('.limb-box').forEach(b => b.classList.remove('selected'));
+            document.getElementById('box-' + limb).classList.add('selected');
+        }
+
+        function updateTarkovUi() {
+            for (let limb in bodyParts) {
+                let p = bodyParts[limb];
+                let pct = Math.max(0, (p.current / p.max) * 100);
+                let hpEl = document.getElementById('hp-' + limb);
+                let fill = document.getElementById('bar-' + limb);
+                if (hpEl) hpEl.innerText = `${Math.floor(p.current)}/${p.max}`;
+                if (fill) {
+                    fill.style.width = pct + '%';
+                    fill.style.background = pct < 30 ? '#ef4444' : (pct < 70 ? '#eab308' : '#22c55e');
+                }
+            }
+        }
+
+        function useMedItem(item) {
+            let p = bodyParts[selectedLimb];
+            if (item === 'tourniquet' && tourniquetsCount > 0 && p.bleeding) {
+                playBeep(900, 0.1); tourniquetsCount--; p.bleeding = false;
+            } else if (item === 'bandage' && bandagesCount > 0 && p.current < p.max) {
+                playBeep(1100, 0.1); bandagesCount--; p.current = Math.min(p.max, p.current + 30);
+            }
+            updateTarkovUi();
         }
 
         function updateFPSLogic() {
             let moveX = (keysFPS['d'] || keysFPS['в'] ? 1 : 0) - (keysFPS['a'] || keysFPS['ф'] ? 1 : 0) + touchFPSDir.x;
             let moveZ = (keysFPS['s'] || keysFPS['і'] ? 1 : 0) - (keysFPS['w'] || keysFPS['ц'] ? 1 : 0) + touchFPSDir.y;
 
-            let speed = 0.12;
+            let speed = 0.15;
             let forward = new THREE.Vector3(0, 0, -1).applyAxisAngle(new THREE.Vector3(0, 1, 0), playerYaw);
             let side = new THREE.Vector3(1, 0, 0).applyAxisAngle(new THREE.Vector3(0, 1, 0), playerYaw);
 
             let nextX = cameraFPS.position.x + (forward.x * -moveZ + side.x * moveX) * speed;
             let nextZ = cameraFPS.position.z + (forward.z * -moveZ + side.z * moveX) * speed;
 
-            // Колізія стін
             let collide = false;
             obstaclesFPS.forEach(obs => {
                 if (Math.hypot(nextX - obs.x, nextZ - obs.z) < obs.radius) collide = true;
@@ -1067,15 +746,15 @@
 
             cameraFPS.rotation.y = playerYaw;
 
-            // Політ куль
+            // Player Bullets
             for (let i = bulletsFPS.length - 1; i >= 0; i--) {
                 let b = bulletsFPS[i];
-                b.mesh.position.addScaledVector(b.dir, 0.9);
+                b.mesh.position.addScaledVector(b.dir, 1.1);
                 b.life--;
 
                 for (let j = enemiesFPS.length - 1; j >= 0; j--) {
                     let e = enemiesFPS[j];
-                    if (b.mesh.position.distanceTo(e.mesh.position) < 1.2) {
+                    if (b.mesh.position.distanceTo(e.mesh.position) < 1.3) {
                         e.hp -= 25;
                         if (e.hp <= 0) {
                             scene.remove(e.mesh); enemiesFPS.splice(j, 1);
@@ -1087,11 +766,28 @@
 
                 if (b.life <= 0 && bulletsFPS[i]) { scene.remove(b.mesh); bulletsFPS.splice(i, 1); }
             }
+
+            // Enemy Bullets hitting Player
+            for (let i = enemyBulletsFPS.length - 1; i >= 0; i--) {
+                let eb = enemyBulletsFPS[i];
+                eb.mesh.position.addScaledVector(eb.dir, 0.7);
+                eb.life--;
+
+                if (eb.mesh.position.distanceTo(cameraFPS.position) < 1.0) {
+                    triggerPlayerDamage(15);
+                    scene.remove(eb.mesh); enemyBulletsFPS.splice(i, 1);
+                    continue;
+                }
+
+                if (eb.life <= 0 && enemyBulletsFPS[i]) { scene.remove(eb.mesh); enemyBulletsFPS.splice(i, 1); }
+            }
         }
 
         function updateFPSUI() {
-            document.getElementById('uiAmmo').innerText = `${ammoFPS}/30`;
-            document.getElementById('uiScore').innerText = scoreFPS;
+            let elAmmo = document.getElementById('uiAmmo');
+            let elScore = document.getElementById('uiScore');
+            if (elAmmo) elAmmo.innerText = `${ammoFPS}/30`;
+            if (elScore) elScore.innerText = scoreFPS;
         }
 
         function gameFPSLoop() {
@@ -1101,7 +797,12 @@
             animFPSId = requestAnimationFrame(gameFPSLoop);
         }
 
-        function stopFPSGame() { isFPSRunning = false; if (animFPSId) cancelAnimationFrame(animFPSId); if (aiIntervalFPS) clearInterval(aiIntervalFPS); }
+        function stopFPSGame() { 
+            isFPSRunning = false; 
+            if (animFPSId) cancelAnimationFrame(animFPSId); 
+            if (aiIntervalFPS) clearInterval(aiIntervalFPS); 
+            window.removeEventListener('resize', onWindowResize);
+        }
 
         function openLeaderboardModal() {
             document.getElementById('leaderboardModal').classList.add('active');
@@ -1111,13 +812,14 @@
                 let list = []; snapshot.forEach(c => list.push(c.val())); list.sort((a,b) => b.score - a.score);
                 list.forEach((item, index) => {
                     const tr = document.createElement('tr');
-                    tr.innerHTML = `<td style="padding:6px;">${index+1}</td><td style="padding:6px;">${escapeHtml(item.name)}</td><td style="padding:6px; text-align:right;">${item.score}</td>`;
+                    tr.innerHTML = `<td style="padding:6px;">${index+1}</td><td style="padding:6px;">${escapeHtml(item.name || 'Воїн')}</td><td style="padding:6px; text-align:right;">${item.score}</td>`;
                     tbody.appendChild(tr);
                 });
             });
         }
 
         function closeLeaderboardModal() { document.getElementById('leaderboardModal').classList.remove('active'); }
+        function escapeHtml(str) { return str.replace(/&/g, "&amp;").replace(/</g, "&lt;").replace(/>/g, "&gt;"); }
     </script>
 </body>
 </html>
