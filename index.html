@@ -168,6 +168,24 @@
         
         .modal-window { width: 100%; max-width: 860px; background: #0f172a; border: 1px solid rgba(56, 189, 248, 0.25); border-radius: 16px; padding: 2.2rem; box-shadow: 0 25px 60px rgba(0,0,0,0.6); position: relative; overflow: hidden; }
 
+        .fade-stage { opacity: 1; transform: translateY(0); transition: opacity 0.35s ease, transform 0.35s ease; }
+        .fade-stage.hidden { opacity: 0; transform: translateY(-15px); pointer-events: none; position: absolute; width: calc(100% - 4.4rem); }
+        .fade-stage.entrance { opacity: 0; transform: translateY(15px); pointer-events: none; position: absolute; width: calc(100% - 4.4rem); }
+
+        .form-group { margin-bottom: 1.2rem; }
+        .form-group label { display: block; font-size: 0.85rem; color: var(--text-muted); margin-bottom: 0.5rem; text-transform: uppercase; letter-spacing: 0.5px; }
+        .form-group input { width: 100%; padding: 0.85rem; background: var(--bg-dark); border: 1px solid rgba(255,255,255,0.08); border-radius: 8px; color: #f8fafc; font-size: 1rem; transition: border-color 0.2s; }
+        .form-group input:focus { outline: none; border-color: var(--accent); box-shadow: 0 0 10px rgba(56, 189, 248, 0.2); }
+        
+        .btn-submit { 
+            width: 100%; padding: 1rem; 
+            background: linear-gradient(135deg, var(--accent), var(--accent-hover)); 
+            color: var(--bg-dark); border: none; border-radius: 8px; 
+            font-weight: 700; font-size: 1rem; text-transform: uppercase; letter-spacing: 0.5px; 
+            cursor: pointer; transition: all 0.2s; margin-top: 0.5rem; box-shadow: 0 4px 12px rgba(56, 189, 248, 0.25);
+        }
+        .btn-submit:hover { transform: translateY(-1px); box-shadow: 0 6px 20px rgba(56, 189, 248, 0.4); }
+
         /* Fullscreen Game Override */
         .modal-overlay.game-fullscreen .modal-window {
             max-width: 100vw !important;
@@ -185,6 +203,56 @@
             transition: all 0.2s; z-index: 120; 
         }
         .close-modal:hover { color: #f8fafc; background: rgba(239, 68, 68, 0.8); border-color: var(--status-alert); transform: rotate(90deg); }
+
+        /* Chat UI */
+        .chat-container { width: 100%; height: 440px; display: flex; flex-direction: column; background: var(--bg-dark); border: 1px solid rgba(255, 255, 255, 0.05); border-radius: 8px; overflow: hidden; margin-top: 0.5rem; }
+        .chat-header { background: #1e293b; padding: 0.85rem 1.2rem; font-size: 0.9rem; font-weight: bold; color: var(--accent); border-bottom: 1px solid rgba(255, 255, 255, 0.05); display: flex; align-items: center; justify-content: space-between; gap: 8px; }
+        .chat-header .status-dot { width: 8px; height: 8px; background: var(--status-online); border-radius: 50%; box-shadow: 0 0 6px var(--status-online); display: inline-block; }
+        
+        .btn-back-chat {
+            background: rgba(255, 255, 255, 0.05); border: 1px solid rgba(255, 255, 255, 0.1); 
+            color: var(--text-muted); width: 30px; height: 30px; border-radius: 6px;
+            cursor: pointer; font-size: 1rem; display: flex; align-items: center; justify-content: center; 
+            transition: all 0.2s;
+        }
+        .btn-back-chat:hover { background: var(--accent-light); border-color: var(--accent); color: var(--accent); }
+
+        .recruiter-actions { display: none; gap: 8px; align-items: center; }
+        .btn-candidates { background: rgba(56, 189, 248, 0.1); color: var(--accent); border: 1px solid rgba(56, 189, 248, 0.3); padding: 6px 12px; border-radius: 6px; font-size: 0.8rem; cursor: pointer; font-weight: bold; transition: all 0.2s; }
+        .btn-candidates:hover { background: rgba(56, 189, 248, 0.25); border-color: var(--accent); }
+
+        .btn-clear-chat { background: rgba(239, 68, 68, 0.15); color: var(--status-alert); border: 1px solid rgba(239, 68, 68, 0.3); padding: 6px 12px; border-radius: 6px; font-size: 0.8rem; cursor: pointer; font-weight: bold; transition: all 0.2s; }
+        .btn-clear-chat:hover { background: rgba(239, 68, 68, 1); color: #fff; }
+
+        .chat-messages { flex: 1; padding: 1.2rem; overflow-y: auto; display: flex; flex-direction: column; gap: 0.9rem; background: var(--bg-deep); }
+        .message { max-width: 80%; padding: 0.7rem 1rem; border-radius: 8px; font-size: 0.92rem; line-height: 1.45; word-break: break-word; position: relative; }
+        .message .msg-time { display: block; font-size: 0.65rem; color: var(--text-subtle); margin-top: 4px; text-align: right; }
+        .message.intercom { background: rgba(56, 189, 248, 0.06); color: var(--accent); align-self: flex-start; border-left: 3px solid var(--accent); }
+        .message.friend { background: #1e293b; color: #f8fafc; align-self: flex-end; border-right: 3px solid var(--text-subtle); }
+        .message.approved { background: rgba(34, 197, 94, 0.1); color: #4ade80; align-self: center; border: 1px solid rgba(34, 197, 94, 0.3); width: 95%; text-align: center; }
+        .message.rejected { background: rgba(239, 68, 68, 0.1); color: #f87171; align-self: center; border: 1px solid rgba(239, 68, 68, 0.3); width: 95%; text-align: center; }
+
+        .quick-tags-area { display: flex; gap: 8px; padding: 10px 12px; background: var(--bg-deep); border-top: 1px solid rgba(255,255,255,0.03); overflow-x: auto; white-space: nowrap; align-items: center; }
+        .quick-tags-area button { flex-shrink: 0; background: linear-gradient(135deg, rgba(56, 189, 248, 0.08), rgba(56, 189, 248, 0.02)); color: var(--accent); border: 1px solid rgba(56, 189, 248, 0.2); padding: 6px 14px; border-radius: 6px; font-size: 0.8rem; cursor: pointer; transition: all 0.2s; font-weight: 600; }
+        .quick-tags-area button:hover { background: rgba(56, 189, 248, 0.18); border-color: var(--accent); color: #f8fafc; }
+        .quick-tags-area #cryptoBtn { margin-left: auto; background: rgba(34, 197, 94, 0.08); color: var(--status-online); border: 1px solid rgba(34, 197, 94, 0.2); }
+
+        .chat-input-area { display: flex; border-top: 1px solid rgba(255, 255, 255, 0.05); background: var(--bg-dark); }
+        .chat-input-area input { flex: 1; padding: 0.9rem 1.2rem; background: transparent; border: none; color: #f8fafc; font-size: 0.95rem; }
+        .chat-input-area input:focus { outline: none; }
+        .btn-send { background: linear-gradient(135deg, #1e293b, #0f172a); color: var(--accent); border: none; border-left: 1px solid rgba(255,255,255,0.05); padding: 0 1.6rem; cursor: pointer; font-weight: bold; transition: all 0.2s; font-size: 0.9rem; }
+        .btn-send:hover { background: var(--accent); color: var(--bg-dark); }
+
+        .candidates-list { height: 380px; overflow-y: auto; background: var(--bg-dark); border-radius: 8px; padding: 12px; border: 1px solid rgba(255, 255, 255, 0.05); margin-top: 10px; }
+        .candidate-card { background: rgba(15, 23, 42, 0.9); border: 1px solid rgba(56, 189, 248, 0.15); border-radius: 8px; padding: 14px 16px; margin-bottom: 10px; text-align: left; display: flex; justify-content: space-between; align-items: center; }
+        .candidate-info h4 { color: #f8fafc; font-size: 1rem; margin-bottom: 4px; display: flex; gap: 10px; align-items: center; }
+        .candidate-info h4 span { font-size: 0.75rem; color: var(--text-subtle); font-weight: normal; }
+        .candidate-info p { color: var(--text-muted); font-size: 0.88rem; line-height: 1.5; }
+        .candidate-actions { display: flex; gap: 8px; align-items: center; }
+        .btn-action-open { background: rgba(56, 189, 248, 0.15); color: var(--accent); border: 1px solid rgba(56, 189, 248, 0.3); padding: 7px 14px; border-radius: 6px; cursor: pointer; font-size: 0.85rem; font-weight: bold; }
+        .btn-approve { background: rgba(34, 197, 94, 0.15); color: var(--status-online); border: 1px solid rgba(34, 197, 94, 0.4); width: 34px; height: 34px; border-radius: 6px; cursor: pointer; font-weight: bold; display: flex; align-items: center; justify-content: center; }
+        .btn-reject { background: rgba(239, 68, 68, 0.15); color: var(--status-alert); border: 1px solid rgba(239, 68, 68, 0.4); width: 34px; height: 34px; border-radius: 6px; cursor: pointer; font-weight: bold; display: flex; align-items: center; justify-content: center; }
+        .candidate-count-badge { background: rgba(56, 189, 248, 0.15); color: var(--accent); padding: 3px 8px; border-radius: 12px; font-size: 0.8rem; border: 1px solid rgba(56, 189, 248, 0.3); margin-left: 8px; }
 
         /* Operation Selection Cards */
         .op-card-grid { display: grid; grid-template-columns: repeat(3, 1fr); gap: 1rem; margin-top: 1.5rem; }
@@ -281,6 +349,41 @@
         </main>
     </div>
 
+    <!-- CALCULATOR SECTION -->
+    <section class="calculator-section" id="calc">
+        <div class="calc-container">
+            <h2 style="color: var(--text-heading); font-size: 2rem; text-transform: uppercase; text-align: center;">Калькулятор грошового забезпечення</h2>
+            <div class="calc-grid">
+                <div>
+                    <div class="calc-input-group" style="margin-bottom: 1.2rem;">
+                        <label>Обирай спеціалізацію:</label>
+                        <select id="roleSelect" class="calc-select" onchange="calculatePay()">
+                            <option value="20000">Стрілець / Піхота</option>
+                            <option value="25000">Оператор БПЛА (FPV)</option>
+                            <option value="23000">Бойовий Медик</option>
+                            <option value="28000">Артилерист / Механік</option>
+                        </select>
+                    </div>
+                </div>
+                <div class="calc-result-box">
+                    <span style="color: var(--text-muted); font-size: 0.9rem; text-transform: uppercase;">Орієнтовний дохід на місяць:</span>
+                    <div class="calc-amount" id="totalPay">20,000 грн</div>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- RECRUITMENT STEPS -->
+    <section class="steps-section" id="steps">
+        <h2 style="color: var(--text-heading); font-size: 2.2rem; text-transform: uppercase; text-align: center;">Етапи Долучення До Лав</h2>
+        <div class="steps-grid">
+            <div class="step-card"><span class="step-num">01</span><h4>Подача Заявки</h4><p>Заповнюйте анкету у модальному вікні та переходьте до зв'язку.</p></div>
+            <div class="step-card"><span class="step-num">02</span><h4>Співбесіда & МЕК</h4><p>Проходження онлайн-інтерв'ю та збір первинного пакета документів.</p></div>
+            <div class="step-card"><span class="step-num">03</span><h4>Курс БЗВП</h4><p>Інтенсивна вишколова програма з тактики та медицини.</p></div>
+            <div class="step-card"><span class="step-num">04</span><h4>Контракт</h4><p>Офіційне зарахування до обраної бригади ЗСУ.</p></div>
+        </div>
+    </section>
+
     <!-- DOLNY PANEL GRY -->
     <div style="background: var(--bg-deep); padding: 2rem; border-top: 1px solid var(--accent-border); text-align: center; display: flex; justify-content: center; gap: 1.5rem; flex-wrap: wrap;">
         <button class="btn-main-trigger" style="margin-bottom: 0; padding: 0.8rem 1.8rem; font-size: 0.95rem;" onclick="openGameModal()">🎮 Graj: 3D FPS Повний Екран + Tarkov Meds</button>
@@ -292,35 +395,27 @@
         <div class="modal-window" style="position: relative;">
             <button class="close-modal" onclick="closeGameModal()">×</button>
             
-            <!-- EKRAN WYBORU OPERACJI -->
             <div id="opSelectScreen" style="padding: 2rem;">
                 <h2 style="color: #f1f5f9; margin-bottom: 0.5rem; text-align: center;">🎯 Wybierz Rodzaj Operacji 3D FPS</h2>
-                <p style="color: var(--text-muted); font-size: 0.9rem; text-align: center;">Мобільна та ПК підтримка 3D гра від першого лица на весь екран!</p>
+                <p style="color: var(--text-muted); font-size: 0.9rem; text-align: center;">Pełny ekran 3D z obsługą strzałów w głowę i obrotu kamery w górę i w dół.</p>
 
                 <div class="op-card-grid">
                     <div class="op-card" onclick="startFPSGame('assault')">
                         <div class="op-icon">🪖</div>
                         <div class="op-title">Штурм Позицій 3D</div>
-                        <div class="op-desc">Штурмуйте 3D сектор від першої особи. Використовуйте WASD/Мишку або сенсорний джойстик.</div>
+                        <div class="op-desc">Strzelaj w korpus lub precyzyjnie w głowę przeciwników.</div>
                     </div>
                     <div class="op-card" onclick="startFPSGame('defense')">
                         <div class="op-icon">🛡️</div>
                         <div class="op-title">Оборона Сектора 3D</div>
-                        <div class="op-desc">Утримуйте 3D блокпост та знищуйте наступаючі сили супротивника.</div>
-                    </div>
-                    <div class="op-card" onclick="startFPSGame('night')">
-                        <div class="op-icon">🌙</div>
-                        <div class="op-title">Нічна Операція</div>
-                        <div class="op-desc">Зачистка сектора в умовах обмеженої видимості.</div>
+                        <div class="op-desc">Utrzymaj pozycję przed napierającymi falami wroga.</div>
                     </div>
                 </div>
             </div>
 
-            <!-- EKRAN CANVASA / THREE.JS CONTAINER -->
             <div id="canvasScreen" style="display: none;">
                 <div class="fps-container" id="threeJsContainer"></div>
 
-                <!-- TARKOV MEDICAL UI FOR 3D FPS -->
                 <div class="tarkov-ui" id="tarkovMedicalUi">
                     <div class="tarkov-header">
                         <span>🏥 STAN ZDROWIA (TCCC DIAGNOSTICS 3D)</span>
@@ -398,8 +493,22 @@
         </div>
     </div>
 
+    <!-- MODAL APPLICATION & CHAT -->
+    <div class="modal-overlay" id="modalOverlay">
+        <div class="modal-window">
+            <button class="close-modal" onclick="toggleModal(false)">×</button>
+            <div id="formStage" class="fade-stage">
+                <h2 style="margin-bottom: 1.5rem; color: #f1f5f9; text-align: center;">Подати заявку</h2>
+                <form onsubmit="handleSubmit(event)">
+                    <div class="form-group"><label>Позивний</label><input type="text" id="userName" required placeholder="Нікнейм"></div>
+                    <div class="form-group"><label>Контакт</label><input type="text" id="userContact" required placeholder="@username"></div>
+                    <button type="submit" class="btn-submit">Надіслати</button>
+                </form>
+            </div>
+        </div>
+    </div>
+
     <script>
-        // Firebase Configuration
         const firebaseConfig = {
             apiKey: "AIzaSyCeWM1wdHdN6bIXFXTqHXO7WgJNJK53nwk",
             authDomain: "storinka-d7bd6.firebaseapp.com",
@@ -410,7 +519,6 @@
             appId: "1:317173750408:web:62d09563fc750e20589d3d",
             measurementId: "G-5HX3ES92NE"
         };
-
         firebase.initializeApp(firebaseConfig);
         const database = firebase.database();
         const scoresRef = database.ref('leaderboard');
@@ -426,15 +534,22 @@
             } catch(e) {}
         };
 
+        function calculatePay() {
+            let val = parseInt(document.getElementById('roleSelect').value) || 20000;
+            document.getElementById('totalPay').innerText = (val + 30000).toLocaleString('uk-UA') + ' грн';
+        }
+
+        function toggleModal(show) { document.getElementById('modalOverlay').classList.toggle('active', show); }
+        function handleSubmit(e) { e.preventDefault(); alert("Заявку надіслано!"); toggleModal(false); }
+
         // =========================================================================
-        // --- 3D FPS (ГРА ВІД ПЕРШОГО ЛИЦЯ) ДВИЖОК - FULLSCREEN + TARKOV MEDS ---
+        // --- 3D FPS ENGINE - NAPRAWIONY PITCH/YAW + HEADSHOTS ---
         // =========================================================================
         let scene, cameraFPS, rendererFPS, isFPSRunning = false, animFPSId = null, aiIntervalFPS = null;
-        let ammoFPS = 30, scoreFPS = 0, playerYaw = 0;
+        let ammoFPS = 30, scoreFPS = 0, playerYaw = 0, playerPitch = 0;
         let keysFPS = {}, touchFPSDir = { x: 0, y: 0 };
         let bulletsFPS = [], enemiesFPS = [], obstaclesFPS = [], enemyBulletsFPS = [];
 
-        // Tarkov Body Parts System
         let bodyParts = {
             head: { current: 35, max: 35, bleeding: false },
             thorax: { current: 85, max: 85, bleeding: false },
@@ -484,7 +599,7 @@
             const container = document.getElementById('threeJsContainer');
             container.innerHTML = `
                 <div class="hit-flash" id="hitFlash"></div>
-                <div class="radio-ticker">📡 [FPS РАДІО]: Повноекранна 3D Операція! WASD — Рух | Мишка — Огляд | M/Tab — Медицина</div>
+                <div class="radio-ticker">📡 [FPS РАДІО]: Повноекранний 3D FPS! Мишка крутиться в усі боки, цільтесь у голови!</div>
                 <div class="fps-crosshair"></div>
                 <div class="fps-hud">
                     <div class="hud-card">Набої: <span id="uiAmmo">30/30</span></div>
@@ -501,7 +616,6 @@
                 </div>
             `;
 
-            // Reset Tarkov Health System
             for (let part in bodyParts) {
                 bodyParts[part].current = bodyParts[part].max;
                 bodyParts[part].bleeding = false;
@@ -519,14 +633,11 @@
             rendererFPS.shadowMap.enabled = true;
             container.appendChild(rendererFPS.domElement);
 
-            const ambientLight = new THREE.AmbientLight(0xffffff, 0.6);
-            scene.add(ambientLight);
-
+            scene.add(new THREE.AmbientLight(0xffffff, 0.6));
             const dirLight = new THREE.DirectionalLight(0xfffaed, 0.8);
             dirLight.position.set(30, 50, 30);
             scene.add(dirLight);
 
-            // Ground
             const ground = new THREE.Mesh(
                 new THREE.PlaneGeometry(300, 300),
                 new THREE.MeshStandardMaterial({ color: 0x162216, roughness: 0.8 })
@@ -535,21 +646,18 @@
             scene.add(ground);
 
             bulletsFPS = []; enemyBulletsFPS = []; enemiesFPS = []; obstaclesFPS = [];
-            scoreFPS = 0; ammoFPS = 30; playerYaw = 0; updateFPSUI();
+            scoreFPS = 0; ammoFPS = 30; playerYaw = 0; playerPitch = 0; updateFPSUI();
 
-            // Houses
             for (let i = 0; i < 10; i++) {
                 let bx = (Math.random() - 0.5) * 120, bz = (Math.random() - 0.5) * 120;
                 if (Math.hypot(bx, bz) < 15) continue;
                 createFPSHouse(bx, bz, 10, 6, 10);
             }
 
-            // Enemies
             for (let i = 0; i < 14; i++) {
                 let enemy = createEnemy3D();
                 enemy.position.set((Math.random() - 0.5) * 140, 0, (Math.random() - 0.5) * 140);
                 scene.add(enemy);
-                enemiesFPS.push({ mesh: enemy, hp: 50 });
             }
 
             container.addEventListener('click', shootFPSBullet);
@@ -564,10 +672,7 @@
         }
 
         function createFPSHouse(x, z, w, h, d) {
-            const house = new THREE.Mesh(
-                new THREE.BoxGeometry(w, h, d),
-                new THREE.MeshStandardMaterial({ color: 0x334155 })
-            );
+            const house = new THREE.Mesh(new THREE.BoxGeometry(w, h, d), new THREE.MeshStandardMaterial({ color: 0x334155 }));
             house.position.set(x, h/2, z);
             scene.add(house);
             obstaclesFPS.push({ x: x, z: z, radius: Math.max(w, d) / 2 + 0.6 });
@@ -575,10 +680,23 @@
 
         function createEnemy3D() {
             const group = new THREE.Group();
-            const body = new THREE.Mesh(new THREE.BoxGeometry(0.8, 1.5, 0.6), new THREE.MeshStandardMaterial({ color: 0xdc2626 }));
-            body.position.y = 0.75; group.add(body);
-            const head = new THREE.Mesh(new THREE.SphereGeometry(0.35, 8, 8), new THREE.MeshStandardMaterial({ color: 0x7f1d1d }));
-            head.position.y = 1.6; group.add(head);
+            
+            // Korpus (Body)
+            const bodyMat = new THREE.MeshStandardMaterial({ color: 0xdc2626 });
+            const body = new THREE.Mesh(new THREE.BoxGeometry(0.8, 1.4, 0.6), bodyMat);
+            body.position.y = 0.7;
+            body.userData = { type: 'body', parentGroup: group };
+            group.add(body);
+
+            // Głowa (Head) - Specjalna detekcja trafienia w głowę!
+            const headMat = new THREE.MeshStandardMaterial({ color: 0x7f1d1d });
+            const head = new THREE.Mesh(new THREE.SphereGeometry(0.35, 8, 8), headMat);
+            head.position.y = 1.55;
+            head.userData = { type: 'head', parentGroup: group };
+            group.add(head);
+
+            group.userData = { hp: 50 };
+            enemiesFPS.push(group);
             return group;
         }
 
@@ -587,6 +705,9 @@
             container.addEventListener('mousemove', (e) => {
                 if (!isFPSRunning) return;
                 playerYaw -= e.movementX * 0.003;
+                playerPitch -= e.movementY * 0.003;
+                // Ograniczenie góra/dół (Pitch)
+                playerPitch = Math.max(-Math.PI / 2.2, Math.min(Math.PI / 2.2, playerPitch));
             });
         }
 
@@ -610,7 +731,6 @@
                 let dy = touch.clientY - (rect.top + rect.height / 2);
                 let dist = Math.hypot(dx, dy);
                 let maxDist = rect.width / 2;
-
                 if (dist > maxDist) { dx = (dx / dist) * maxDist; dy = (dy / dist) * maxDist; }
                 knob.style.transform = `translate(${dx}px, ${dy}px)`;
                 touchFPSDir.x = dx / maxDist; touchFPSDir.y = dy / maxDist;
@@ -628,13 +748,14 @@
             if (!isFPSRunning || ammoFPS <= 0) return;
             playBeep(1200, 0.03); ammoFPS--; updateFPSUI();
 
-            const bullet = new THREE.Mesh(
-                new THREE.SphereGeometry(0.12, 6, 6),
-                new THREE.MeshBasicMaterial({ color: 0xfacc15 })
-            );
+            const bullet = new THREE.Mesh(new THREE.SphereGeometry(0.12, 6, 6), new THREE.MeshBasicMaterial({ color: 0xfacc15 }));
             bullet.position.copy(cameraFPS.position);
 
-            let dir = new THREE.Vector3(0, 0, -1).applyAxisAngle(new THREE.Vector3(0, 1, 0), playerYaw);
+            // Obliczanie kierunku strzału uwzględniającego Pitch (góra/dół) oraz Yaw (lewo/prawo)
+            let dir = new THREE.Vector3(0, 0, -1);
+            dir.applyAxisAngle(new THREE.Vector3(1, 0, 0), playerPitch);
+            dir.applyAxisAngle(new THREE.Vector3(0, 1, 0), playerYaw);
+
             bulletsFPS.push({ mesh: bullet, dir: dir, life: 60 });
             scene.add(bullet);
         }
@@ -642,24 +763,18 @@
         function updateFPSAI() {
             if (!isFPSRunning) return;
             enemiesFPS.forEach(e => {
-                let dx = cameraFPS.position.x - e.mesh.position.x;
-                let dz = cameraFPS.position.z - e.mesh.position.z;
+                let dx = cameraFPS.position.x - e.position.x;
+                let dz = cameraFPS.position.z - e.position.z;
                 let dist = Math.hypot(dx, dz);
-
                 if (dist < 40) {
-                    e.mesh.position.x += (dx / dist) * 0.1;
-                    e.mesh.position.z += (dz / dist) * 0.1;
+                    e.position.x += (dx / dist) * 0.1;
+                    e.position.z += (dz / dist) * 0.1;
 
-                    // Enemy shoots back
-                    if (Math.random() < 0.35) {
-                        const eb = new THREE.Mesh(
-                            new THREE.SphereGeometry(0.1, 6, 6),
-                            new THREE.MeshBasicMaterial({ color: 0xef4444 })
-                        );
-                        eb.position.copy(e.mesh.position);
-                        eb.position.y = 1.4;
-                        let dir = new THREE.Vector3(dx, 0, dz).normalize();
-                        enemyBulletsFPS.push({ mesh: eb, dir: dir, life: 50 });
+                    if (Math.random() < 0.3) {
+                        const eb = new THREE.Mesh(new THREE.SphereGeometry(0.1, 6, 6), new THREE.MeshBasicMaterial({ color: 0xef4444 }));
+                        eb.position.copy(e.position); eb.position.y = 1.4;
+                        let edir = new THREE.Vector3(dx, 0, dz).normalize();
+                        enemyBulletsFPS.push({ mesh: eb, dir: edir, life: 50 });
                         scene.add(eb);
                     }
                 }
@@ -671,12 +786,10 @@
             const flash = document.getElementById('hitFlash');
             if (flash) { flash.style.opacity = '1'; setTimeout(() => flash.style.opacity = '0', 200); }
 
-            // Randomly damage Tarkov body parts
             const parts = ['thorax', 'head', 'stomach', 'rarm', 'larm', 'rleg', 'lleg'];
             let hitPart = parts[Math.floor(Math.random() * parts.length)];
             bodyParts[hitPart].current -= amount;
             if (Math.random() < 0.4) bodyParts[hitPart].bleeding = true;
-
             updateTarkovUi();
 
             if (bodyParts.head.current <= 0 || bodyParts.thorax.current <= 0) {
@@ -744,30 +857,54 @@
                 cameraFPS.position.z = nextZ;
             }
 
-            cameraFPS.rotation.y = playerYaw;
+            // Aplikowanie rotacji kamery (Yaw oraz Pitch)
+            cameraFPS.rotation.set(0, 0, 0);
+            cameraFPS.rotateY(playerYaw);
+            cameraFPS.rotateX(playerPitch);
 
-            // Player Bullets
+            // Pociski gracza i sprawdzanie trafień w głowę / korpus
             for (let i = bulletsFPS.length - 1; i >= 0; i--) {
                 let b = bulletsFPS[i];
-                b.mesh.position.addScaledVector(b.dir, 1.1);
+                b.mesh.position.addScaledVector(b.dir, 1.2);
                 b.life--;
 
+                let hitRegistered = false;
                 for (let j = enemiesFPS.length - 1; j >= 0; j--) {
-                    let e = enemiesFPS[j];
-                    if (b.mesh.position.distanceTo(e.mesh.position) < 1.3) {
-                        e.hp -= 25;
-                        if (e.hp <= 0) {
-                            scene.remove(e.mesh); enemiesFPS.splice(j, 1);
-                            scoreFPS += 50; updateFPSUI();
+                    let enemyGroup = enemiesFPS[j];
+                    
+                    // Sprawдzamy dzieci (głowa lub korpus)
+                    for (let child of enemyGroup.children) {
+                        let worldPos = new THREE.Vector3();
+                        child.getWorldPosition(worldPos);
+
+                        let hitRadius = child.userData.type === 'head' ? 0.45 : 0.8;
+                        if (b.mesh.position.distanceTo(worldPos) < hitRadius) {
+                            // Headshot zadaje większe obrażenia!
+                            let damage = child.userData.type === 'head' ? 50 : 25;
+                            enemyGroup.userData.hp -= damage;
+
+                            if (enemyGroup.userData.hp <= 0) {
+                                scene.remove(enemyGroup);
+                                enemiesFPS.splice(j, 1);
+                                scoreFPS += (child.userData.type === 'head' ? 100 : 50);
+                                updateFPSUI();
+                            }
+
+                            scene.remove(b.mesh);
+                            bulletsFPS.splice(i, 1);
+                            hitRegistered = true;
+                            break;
                         }
-                        scene.remove(b.mesh); bulletsFPS.splice(i, 1); break;
                     }
+                    if (hitRegistered) break;
                 }
 
-                if (b.life <= 0 && bulletsFPS[i]) { scene.remove(b.mesh); bulletsFPS.splice(i, 1); }
+                if (!hitRegistered && b.life <= 0 && bulletsFPS[i]) {
+                    scene.remove(b.mesh); bulletsFPS.splice(i, 1);
+                }
             }
 
-            // Enemy Bullets hitting Player
+            // Pociski wroga trafiające w gracza
             for (let i = enemyBulletsFPS.length - 1; i >= 0; i--) {
                 let eb = enemyBulletsFPS[i];
                 eb.mesh.position.addScaledVector(eb.dir, 0.7);
@@ -778,7 +915,6 @@
                     scene.remove(eb.mesh); enemyBulletsFPS.splice(i, 1);
                     continue;
                 }
-
                 if (eb.life <= 0 && enemyBulletsFPS[i]) { scene.remove(eb.mesh); enemyBulletsFPS.splice(i, 1); }
             }
         }
